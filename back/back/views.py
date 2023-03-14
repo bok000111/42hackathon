@@ -8,7 +8,9 @@ import time
 
 class	GetMe(View):
 	def	get(self, request):
-		access_token = request.COOKIES['access_token']
+		access_token = request.META.get('HTTP_ACCESS_TOKEN') 
+		if access_token is None:
+			return (HttpResponse("asdasd"))
 		data = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + access_token}).json()
 		projects = [{'name': x['project']['name'], 'final_mark': x['final_mark']} for x in data['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
 		mydata = {'login': data['login'], 'image': data['image']['link'], 'project': projects}
