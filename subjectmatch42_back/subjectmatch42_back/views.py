@@ -27,7 +27,7 @@ class	Login(View):
 	def	get(self, request):
 		code = request.GET.get('code', None)
 		if code == None:
-			return redirect(self.default_redirect)
+			return render(request, 'index.html')
 		data = {'grant_type': 'authorization_code', 'client_id': self.id,'client_secret': self.secret, 'code': code, 'redirect_uri': self.redirect_uri, 'scope': 'public'}
 		access_token = requests.post('https://api.intra.42.fr/v2/oauth/token', data=data).json()['access_token']
 		return JsonResponse({'token': access_token})
