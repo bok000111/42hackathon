@@ -14,11 +14,12 @@ class	GetDataView(View):
 		code = request.GET.get('code', None)
 		if code == None:
 			return HttpResponse('error!')
-		data = {'grant_type': 'authorization_code', 'client_id': self.id,'client_secret': self.secret, 'code': code, 'redirect_uri': 'http://localhost:8000/code', 'scope': 'public'}
+		data = {'grant_type': 'authorization_code', 'client_id': self.id,'client_secret': self.secret, 'code': code, 'redirect_uri': 'http://localhost:8000/', 'scope': 'public'}
 		print(data)
 		token = requests.post('https://api.intra.42.fr/v2/oauth/token', data=data)
 		if token == None:
 			return HttpResponse('error!')
+		print(token)
 		res = requests.get("https://api.intra.42.fr/v2/users/131690/projects_users", headers={'Authorization': 'Bearer ' + token.json()['access_token']})
 		if res == None:
 			return HttpResponse('error!')
