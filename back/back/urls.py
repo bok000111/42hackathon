@@ -1,4 +1,4 @@
-"""subjectmatch42_back URL Configuration
+"""back URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from .views import Login, Main, redirecct_login
+from .views import Login, GetMe#, Main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', Login.as_view()),
     path('login/', Login.as_view()),
-    path('main/', Main.as_view()),
-    path('', redirecct_login),
+    path('api/getme/', GetMe.as_view()),
+    #path('main/', Main.as_view()),
+    #path('', redirecct_login),
 ]
