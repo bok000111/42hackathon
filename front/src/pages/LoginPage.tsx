@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import Background from "../components/Background";
+import Background from "../components/common/Background";
 import { CommonContainer, Logo } from "../Styles";
 import { Cookies } from "react-cookie";
 import { useEffect } from "react";

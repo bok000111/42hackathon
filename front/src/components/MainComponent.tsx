@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import Button from "./Button";
-import MatchList from "./MatchList";
-import MenuComponent from "./MenuComponent";
-import Rank from "./Rank";
+import Button from "./common/Button";
+import MatchList from "./MatchList/MatchList";
+import MenuComponent from "./Menu/MenuComponent";
+import Rank from "./Rank/Rank";
 
 const MainComponent = () => {
   return (

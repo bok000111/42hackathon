@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { HeaderContainer } from "../Styles";
+import { HeaderContainer } from "../../Styles";
 
 const MatchList = () => {
   return (
