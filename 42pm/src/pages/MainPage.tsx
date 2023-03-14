@@ -12,11 +12,15 @@ const MainPage = () => {
   console.log(cookie.get("access_token"));
   localStorage.setItem("access_token", cookie.get("access_token"));
   useEffect(() => {
+    console.log(cookie.get("access_token"));
     getData();
     async function getData() {
       try {
-        const data = await accessClient.get("/api/getme");
-        console.log(data);
+        axios.get("http://localhost:8000/api/getme", {
+          headers: {
+            access_token: cookie.get("access_token"),
+          },
+        });
       } catch (e) {
         console.log(e);
       }
