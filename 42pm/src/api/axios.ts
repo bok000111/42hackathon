@@ -6,6 +6,6 @@ export const accessClient = axios.create({
   withCredentials: false,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    token: `${localStorage.getItem("access_token")}`,
   },
 });
