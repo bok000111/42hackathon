@@ -1,0 +1,7 @@
+#bin/bash
+
+python3 -m venv ft_venv
+source ft_venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+echo "to run venv: source ft_venv/bin/activate"
