@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <h1>test</h1>
+    <button id="button">Send</button>
+    <h2>Response</h2>
+    <div id="res" style="border:1px solid black; width:300px; height:300px"></div>
+    <script>
+      const button = document.getElementById('button');
+      const res = document.getElementById('res');
+
+      button.addEventListener('click', () => {
+        fetch('http://localhost:8000/')
+          .then(res=>console.log(res))
+          .catch(e=>console.error(e))
+      })
+    </script>
+  </body>
+</html>
