@@ -8,11 +8,12 @@ import time
 
 class	GetMe(View):
 	def	get(self, request):
-		access_token = request.COOKIES['access_token']
-		data = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + access_token}).json()
-		projects = [{'name': x['project']['name'], 'final_mark': x['final_mark']} for x in data['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
-		mydata = {'login': data['login'], 'image': data['image']['link'], 'project': projects}
-		return JsonResponse(mydata)
+		print(request.COOKIES)
+		#access_token = request.COOKIES['access_token']
+		#data = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + access_token}).json()
+		#projects = [{'name': x['project']['name'], 'final_mark': x['final_mark']} for x in data['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
+		#mydata = {'login': data['login'], 'image': data['image']['link'], 'project': projects}
+		return JsonResponse("hello")
 
 # class	Main(View):
 # 	id = 'u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c'

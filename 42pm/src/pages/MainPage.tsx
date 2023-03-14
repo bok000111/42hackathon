@@ -2,24 +2,26 @@ import styled from "@emotion/styled";
 import Background from "../components/Background";
 import MainComponent from "../components/MainComponent";
 import { CommonContainer, Logo } from "../Styles";
-import { Cookies } from 'react-cookie';
+import { Cookies } from "react-cookie";
 import { useEffect } from "react";
-import axios from 'axios';
+import axios from "axios";
+import { accessClient } from "../api/axios";
 
 const MainPage = () => {
   const cookie = new Cookies();
-  console.log(cookie.get('access_token'));
+  console.log(cookie.get("access_token"));
+  localStorage.setItem("access_token", cookie.get("access_token"));
   useEffect(() => {
-    getData(); 
+    getData();
     async function getData() {
       try {
-        const data = await axios.get('http://localhost:8000/api/getme/');
+        const data = await accessClient.get("/api/getme");
         console.log(data);
       } catch (e) {
         console.log(e);
       }
     }
-  },[])
+  }, []);
   return (
     <CommonContainer>
       <MainComponent />
