@@ -31,7 +31,7 @@ class	Login(View):
 	default_redirect = 'https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Flogin&response_type=code'
 	def	get(self, request):
 		code = request.GET.get('code', None)
-		access_token = request.COOKIE.get('access_token', None)
+		access_token = request.COOKIES.get('access_token', None)
 		if code is None or access_token is not None:
 			return render(request, 'index.html')
 		data = {'grant_type': 'authorization_code', 'client_id': self.id,'client_secret': self.secret, 'code': code, 'redirect_uri': self.redirect_uri, 'scope': 'public'}
