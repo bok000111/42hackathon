@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+#from django.templates import loader
 from django.views import View
+from .models import *
 import json
 import requests
 import time
@@ -25,3 +27,13 @@ class	GetDataView(View):
 		for projects in res.json():
 			print(f'project_name: {projects["project"]["name"]}, final_mark: {projects["teams"][-1]["final_mark"]}', end='\n')
 		return HttpResponse(res)
+
+def index(request):
+ #   latest_question_list = Question.objects.order_by('-pub_date')[:5]
+  #  template = loader.get_template('getdata/index.html')
+   # context = {
+    #    'latest_question_list': latest_question_list,
+    #}
+    return render(request, 'getdata/index.html', {'test': 'test', 'Respnose': 'r'})
+    #return HttpResponse(template.render(context, request), {'test': 'test', 'Respnose': 'r'})
+#template = loader.get_template()
