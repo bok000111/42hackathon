@@ -23,3 +23,5 @@ ft_venv
 *.njsproj
 *.sln
 *.sw?
+
+back/back/__pycache__/*
