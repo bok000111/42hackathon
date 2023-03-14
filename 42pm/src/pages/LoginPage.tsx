@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import Background from "../components/Background";
 import { CommonContainer, Logo } from "../Styles";
+import { Cookies } from "react-cookie";
 
 const ButtonContainer = styled.div`
   width: 340px;
@@ -57,6 +58,8 @@ const NameContainer = styled.div`
 `;
 
 const LoginPage = () => {
+  const cookie = new Cookies();
+  console.log(cookie.get("access_token"));
   return (
     <CommonContainer>
       <Background />

@@ -8,6 +8,12 @@ export const CommonContainer = styled.div`
   align-items: center;
 `;
 
+export const HeaderContainer = styled.div`
+  color: var(--main-color);
+  font-size: 1.5rem;
+  font-weight: bold;
+`;
+
 export const Logo = styled.div<{ width: number; height: number }>`
   ${({ width }) => `width : ${width}px`};
   ${({ height }) => `height : ${height}px`};

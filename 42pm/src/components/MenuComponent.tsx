@@ -37,7 +37,6 @@ const IconContainer = styled.div<{
 const MenuContainer = styled.div`
   width: 270px;
   height: 50px;
-  background: white;
   margin-top: 15px;
   display: flex;
   justify-content: space-between;

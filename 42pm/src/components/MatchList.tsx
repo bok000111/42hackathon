@@ -1,7 +1,12 @@
 import styled from "@emotion/styled";
+import { HeaderContainer } from "../Styles";
 
 const MatchList = () => {
-  return <MatchListContainer></MatchListContainer>;
+  return (
+    <MatchListContainer>
+      <HeaderContainer>Mentor</HeaderContainer>
+    </MatchListContainer>
+  );
 };
 
 const MatchListContainer = styled.div`
