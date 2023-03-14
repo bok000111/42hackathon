@@ -8,7 +8,7 @@ import time
 
 class	GetMe(View):
 	def	get(self, request):
-		access_token = request.META.get('HTTP_TOKEN') 
+		access_token = request.GET.get('access_token', None)
 		if access_token is None:
 			return (HttpResponse("asdasd"))
 		print(access_token)

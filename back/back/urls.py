@@ -21,7 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Login.as_view()),
     path('login/', Login.as_view()),
-    path('api/getme', GetMe.as_view()),
+    path('api/getme/', GetMe.as_view()),
     #path('main/', Main.as_view()),
     #path('', redirecct_login),
 ]

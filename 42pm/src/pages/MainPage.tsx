@@ -16,11 +16,7 @@ const MainPage = () => {
     getData();
     async function getData() {
       try {
-        axios.get("http://localhost:8000/api/getme", {
-          headers: {
-            access_token: cookie.get("access_token"),
-          },
-        });
+        axios.get("http://localhost:8000/api/getme/?access_token=" + cookie.get('access_token')).then(res=>console.log(res));
       } catch (e) {
         console.log(e);
       }
