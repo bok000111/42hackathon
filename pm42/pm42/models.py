@@ -23,6 +23,7 @@ class OpenSlot(models.Model):
     id = models.AutoField(primary_key=True)
     login = models.CharField(max_length=20, null=True, default=None)
     subject_name = models.CharField(max_length=256, null=True, default=None)
+    final_mark = models.IntegerField(default=0)
     max = models.IntegerField(default=4)
     curr = models.IntegerField(default=0)
     left = models.IntegerField(default=4)

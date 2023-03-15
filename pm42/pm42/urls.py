@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from .views import Init, Dev, ApiToken, ApiMe, ApiRank
+from .views import Init, Dev, ApiToken, ApiMe, ApiRank, ApiSlot
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +24,5 @@ urlpatterns = [
     path('api/token/', ApiToken.as_view()),
     path('api/me/', ApiMe.as_view()),
     path('api/rank/', ApiRank.as_view()),
+    path('api/slot/', ApiSlot.as_view()),
 ]

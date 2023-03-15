@@ -67,7 +67,7 @@ class ApiMe(View):
 class ApiRank(View):
 	def get(self, request):
 		try:
-			User42.objects.get(token=Fernet(key).decrypt(request.GET.get('token').encode('utf-8')).decode('utf-8'))
+			User42.objects.get(token=request.GET['token'].decode('utf-8'))
 		except:
 			return HttpResponse('Unauthorized', status=401)
 		users = User42.objects.all().order_by('-total_time', '-mentor_cnt', '-total_feedback', 'id')[:3]
@@ -77,6 +77,8 @@ class ApiSlot(View):
 	def get(self, request):
 		return HttpResponse('Unauthorized', status=401)
 	def post(self, requset):
+		return HttpResponse('Unauthorized', status=401)
+	def delete(self, requset):
 		return HttpResponse('Unauthorized', status=401)
 
 class Dev(View):
