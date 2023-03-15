@@ -24,4 +24,4 @@ ft_venv
 *.sln
 *.sw?
 
-back/back/__pycache__/*
+pm42/pm42/__pycache__

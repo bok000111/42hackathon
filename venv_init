@@ -1,5 +1,6 @@
 #bin/bash
 
+rm -rf ft_venv
 python3 -m venv ft_venv
 source ft_venv/bin/activate
 pip install --upgrade pip
