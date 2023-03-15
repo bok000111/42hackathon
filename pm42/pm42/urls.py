@@ -20,6 +20,6 @@ from .views import Init, Api, Dev
 urlpatterns = [
     path('admin/', admin.site.urls),
     #path('', Init.as_view()),
-    path('', Dev.as_view())
-    #path('api/<str:name>/', Api.as_view())
+    path('', Dev.as_view()),
+    path('api/<str:apiname>/', Api.as_view())
 ]
