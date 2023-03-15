@@ -150,7 +150,7 @@ Error generating stack: `+i.message+`
   position: absolute;
   left: 12%;
   top: 390px;
-`,Uy=()=>{const e=new Ud;return console.log(e),console.log(e.get("access_token")),Gt(Dd,{children:[F(Fd,{}),F(Md,{width:420,height:290}),F(Fy,{}),F(Dy,{id:"firstSlogun",children:"혼자하면 42일"}),F(My,{id:"secondSlogun",children:"같이하면 42분"}),F(Iy,{children:"42 PeerMatching"}),F(Ay,{children:F("a",{href:"https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Flogin&response_type=code",children:"LOG IN"})})]})},Xa=()=>F(jy,{}),jy=q.div`
+`,Uy=()=>{const e=new Ud;return console.log(e),console.log(e.get("access_token")),Gt(Dd,{children:[F(Fd,{}),F(Md,{width:420,height:290}),F(Fy,{}),F(Dy,{id:"firstSlogun",children:"혼자하면 42일"}),F(My,{id:"secondSlogun",children:"같이하면 42분"}),F(Iy,{children:"42 PeerMatching"}),F(Ay,{children:F("a",{href:"https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c&redirect_uri=http%3A%2F%2Flocalhost%3A5173&response_type=code",children:"LOG IN"})})]})},Xa=()=>F(jy,{}),jy=q.div`
   width: 270px;
   height: 55px;
   background: white;

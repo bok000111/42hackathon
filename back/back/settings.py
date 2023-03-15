@@ -123,8 +123,9 @@ USE_TZ = True
 import os
 STATIC_URL = "src/"
 STATICFILES_DIRS = [
-    BASE_DIR / "templates",
     BASE_DIR / "src",
+    BASE_DIR / "templates",
+    BASE_DIR / "templates" / "assets",
 ]
 
 # Default primary key field type
