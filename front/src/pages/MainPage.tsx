@@ -5,7 +5,6 @@ import { CommonContainer, Logo } from "../Styles";
 import { Cookies } from "react-cookie";
 import { useEffect } from "react";
 import axios from "axios";
-import { accessClient } from "../api/axios";
 
 const MainPage = () => {
   const cookie = new Cookies();
@@ -16,7 +15,12 @@ const MainPage = () => {
     getData();
     async function getData() {
       try {
-        axios.get("http://localhost:8000/api/getme/?access_token=" + cookie.get('access_token')).then(res=>console.log(res));
+        axios
+          .get(
+            "http://localhost:8000/api/getme/?access_token=" +
+              cookie.get("access_token")
+          )
+          .then((res) => console.log(res));
       } catch (e) {
         console.log(e);
       }

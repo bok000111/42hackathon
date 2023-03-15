@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import Button from "./common/Button";
+import Filter from "./Filter/Filter";
 import MatchList from "./MatchList/MatchList";
+import MentorList from "./MentorList/MentorList";
 import MenuComponent from "./Menu/MenuComponent";
 import Rank from "./Rank/Rank";
 
@@ -11,10 +13,13 @@ const MainComponent = () => {
         <MenuComponent />
         <MatchList />
         <Rank />
-        <Button />
-        <Button />
+        <Button name="멘토링 신청내역" />
+        <Button name="멘토링 신청하기" />
       </LeftContainer>
-      <RightContainer></RightContainer>
+      <RightContainer>
+        <Filter />
+        <MentorList />
+      </RightContainer>
     </MainContainer>
   );
 };
@@ -22,7 +27,7 @@ const MainComponent = () => {
 const LeftContainer = styled.div`
   width: 300px;
   height: 100%;
-  background: gray;
+  background: var(--white-color);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,7 +36,6 @@ const LeftContainer = styled.div`
 const RightContainer = styled.div`
   width: 700px;
   height: 100%;
-  background: pink;
 `;
 
 const MainContainer = styled.div`
