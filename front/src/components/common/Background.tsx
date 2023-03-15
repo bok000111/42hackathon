@@ -12,7 +12,7 @@ const BackgroundContainer = styled.div`
 const BackgroundBox = styled.div`
   width: 750px;
   height: 750px;
-  background-image: url("/src/assets/backgroundBox.png");
+  background-image: url("/assets/backgroundBox.png");
   background-size: 100% 100%;
   position: absolute;
   right: 0;

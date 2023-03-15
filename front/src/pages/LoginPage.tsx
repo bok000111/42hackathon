@@ -36,7 +36,7 @@ const Illust = styled.div`
   left: 38%;
   top: 17%;
   background-repeat: no-repeat;
-  background-image: url("/src/assets/illust.png");
+  background-image: url("/assets/illust.png");
   background-size: 100% 100%;
 `;
 
@@ -78,7 +78,7 @@ const LoginPage = () => {
       <NameContainer>42 PeerMatching</NameContainer>
       <ButtonContainer>
         <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c&redirect_uri=http%3A%2F%2Flocalhost%3A5173&response_type=code">
-        {/* <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-8c529c310d2083e37de555c07c13cdf6ce2af095817bf78362b803144f2b11c6&redirect_uri=http%3A%2F%2Flocalhost%3A5173&response_type=code"> */}
+          {/* <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-8c529c310d2083e37de555c07c13cdf6ce2af095817bf78362b803144f2b11c6&redirect_uri=http%3A%2F%2Flocalhost%3A5173&response_type=code"> */}
           LOG IN
         </a>
       </ButtonContainer>

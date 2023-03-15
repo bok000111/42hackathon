@@ -40,7 +40,7 @@ const Input = styled.input`
   }
 `;
 const SearchIcon = styled.div`
-  background-image: url("/src/assets/SearchIcon.png");
+  background-image: url("/public/assets/SearchIcon.png");
   background-size: 100% 100%;
   width: 20px;
   height: 20px;
