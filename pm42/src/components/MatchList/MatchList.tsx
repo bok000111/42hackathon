@@ -60,11 +60,12 @@ const MatchList = () => {
 };
 
 const MatchInfoContainer = styled.div`
+  margin-top: 15px;
   padding-left: 10px;
   width: 100%;
-  height: 150px;
-  overflow-y: scroll;
-  font-size: 0.8rem;
+  height: 200px;
+  overflow-y: auto;
+  font-size: 1rem;
   & > div {
     margin-top: 5px;
   }
@@ -75,10 +76,11 @@ const MatchInfoContainer = styled.div`
 `;
 
 const MatchListContainer = styled.div`
-  width: 270px;
-  height: 170px;
+  width: 360px;
+  height: 270px;
   background: white;
   overflow: hidden;
+  margin-top: 30px;
 `;
 
 export default MatchList;

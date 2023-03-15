@@ -37,7 +37,7 @@ const Input = styled.input`
   color: white;
 `;
 const SearchIcon = styled.div`
-  background-image: url("/public/assets/SearchIcon.png");
+  background-image: url("/assets/SearchIcon.png");
   background-size: 100% 100%;
   width: 20px;
   height: 20px;
@@ -61,13 +61,13 @@ const FilterElement = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px;
+  padding: 5px 7px;
   background: var(--main-color);
   border: 1px solid var(--main-color);
-  height: 30px;
+  height: 40px;
   margin-left: 10px;
   border-radius: 10px;
-  font-size: 0.85rem;
+  font-size: 1rem;
   transition: 0.5s;
   cursor: pointer;
   &:hover {

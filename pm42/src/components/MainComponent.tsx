@@ -13,8 +13,7 @@ const MainComponent = () => {
         <MenuComponent />
         <MatchList />
         <Rank />
-        <Button name="멘토링 신청내역" />
-        <Button name="멘토링 신청하기" />
+        <Button name="멘토링 하러가기" />
       </LeftContainer>
       <RightContainer>
         <Filter />
@@ -25,7 +24,7 @@ const MainComponent = () => {
 };
 
 const LeftContainer = styled.div`
-  width: 300px;
+  width: 400px;
   height: 100%;
   background: var(--white-color);
   display: flex;
@@ -34,13 +33,13 @@ const LeftContainer = styled.div`
 `;
 
 const RightContainer = styled.div`
-  width: 700px;
+  width: 800px;
   height: 100%;
 `;
 
 const MainContainer = styled.div`
-  width: 1000px;
-  height: 600px;
+  width: 1200px;
+  height: 800px;
   box-shadow: 0px 10px 40px 5px rgba(0, 0, 0, 0.33);
   border-radius: 20px;
   background: var(--white-color);

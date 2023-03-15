@@ -4,7 +4,7 @@ const MenuComponent = () => {
   return (
     <MenuContainer>
       <div>
-        <IconContainer url="/assets/42logo.png" width={50} height={32} />
+        <IconContainer url="/assets/mtom.jpg" width={70} height={50} />
       </div>
       <RightContainer>
         <IconContainer url="/assets/info.png" height={25} width={25} />
@@ -35,7 +35,7 @@ const IconContainer = styled.div<{
 `;
 
 const MenuContainer = styled.div`
-  width: 270px;
+  width: 360px;
   height: 50px;
   margin-top: 15px;
   display: flex;

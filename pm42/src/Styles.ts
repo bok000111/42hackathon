@@ -10,8 +10,9 @@ export const CommonContainer = styled.div`
 
 export const HeaderContainer = styled.div`
   color: var(--main-color);
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
+  margin-bo
 `;
 
 export const Logo = styled.div<{ width: number; height: number }>`

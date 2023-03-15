@@ -1,7 +1,12 @@
 import styled from "@emotion/styled";
 
 const Button = ({ name }: { name: string }) => {
-  return <ButtonStyled>{name}</ButtonStyled>;
+  return (
+    <ButtonStyled>
+      {name}
+      <ArrowIcon />
+    </ButtonStyled>
+  );
 };
 
 const ArrowIcon = styled.div`
@@ -9,14 +14,15 @@ const ArrowIcon = styled.div`
   width: 30px;
   height: 30px;
   background-size: 100% 100%;
+  margin-left: 50px;
 `;
 
 const ButtonStyled = styled.div`
-  width: 270px;
-  height: 55px;
+  width: 360px;
+  height: 65px;
   background: var(--main-color);
   border-radius: 10px;
-  margin-top: 15px;
+  margin-top: 45px;
   color: white;
   display: flex;
   justify-content: center;

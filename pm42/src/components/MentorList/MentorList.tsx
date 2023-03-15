@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import React from "react";
 import MentorCard from "./MentorCard";
 
 interface IMentorInfo {
@@ -29,19 +30,19 @@ const data: IMentorInfo[] = [
     intra: "yeckim",
     level: 3.95,
     rating: 1135,
-    subjects: ["minishell, born_to_beroot"],
+    subjects: ["minishell", "born_to_be_root"],
     coalition: "gam",
   },
   {
     intra: "jpark2",
     level: 6.95,
     rating: 1335,
-    subjects: ["minishell+, mini_rt+, ft_container+"],
+    subjects: ["minishell+", "mini_rt+", "ft_container+"],
     coalition: "lee",
   },
 ];
 
-const MentorList = () => {
+const MentorList = ({}: {}) => {
   return (
     <MentorListContainer>
       {data.map((info) => (
@@ -55,7 +56,7 @@ const MentorList = () => {
 
 const MentoCardContainer = styled.div`
   width: 100%;
-  height: 250px;
+  height: 355px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -63,14 +64,14 @@ const MentoCardContainer = styled.div`
 
 const MentorListContainer = styled.div`
   width: 100%;
-  height: 510px;
+  height: 710px;
   background: var(--lightgray-color);
   margin-top: 30px;
   border-top-left-radius: 20px;
   box-shadow: 0px 0px 200px 5px rgba(0, 0, 0, 0.33);
-  overflow: scroll;
+  overflow: auto;
   display: grid;
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: repeat(3, 33%);
   justify-items: stretch;
 `;
 

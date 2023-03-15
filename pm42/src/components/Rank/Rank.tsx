@@ -39,9 +39,9 @@ const Rank = () => {
       <TableContainer>
         <colgroup>
           <col width="30px" />
+          <col width="100px" />
           <col width="70px" />
-          <col width="40px" />
-          <col width="40px" />
+          <col width="70px" />
         </colgroup>
         <thead>
           <tr>
@@ -55,7 +55,7 @@ const Rank = () => {
           {data.map((info, idx) => (
             <tr>
               <td>{idx + 1}</td>
-              <td style={{ display: "flex", alignItems: "flex-end" }}>
+              <td>
                 <a target="_blank" href={createLink(info.intra)}>
                   <CoalitionIcon src={info.coalition} />
                   {info.intra}
@@ -82,7 +82,7 @@ const CoalitionIcon = styled.div<{ src: string }>`
 
 const TableContainer = styled.table`
   width: 100%;
-  margin-top: 10px;
+  margin-top: 20px;
   border-spacing: 0;
   border-radius: 10px;
   border: 1px solid var(--main-color);
@@ -96,20 +96,21 @@ const TableContainer = styled.table`
   }
   & > tbody {
     td {
+      height: 50px;
       text-align: center;
-      height: 34px;
+      line-height: 50px;
     }
-    a {
+    td a {
       display: b;
     }
   }
 `;
 
 const RankContainer = styled.div`
-  width: 270px;
-  height: 190px;
+  width: 360px;
   background: white;
-  margin-top: 15px;
+  margin-top: 35px;
+  margin-bottom: 5px;
 `;
 
 export default Rank;

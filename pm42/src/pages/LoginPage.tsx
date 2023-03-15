@@ -17,7 +17,7 @@ const LoginPage = () => {
     axios
       .get("http://localhost:8000/api/token/?code=" + code)
       .then((res) => {
-        sessionStorage.setItem("token", res.data.token);
+        localStorage.setItem("token", res.data.token);
         navigator("/main");
       })
       .catch((e) => console.log(e));
@@ -54,8 +54,8 @@ const ButtonContainer = styled.div`
   background: var(--main-color);
   border-radius: 20px;
   position: absolute;
-  left: 12%;
-  top: 480px;
+  left: 17%;
+  top: 600px;
   cursor: pointer;
   & > a {
     color: var(--white-color);
@@ -68,11 +68,11 @@ const ButtonContainer = styled.div`
 `;
 
 const Illust = styled.div`
-  width: 600px;
-  height: 400px;
+  width: 700px;
+  height: 500px;
   position: absolute;
-  left: 38%;
-  top: 17%;
+  left: 43%;
+  top: 24%;
   background-repeat: no-repeat;
   background-image: url("/assets/illust.png");
   background-size: 100% 100%;
@@ -81,21 +81,21 @@ const Illust = styled.div`
 const FirstSlogunContainer = styled.div`
   font-size: 2rem;
   position: absolute;
-  left: 12%;
-  top: 180px;
+  left: 17%;
+  top: 330px;
 `;
 const SecondSlogunContainer = styled.div`
   font-size: 2rem;
   position: absolute;
-  left: 12%;
-  top: 220px;
+  left: 17%;
+  top: 370px;
 `;
 const NameContainer = styled.div`
   font-size: 3rem;
   font-weight: bold;
   position: absolute;
-  left: 12%;
-  top: 390px;
+  left: 17%;
+  top: 520px;
 `;
 
 export default LoginPage;
