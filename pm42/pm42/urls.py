@@ -23,5 +23,5 @@ urlpatterns = [
     path('', Dev.as_view()),
     path('api/token/', ApiToken.as_view()),
     path('api/me/', ApiMe.as_view()),
-    path('api/Rank/', ApiRank.as_view()),
+    path('api/rank/', ApiRank.as_view()),
 ]
