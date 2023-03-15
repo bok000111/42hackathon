@@ -38,7 +38,7 @@ class	Api(View):
 		elif	quary_dict.get('code') is None and quary_dict.get('encrypted_token') is None:
 			return HttpResponseNotFound('404notfound')
 		return self.api_list.get(apiname)(request, quary_dict.get('code'), quary_dict.get('access_token'))
-	api_list = {'gettoken': getToken, 'me': apiMe}
+	api_list = {'token': getToken, 'me': apiMe}
 
 class Dev(View):
 	id = 'u-s4t2ud-97752de4d75913a94e9887dbe2f66519abe99042fba7fc73fe3f7e1340602529'
