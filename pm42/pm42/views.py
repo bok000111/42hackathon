@@ -55,6 +55,11 @@ class Dev(View):
 		if token is None:
 			return HttpResponseNotFound("auth fail:(")
 		data = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + token}).json()
+		projects = data.get("cursus_users")
+		return (JsonResponse(data))
+		for project in projects:
+			print(project['grade'], project['level'], sep='\n')
+		return JsonResponse({"c" :data.get("cursus_users")})
 		projects = [{'name': x['project']['name'], 'final_mark': x['final_mark'], 'marked_at': x['marked_at']} for x in data['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
 		for project in projects:
 			print(project, sep='\n')
