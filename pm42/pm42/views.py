@@ -66,8 +66,15 @@ class ApiMe(View):
 
 class ApiRank(View):
 	def get(self, request):
+		try:
+			User42.objects.get(token=Fernet(key).decrypt(request.GET.get('token').encode('utf-8')).decode('utf-8'))
+		except:
+			return HttpResponse('Unauthorized', status=401)
 		users = User42.objects.all().order_by('-total_time', '-mentor_cnt', '-total_feedback', 'id')[:3]
 		return JsonResponse({'users': users})
+
+class ApiSlot(View):
+
 
 class Dev(View):
 	id = 'u-s4t2ud-97752de4d75913a94e9887dbe2f66519abe99042fba7fc73fe3f7e1340602529'
