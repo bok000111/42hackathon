@@ -74,7 +74,10 @@ class ApiRank(View):
 		return JsonResponse({'users': users})
 
 class ApiSlot(View):
-
+	def get(self, request):
+		return HttpResponse('Unauthorized', status=401)
+	def post(self, requset):
+		return HttpResponse('Unauthorized', status=401)
 
 class Dev(View):
 	id = 'u-s4t2ud-97752de4d75913a94e9887dbe2f66519abe99042fba7fc73fe3f7e1340602529'
