@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import MentorCard from "./MentorCard";
 
 interface IMentorInfo {
   intra: string;
@@ -41,8 +42,24 @@ const data: IMentorInfo[] = [
 ];
 
 const MentorList = () => {
-  return <MentorListContainer>MentorList</MentorListContainer>;
+  return (
+    <MentorListContainer>
+      {data.map((info) => (
+        <MentoCardContainer>
+          <MentorCard info={info} />
+        </MentoCardContainer>
+      ))}
+    </MentorListContainer>
+  );
 };
+
+const MentoCardContainer = styled.div`
+  width: 100%;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const MentorListContainer = styled.div`
   width: 100%;
@@ -51,6 +68,10 @@ const MentorListContainer = styled.div`
   margin-top: 30px;
   border-top-left-radius: 20px;
   box-shadow: 0px 0px 200px 5px rgba(0, 0, 0, 0.33);
+  overflow: scroll;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-items: stretch;
 `;
 
 export default MentorList;

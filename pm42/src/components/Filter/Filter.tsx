@@ -26,18 +26,15 @@ const Filter = () => {
 };
 
 const Input = styled.input`
-  right: 200px;
   height: 30px;
   margin-left: 5px;
   outline: none;
   border: none;
   outline: none;
   border-radius: 10px;
-  background: var(--sub-color);
-  padding-left: 5px;
-  &::placeholder {
-    color: var(--gray-color);
-  }
+  background: var(--main-color);
+  padding-left: 10px;
+  color: white;
 `;
 const SearchIcon = styled.div`
   background-image: url("/public/assets/SearchIcon.png");
@@ -52,7 +49,7 @@ const FilterContainer = styled.div`
   width: 98%;
   border-radius: 10px;
   height: 50px;
-  background: var(--main-color);
+  background: var(--lightgray-color);
   margin-top: 15px;
   display: flex;
   align-items: center;
@@ -65,7 +62,8 @@ const FilterElement = styled.div`
   justify-content: center;
   align-items: center;
   padding: 5px;
-  border: 1px solid var(--white-color);
+  background: var(--main-color);
+  border: 1px solid var(--main-color);
   height: 30px;
   margin-left: 10px;
   border-radius: 10px;

@@ -1,6 +1,13 @@
 import styled from "@emotion/styled";
 import { HeaderContainer } from "../../Styles";
 
+interface IRank {
+  coalition: string;
+  intra: string;
+  time: number;
+  good: number;
+}
+
 const data = [
   {
     coalition: "gun",
