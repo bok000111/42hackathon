@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponseNotFound
 from django.views import View
 from cryptography.fernet import Fernet
+from .models import User42
 import json
 import requests
 import time
