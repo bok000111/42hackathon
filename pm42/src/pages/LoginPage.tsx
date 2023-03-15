@@ -13,7 +13,7 @@ const LoginPage = () => {
     const code = window.location.search.slice(1).split("=")[1];
     if (!code) return;
     axios
-      .get("http://localhost:8000/api/gettoken/?code=" + code)
+      .get("http://localhost:8000/api/token/?code=" + code)
       .then((res) => console.log(res));
   }, []);
   return (
