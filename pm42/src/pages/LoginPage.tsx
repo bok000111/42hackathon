@@ -4,8 +4,10 @@ import { CommonContainer, Logo } from "../Styles";
 import { Cookies } from "react-cookie";
 import { useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 //api/get_token/?code=
 const LoginPage = () => {
+  const navigator = useNavigate();
   const cookie = new Cookies();
   console.log(cookie);
   console.log(cookie.get("access_token"));
@@ -14,7 +16,11 @@ const LoginPage = () => {
     if (!code) return;
     axios
       .get("http://localhost:8000/api/token/?code=" + code)
-      .then((res) => console.log(res));
+      .then((res) => {
+        sessionStorage.setItem("token", res.data.token);
+        navigator("/main");
+      })
+      .catch((e) => console.log(e));
   }, []);
   return (
     <CommonContainer>

@@ -19,17 +19,29 @@ const MentoCard = ({ info }: { info: IMentorInfo }) => {
           <span>Level : {info.level}</span>
           <span>Rating : {info.rating}</span>
         </InfoContainer>
-        <SubjectContainer></SubjectContainer>
+        <SubjectContainer>
+          {info.subjects.map((subject) => (
+            <Subject>{subject}</Subject>
+          ))}
+        </SubjectContainer>
       </ContentsContainer>
     </MentoCardContainer>
   );
 };
 
+const Subject = styled.div`
+  display: inline-block;
+  border: 1px solid var(--white-color);
+  color: var(--white-color);
+  border-radius: 5px;
+  padding: 0 5px;
+`;
+
 const SubjectContainer = styled.div`
   border: 1px solid var(--white-color);
-  width: 90%;
+  width: 95%;
   height: 50px;
-  margin-left: 10px;
+  margin-left: 5px;
   border-radius: 10px;
   overflow-y: auto;
 `;
