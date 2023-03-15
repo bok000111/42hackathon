@@ -14,7 +14,7 @@ class	Init(View):
 class	Api(View):
 	id = 'u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c'
 	secret = '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'
-	redirect_uri = 'http://localhost:8000'
+	redirect_uri = 'http://localhost:5173'
 	key = b'Zf3NDyN344q5gAf4L8VYdElc1lRX2-7KrEqDSYuUmDI='
 	def apiMe(self, requset, code, token):
 		if token is None:
@@ -32,11 +32,17 @@ class	Api(View):
 		token = Fernet(self.key).encrypt(token)
 		return JsonResponse({'token': token})
 	def get(self, request, apiname=None):
+		print(apiname)
 		quary_dict = request.GET
 		if apiname is None or self.api_list.get(apiname) is None:
 			return HttpResponseNotFound('404notfound')
 		elif	quary_dict.get('code') is None and quary_dict.get('encrypted_token') is None:
 			return HttpResponseNotFound('404notfound')
+		code = quary_dict.get('code')
+		data = {'grant_type': 'authorization_code', 'client_id': self.id,'client_secret': self.secret, 'code': code, 'redirect_uri': self.redirect_uri, 'scope': 'public'}
+		token = requests.post('https://api.intra.42.fr/v2/oauth/token', data=data).json()['access_token']
+		token = Fernet(self.key).encrypt(token.encode('utf-8')).decode('utf-8')
+		return JsonResponse({'token': token})
 		return self.api_list.get(apiname)(request, quary_dict.get('code'), quary_dict.get('access_token'))
 	api_list = {'token': getToken, 'me': apiMe}
 
