@@ -10,12 +10,13 @@ import time
 from .models import User42, OpenSlot
 
 key = b'Zf3NDyN344q5gAf4L8VYdElc1lRX2-7KrEqDSYuUmDI='
+fernet = Fernet(key)
 
 class	Init(View):
 	def get(self, request):
 		return render(request, 'index.html')
 
-class	ApiToken(View):
+class	ApiLogin(View):
 	id = 'u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c'
 	secret = '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'
 	uri = 'http://localhost:5173'
@@ -29,16 +30,8 @@ class	ApiToken(View):
 		except:
 			return HttpResponse('Unauthorized', status=401)
 		token = res.json().get('access_token')
-		token = Fernet(key).encrypt(token.encode('utf-8')).decode('utf-8')
-		return JsonResponse({'token': token})
-
-class ApiMe(View):
-	def get(self, request):
-		quary_dict = request.GET
 		try:
-			token = quary_dict['token']
-			decrypted = Fernet(key).decrypt(token.encode('utf-8')).decode('utf-8')
-			res = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + decrypted})
+			res = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + token})
 			res.raise_for_status()
 		except:
 			return HttpResponse('Unauthorized', status=401)
@@ -48,26 +41,27 @@ class ApiMe(View):
 		except:
 			me = User42(id=res['id'])
 			try:
-				time.sleep(1)
-				coa = requests.get("https://api.intra.42.fr/v2/users/" + str(me.id) + "/coalitions", headers={'Authorization': 'Bearer ' + decrypted})
+				coa = requests.get("https://api.intra.42.fr/v2/users/" + str(me.id) + "/coalitions", headers={'Authorization': 'Bearer ' + token})
 				coa.raise_for_status()
 			except:
 				return HttpResponse('Unauthorized', status=401)
 			me.coa = coa.json()[0]['slug']
 		me.login = res['login']
-		me.image = res.get["image"].get["link"]
+		me.image = res["image"]["link"]
 		for cursus in res.get("cursus_users"):
 			if cursus.get('grade') is not None:
 				me.level = cursus.get('level')
-		me.token = token.encode()
+		me.token = fernet.encrypt(token.encode()).decode()
+		print(me.token)
 		me.save()
+		time.sleep(1)
 		projects = [{'name': x['project']['name'], 'final_mark': x['final_mark'], 'marked_at': x['marked_at']} for x in res['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
-		return JsonResponse({'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level,'projects': projects})
+		return JsonResponse({'token': me.token, 'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level,'projects': projects})
 
 class ApiRank(View):
 	def get(self, request):
 		try:
-			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+			User42.objects.get(token=request.GET.get('token'))
 		except:
 			return HttpResponse('Unauthorized', status=401)
 		users = list(User42.objects.all().order_by('-total_time', '-mentor_cnt', '-total_feedback', 'id').values('login', 'coa', 'total_time', 'total_feedback')[:3])
@@ -76,39 +70,70 @@ class ApiRank(View):
 class ApiSlot(View):
 	def get(self, request):
 		try:
-			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+			User42.objects.get(token=request.GET.get('token'))
 		except:
 			return HttpResponse('Unauthorized', status=401)
-		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start_time', 'end_time', 'description'))
+		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start_te', 'end', 'description'))
 		for slot in slots:
 			slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
 		return JsonResponse({'slots': slots})
 	def post(self, request):
 		try:
-			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+			User42.objects.get(token=request.POST.get('token'))
+			body = json.loads(request.body)
+			newSlot = OpenSlot(mento=body['login'], subject=body['subject'], max=body['max'], start=body['start'], end=body['end'], description=body['description'])
+			newSlot.save()
+			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
+			for slot in slots:
+				slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
+			return JsonResponse({'slots': slots})
 		except:
 			return HttpResponse('Unauthorized', status=401)
-		return HttpResponse('Unauthorized', status=401)
 	def put(self, request):
-		try:
-			User42.objects.get(token=request.GET['token'].decode('utf-8'))
-		except:
-			return HttpResponse('Unauthorized', status=401)
-		return HttpResponse('Unauthorized', status=401)
+			User42.objects.get(token=request.PUT.get('token'))
+			body = json.loads(request.body)
+			toPart = OpenSlot.objects.get(id=body['id'])
+			mentee =  User42.objects.get(login=body['mentee'])
+			if toPart.left == 0:
+				raise
+			toPart.left -= 1
+			if toPart.curr == 0:
+				toPart.mentee1 = mentee.level
+			if toPart.curr == 1:
+				toPart.mentee2 = mentee.level
+			if toPart.curr == 2:
+				toPart.mentee3 = mentee.level
+			if toPart.curr == 3:
+				toPart.mentee4 = mentee.level
+			toPart.curr += 1
+			toPart.save()
+			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
+			for slot in slots:
+				slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
+			return JsonResponse({'slots': slots})
 	def delete(self, request):
 		try:
-			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+			User42.objects.get(token=request.DELETE.get('token'))
+			body = json.loads(request.body)
+			toDelete = OpenSlot.objects.get(id=body['id'])
+			toDelete.delete()
+			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
+			for slot in slots:
+				slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
+			return JsonResponse({'slots': slots})
 		except:
 			return HttpResponse('Unauthorized', status=401)
-		return HttpResponse('Unauthorized', status=401)
-	
+
+from django.db.models import Q
+
 class ApiSlotMe(View):
 	def get(self, request):
 		try:
-			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+			login = User42.objects.get(token=request.GET.get('token')).login
 		except:
 			return HttpResponse('Unauthorized', status=401)
-		return HttpResponse('Unauthorized', status=401)
+		myslots = list(OpenSlot.objects.filter(Q(mento=login) | Q(mentee1=login) | Q(mentee2=login) | Q(mentee3=login) | Q(mentee4=login)).values('id', 'mento', 'subject', 'mentee1', 'mentee2', 'mentee3', 'mentee4', 'start', 'end'))
+		return HttpResponse({'myslots': myslots})
 
 class Dev(View):
 	id = 'u-s4t2ud-97752de4d75913a94e9887dbe2f66519abe99042fba7fc73fe3f7e1340602529'
@@ -119,7 +144,7 @@ class Dev(View):
 		return HttpResponse({})
 	
 		#test GET api/slot/
-		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start_time', 'end_time', 'description'))
+		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
 		for slot in slots:
 			slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
 		return JsonResponse({'slots': slots})
