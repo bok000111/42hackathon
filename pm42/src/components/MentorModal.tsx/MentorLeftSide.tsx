@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 
 interface ISubjectData {
   name: string;
@@ -14,7 +14,18 @@ function bonusDone({ name, final_mark: score }: ISubjectData) {
   return score > 100;
 }
 
-const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
+const MentorLeftSide = ({
+  data,
+  setSubject,
+  setDescription,
+  subject,
+}: {
+  data: ISubjectData[];
+  setSubject: React.Dispatch<React.SetStateAction<string>>;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  subject: string;
+}) => {
+  const ref = useRef(null);
   const [prev, setPrev] = useState<HTMLElement | null>(null);
   const onClickMandetory = (e: React.MouseEvent) => {
     if (prev) {
@@ -28,6 +39,9 @@ const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
     e.currentTarget.classList.add("active");
     e.currentTarget.classList.remove("notActive");
     setPrev(e.currentTarget.parentElement);
+    setSubject(e.currentTarget.textContent || "");
+    const target = ref.current as unknown as HTMLTextAreaElement;
+    target.value = "";
   };
   const onClickBonus = (e: React.MouseEvent) => {
     if (prev) {
@@ -45,6 +59,15 @@ const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
       target.classList.remove("notActive");
     });
     setPrev(e.currentTarget.parentElement);
+    setSubject(
+      e.currentTarget.parentElement?.childNodes[0].textContent + " Bonus" || ""
+    );
+    const target = ref.current as unknown as HTMLTextAreaElement;
+    console.log(target);
+    target.value = "";
+  };
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(e.target.value);
   };
   return (
     <>
@@ -54,7 +77,7 @@ const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
         {data.map((info) => (
           <SubjectContainer key={info.name}>
             <Subject className="notActive" onClick={onClickMandetory}>
-              {info.name}
+              {info.name.replaceAll(" Module", "")}
             </Subject>
             {bonusDone(info) && (
               <Bonus className="notActive" onClick={onClickBonus}>
@@ -65,10 +88,27 @@ const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
         ))}
       </SubjectsContainer>
       <SubHeaderContainer>Subject Detail</SubHeaderContainer>
-      <TextArea maxLength={1024} />
+      {subject.length > 0 ? (
+        <TextArea ref={ref} maxLength={1024} onChange={onChange} />
+      ) : (
+        <NoSubject>Choose Subject...</NoSubject>
+      )}
     </>
   );
 };
+
+const NoSubject = styled.div`
+  margin-top: 15px;
+  width: 350px;
+  height: 220px;
+  border-radius: 10px;
+  border: 1px solid var(--main-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--main-color);
+  font-size: 1.5rem;
+`;
 
 const SubjectContainer = styled.div`
   display: flex;

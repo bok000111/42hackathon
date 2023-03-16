@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useSetRecoilState } from "recoil";
-import { ScheduleBackToggleState, ScheduleToggleState } from "../Atom";
+import { ScheduleBackToggleState, ScheduleToggleState } from "../../Atom";
 
 interface ITimeData {
   date: string;

@@ -19,3 +19,18 @@ export const ScheduleBackToggleState = atom({
   key: "schduleBackToggle",
   default: true,
 });
+
+export const StartIndexState = atom({
+  key: "startIndex",
+  default: -1,
+});
+
+export const EndIndexState = atom({
+  key: "endIndex",
+  default: -1,
+});
+
+export const MenteeNumberState = atom({
+  key: "menteeNumber",
+  default: 1,
+});

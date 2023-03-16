@@ -1,16 +1,30 @@
 import styled from "@emotion/styled";
+import React from "react";
+import { useRecoilState } from "recoil";
+import { MenteeNumberState } from "../../Atom";
 
 const Select = () => {
+  const [menteeNumber, setMenteeNumber] = useRecoilState(MenteeNumberState);
+  const onClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (Number(e.currentTarget.textContent) === menteeNumber) return;
+    const parent = e.currentTarget.parentElement as HTMLElement;
+    parent.childNodes.forEach((node) => {
+      const target = node as HTMLElement;
+      target.classList.remove("numberActive");
+    });
+    e.currentTarget.classList.add("numberActive");
+    setMenteeNumber(Number(e.currentTarget.textContent));
+  };
+
   return (
     <>
       <SelectCount>
-        1
-        <SelectContainer>
-          <SelectBox>1</SelectBox>
-          <SelectBox>2</SelectBox>
-          <SelectBox>3</SelectBox>
-          <SelectBox>4</SelectBox>
-        </SelectContainer>
+        <SelectBox onClick={onClick} className="numberActive">
+          1
+        </SelectBox>
+        <SelectBox onClick={onClick}>2</SelectBox>
+        <SelectBox onClick={onClick}>3</SelectBox>
+        <SelectBox onClick={onClick}>4</SelectBox>
       </SelectCount>
     </>
   );
@@ -24,23 +38,23 @@ const SelectBox = styled.div`
   align-items: center;
   width: 40px;
   height: 40px;
-  border-bottom: 1px solid var(--main-color);
+  border-right: 1px solid var(--main-color);
+  transition: 0.3s;
   &:last-of-type {
-    border: none;
+    border-right: none;
+  }
+  &.numberActive {
+    background: var(--main-color);
+    color: white;
+  }
+  &:hover {
+    background: var(--main-color);
+    color: white;
   }
 `;
 
-const SelectContainer = styled.div`
-  position: absolute;
-  left: calc() (50% - 20px);
-  top: 50px;
-  border-radius: 10px;
-  border: 1px solid var(--main-color);
-  visibility: hidden;
-`;
-
 const SelectCount = styled.div`
-  width: 40px;
+  width: 160px;
   height: 40px;
   border: 1px solid var(--main-color);
   border-radius: 10px;
@@ -52,7 +66,7 @@ const SelectCount = styled.div`
   color: var(--main-color);
   margin: 0 10px;
   cursor: pointer;
-  position: relative;
+  overflow: hidden;
 `;
 
 export default Select;

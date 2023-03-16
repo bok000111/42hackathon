@@ -1,92 +1,69 @@
 import styled from "@emotion/styled";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { EndIndexState, StartIndexState } from "../../Atom";
+import {
+  checkTimeOver,
+  createDateInfo,
+  getDayInfoList,
+  getMonday,
+  getTimeStamp,
+  getWeekInfo,
+} from "./ScheduleHooks";
 import Select from "./Select";
-
-const getMonday = () => {
-  const now = new Date();
-  const monday = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() - now.getDay() + 1
-  );
-
-  return monday;
-};
-
-const getWeekInfo = (monday: Date) => {
-  const sunday = new Date(monday);
-  sunday.setDate(sunday.getDate() + 6);
-
-  const months = [
-    "Jan", // January
-    "Feb", // February
-    "Mar", // March
-    "Apr", // April
-    "May", // May
-    "Jun", // June
-    "Jul", // July
-    "Aug", // August
-    "Sep", // September
-    "Oct", // October
-    "Nov", // November
-    "Dec", // December
-  ];
-  return `${months[monday.getMonth()]} ${monday.getDate()} ~ ${
-    monday.getMonth() !== sunday.getMonth() ? months[sunday.getMonth()] : ""
-  } ${sunday.getDate()}, ${monday.getFullYear()}`;
-};
-
-function getDayInfoList() {
-  const DayInfoList = new Array(9).fill("");
-  const now = new Date();
-  const monday = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() - now.getDay() + 1
-  );
-  const Days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  for (let i = 1; i <= 7; i++) {
-    DayInfoList[i] = `${Days[i - 1]} ${monday.getMonth() + 1}/${
-      monday.getDate() + i - 1
-    }`;
-  }
-  return DayInfoList;
-}
-
-const getTimeInfo = (monday: Date) =>
-  new Array(96).fill(0).map((_, idx) => ({
-    mon: monday,
-    min: idx * 15,
-  }));
-
-const getTimeStamp = (monday: Date, min: number) => {
-  const temp = new Date(monday);
-  temp.setMinutes(min);
-  const h = temp.getHours(),
-    m = temp.getMinutes();
-
-  return m % 60 === 0
-    ? `${h % 12 === 0 ? 12 : h % 12} : ${m ? m : "0" + m} ${
-        h < 12 ? "AM" : "PM"
-      }`
-    : "";
-};
-
-const checkTimeOver = (time: Date) => {
-  const now = new Date().getTime();
-  return Math.floor((now - time.getTime()) / 1000 / 60) <= -15;
-};
-
-const createDateInfo = (mon: Date, idx: number) => {
-  const temp = new Date(mon);
-  temp.setMinutes(idx * 15);
-  return temp;
-};
 
 const calIdx = (idx: number) => 96 * (idx % 7) + Math.floor(idx / 7);
 
 const ScheduleModal = () => {
+  const ref = useRef(null);
   const mon = getMonday();
+  const [start, setStart] = useRecoilState(StartIndexState);
+  const [end, setEnd] = useRecoilState(EndIndexState);
+
+  const onClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.currentTarget.classList.contains("disabled")) return;
+    if (start === -1) {
+      e.currentTarget.classList.add("blockActive");
+      setStart(Number(e.currentTarget.dataset.idx));
+      return;
+    }
+    if (Number(e.currentTarget.dataset.idx) === start) {
+      e.currentTarget.classList.remove("blockActive");
+      setStart(-1);
+      const target = e.currentTarget.parentElement as HTMLElement;
+      target.childNodes.forEach((node: any) => {
+        node.classList.remove("blockActive");
+      });
+      return;
+    }
+    const i = Math.min(start, Number(e.currentTarget.dataset.idx)),
+      j = Math.max(start, Number(e.currentTarget.dataset.idx));
+
+    const target = e.currentTarget.parentElement as HTMLElement;
+    target.childNodes.forEach((node: any) => {
+      const t = Number(node.dataset.idx);
+      if (t >= i && t <= j) node.classList.add("blockActive");
+      else node.classList.remove("blockActive");
+    });
+    setStart(i);
+    setEnd(j);
+  };
+
+  useEffect(() => {
+    if (start !== -1 && end !== -1) {
+      const target = ref.current as unknown as HTMLElement;
+      target.childNodes.forEach((node: any) => {
+        const t = Number(node.dataset.idx);
+        if (t >= start && t <= end) node.classList.add("blockActive");
+        else node.classList.remove("blockActive");
+      });
+    }
+    return () => {
+      if (end === -1) {
+        setStart(-1);
+      }
+    };
+  }, []);
   return (
     <ScheduleModalContainer>
       <InfoContainer>
@@ -111,15 +88,19 @@ const ScheduleModal = () => {
               ))}
             </TimeStampContainer>
           </TimeInfoContainer>
-          <TimeBlockContainer>
+          <TimeBlockContainer ref={ref}>
             {new Array(96 * 7).fill(0).map((_, idx) => {
+              const i = calIdx(idx);
               return (
                 <TimeBlock
-                  className={Math.floor(idx / 7) % 2 === 0 ? "odd" : "even"}
+                  onClick={onClick}
+                  className={`${
+                    Math.floor(idx / 7) % 2 === 0 ? "odd" : "even"
+                  } ${checkTimeOver(createDateInfo(mon, i)) ? "" : "disabled"}`}
                   data-time-info={createDateInfo(mon, calIdx(idx))}
+                  data-idx={i}
                 >
-                  {/*{96 * (idx % 7) + Math.floor(idx / 7)}*/}
-                  {createDateInfo(mon, calIdx(idx)).getDate()}
+                  {i}
                 </TimeBlock>
               );
             })}
@@ -139,6 +120,17 @@ const TimeBlock = styled.div`
   &.even {
     border-bottom: 1px solid var(--gray-color);
   }
+  &.disabled {
+    background: var(--lightgray-color);
+    cursor: not-allowed;
+  }
+  &.active {
+    background: var(--sub-color);
+  }
+  &.blockActive {
+    background: var(--sub-color);
+  }
+  cursor: grab;
 `;
 
 const TimeBlockContainer = styled.div`
@@ -171,9 +163,7 @@ const TimeStamp = styled.div`
     background: var(--lightgray-color);
     cursor: not-allowed;
   }
-  &.active {
-    background: var(--sub-color);
-  }
+
   &:nth-child(2n) {
     border-bottom: 1px solid var(--gray-color);
   }

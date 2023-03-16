@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import MentorLeftSide from "./MentorLeftSide";
 import MentorRightSide from "./MentorRightSide";
 
@@ -95,22 +95,30 @@ const timeData = subjectData.map((el) => ({
   time: "14:00~16:00",
 }));
 
+const getStartDate = () => {
+  const now = new Date();
+  const monday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() - now.getDay() + 1
+  );
+
+  return monday;
+};
+
 const MentorModal = () => {
-  console.log(localStorage.getItem("token"));
-  useEffect(() => {
-    axios
-      .get(
-        "http://localhost:8000/api/me/?token=" + localStorage.getItem("token")
-      )
-      .then((res) => {
-        console.log(res);
-        console.log(JSON.stringify(res.data.projects));
-      });
-  }, []);
+  const [subject, setSubject] = useState("");
+  const [description, setDescription] = useState("");
+  const startDate = getStartDate();
   return (
     <MentorModalContainer>
       <Container>
-        <MentorLeftSide data={subjectData} />
+        <MentorLeftSide
+          data={subjectData}
+          setSubject={setSubject}
+          setDescription={setDescription}
+          subject={subject}
+        />
       </Container>
       <Container>
         <MentorRightSide data={timeData} />

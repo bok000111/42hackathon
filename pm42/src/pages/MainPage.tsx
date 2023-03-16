@@ -13,7 +13,7 @@ import {
   ScheduleToggleState,
 } from "../Atom";
 import customHooks from "../hooks";
-import MentorModal from "../MentorModal.tsx/MentorModal";
+import MentorModal from "../components/MentorModal.tsx/MentorModal";
 import ScheduleModal from "../components/ScheduleModal.tsx/ScheduleModal";
 
 const MainPage = () => {
