@@ -73,7 +73,7 @@ class ApiSlot(View):
 			User42.objects.get(token=request.GET.get('token'))
 		except:
 			return HttpResponse('Unauthorized', status=401)
-		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start_te', 'end', 'description'))
+		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'max', 'curr', 'start', 'end', 'description'))
 		for slot in slots:
 			slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
 		return JsonResponse({'slots': slots})
