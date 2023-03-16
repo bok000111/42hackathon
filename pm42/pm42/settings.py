@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-&@vu-7r51y3y+q=kecqriq7_tze(j1!s6z-ngj#@$^@w8y##17
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-CSRF_TRUSTED_ORIGINS = ['http://localhost*']
+#ALLOWED_HOSTS = ['django']
 
 # Application definition
 
@@ -44,7 +43,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -54,8 +53,15 @@ MIDDLEWARE = [
 # CORS 관련 추가
 CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:5173'
                          ,'http://localhost:5173']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173/*']
 CORS_ALLOW_CREDENTIALS = True
-
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'PATCH',
+    'POST',
+    'PUT'
+]
 ROOT_URLCONF = 'pm42.urls'
 
 TEMPLATES = [
