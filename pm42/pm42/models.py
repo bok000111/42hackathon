@@ -17,7 +17,7 @@ class User42(models.Model):
     feedback4 = models.IntegerField(default=0)
     feedback5 = models.IntegerField(default=0)
     total_time = models.IntegerField(default=0)
-    token = models.BinaryField(default=b'')
+    token = models.TextField(default='')
 
 class OpenSlot(models.Model):
     id = models.AutoField(primary_key=True)

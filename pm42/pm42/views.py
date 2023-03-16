@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponseNotFound, HttpResponse
 from django.views import View
 from cryptography.fernet import Fernet
+from django.db.models import Q
 
-from datetime import timedelta
-import json
 import requests
 import time
+
 from .models import User42, OpenSlot
 
 key = b'Zf3NDyN344q5gAf4L8VYdElc1lRX2-7KrEqDSYuUmDI='
@@ -55,11 +55,11 @@ class ApiMe(View):
 				return HttpResponse('Unauthorized', status=401)
 			me.coa = coa.json()[0]['slug']
 		me.login = res['login']
-		me.image = res.get["image"].get["link"]
+		me.image = res["image"]["link"]
 		for cursus in res.get("cursus_users"):
 			if cursus.get('grade') is not None:
 				me.level = cursus.get('level')
-		me.token = token.encode()
+		me.token = token
 		me.save()
 		projects = [{'name': x['project']['name'], 'final_mark': x['final_mark'], 'marked_at': x['marked_at']} for x in res['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
 		return JsonResponse({'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level,'projects': projects})
@@ -67,7 +67,8 @@ class ApiMe(View):
 class ApiRank(View):
 	def get(self, request):
 		try:
-			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+			print(request.GET.get('token'))
+			User42.objects.get(token=request.GET['token'])
 		except:
 			return HttpResponse('Unauthorized', status=401)
 		users = list(User42.objects.all().order_by('-total_time', '-mentor_cnt', '-total_feedback', 'id').values('login', 'coa', 'total_time', 'total_feedback')[:3])
@@ -76,7 +77,7 @@ class ApiRank(View):
 class ApiSlot(View):
 	def get(self, request):
 		try:
-			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+			User42.objects.get(token=request.GET.get('token'))
 		except:
 			return HttpResponse('Unauthorized', status=401)
 		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start_time', 'end_time', 'description'))
@@ -85,30 +86,32 @@ class ApiSlot(View):
 		return JsonResponse({'slots': slots})
 	def post(self, request):
 		try:
-			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+			User42.objects.get(token=request.GET.get('token'))
 		except:
 			return HttpResponse('Unauthorized', status=401)
 		return HttpResponse('Unauthorized', status=401)
 	def put(self, request):
 		try:
-			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+			User42.objects.get(token=request.GET.get('token'))
 		except:
 			return HttpResponse('Unauthorized', status=401)
 		return HttpResponse('Unauthorized', status=401)
 	def delete(self, request):
 		try:
-			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+			User42.objects.get(token=request.GET.get('token'))
 		except:
 			return HttpResponse('Unauthorized', status=401)
 		return HttpResponse('Unauthorized', status=401)
-	
+
+
 class ApiSlotMe(View):
 	def get(self, request):
 		try:
-			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+			login = User42.objects.get(token=request.GET.get('token')).login
 		except:
 			return HttpResponse('Unauthorized', status=401)
-		return HttpResponse('Unauthorized', status=401)
+		myslots = list(OpenSlot.objects.filter(Q(mento=login) | Q(mentee1=login) | Q(mentee2=login) | Q(mentee3=login) | Q(mentee4=login)).values('id', 'mento', 'subject', 'mentee1', 'mentee2', 'mentee3', 'mentee4', 'start_time', 'end_time'))
+		return HttpResponse({'myslots': myslots})
 
 class Dev(View):
 	id = 'u-s4t2ud-97752de4d75913a94e9887dbe2f66519abe99042fba7fc73fe3f7e1340602529'
