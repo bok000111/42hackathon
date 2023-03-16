@@ -77,47 +77,16 @@ const checkTimeOver = (time: Date) => {
   return Math.floor((now - time.getTime()) / 1000 / 60) <= -15;
 };
 
-const createDateInfo = (mon: Date, day: number, min: number) => {
+const createDateInfo = (mon: Date, idx: number) => {
   const temp = new Date(mon);
-  temp.setDate(temp.getDate() + day);
-  temp.setMinutes(min);
+  temp.setMinutes(idx * 15);
   return temp;
 };
 
+const calIdx = (idx: number) => 96 * (idx % 7) + Math.floor(idx / 7);
+
 const ScheduleModal = () => {
-  const ref = useRef();
-  const [start, setStart] = useState<number>(-1);
-  const [end, setEnd] = useState<number>(-1);
-
-  const onClickTimeBlock = (e: any) => {
-    if (
-      e.currentTarget.classList.contains("disabled") ||
-      e.currentTarget.classList.contains("active")
-    ) {
-      console.log("disabled");
-      return;
-    }
-    if (start === -1) {
-      setStart(e.currentTarget.dataset.blockNumber);
-      e.currentTarget.classList.add("active");
-      return;
-    }
-    const num = e.currentTarget.dataset.blockNumber;
-    let i = Math.min(num, start),
-      j = Math.max(num, start);
-    console.log(ref.current);
-    const targert = ref.current as unknown as HTMLElement;
-    targert.childNodes.forEach((node) => {
-      const t = node as HTMLElement;
-      console.log(t);
-      if (
-        i <= Number(t.dataset.blockNumber && Number(t.dataset.blockNumber) <= j)
-      ) {
-        t.classList.add("active");
-      }
-    });
-  };
-
+  const mon = getMonday();
   return (
     <ScheduleModalContainer>
       <InfoContainer>
@@ -134,34 +103,64 @@ const ScheduleModal = () => {
             <DayInfo key={idx}>{info}</DayInfo>
           ))}
         </DayInfoContainer>
-        <TimeInfoContainer ref={ref}>
-          {getTimeInfo(getMonday()).map(({ mon, min }, i) => (
-            <TimeInfo>
-              <TimeStamp>{getTimeStamp(mon, min)}</TimeStamp>
-              {new Array(7).fill(0).map((_, idx) => {
-                const time = createDateInfo(mon, idx, min);
-                return (
-                  <TimeStamp
-                    key={idx}
-                    className={checkTimeOver(time) ? "" : "disabled"}
-                    data-time-stamp={time}
-                    data-block-number={i + idx * 96}
-                    onClick={onClickTimeBlock}
-                  >
-                    {i + idx * 96}
-                  </TimeStamp>
-                );
-              })}
-            </TimeInfo>
-          ))}
-        </TimeInfoContainer>
+        <TimeSectionContainer>
+          <TimeInfoContainer>
+            <TimeStampContainer>
+              {new Array(96).fill(0).map((_, idx) => (
+                <TimeStamp>{getTimeStamp(mon, idx * 15)}</TimeStamp>
+              ))}
+            </TimeStampContainer>
+          </TimeInfoContainer>
+          <TimeBlockContainer>
+            {new Array(96 * 7).fill(0).map((_, idx) => {
+              return (
+                <TimeBlock
+                  className={Math.floor(idx / 7) % 2 === 0 ? "odd" : "even"}
+                  data-time-info={createDateInfo(mon, calIdx(idx))}
+                >
+                  {/*{96 * (idx % 7) + Math.floor(idx / 7)}*/}
+                  {createDateInfo(mon, calIdx(idx)).getDate()}
+                </TimeBlock>
+              );
+            })}
+          </TimeBlockContainer>
+        </TimeSectionContainer>
       </CalendarContainer>
     </ScheduleModalContainer>
   );
 };
 
+const TimeBlock = styled.div`
+  height: 40px;
+  border-right: 1px solid var(--gray-color);
+  &.odd {
+    border-bottom: 1px solid var(--lightgray-color);
+  }
+  &.even {
+    border-bottom: 1px solid var(--gray-color);
+  }
+`;
+
+const TimeBlockContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(7, auto);
+  width: 87.5%;
+`;
+
+const TimeStampContainer = styled.div`
+  width: 100%;
+`;
+
+const TimeSectionContainer = styled.div`
+  width: 100%;
+  height: 546px;
+  display: flex;
+  overflow-y: scroll;
+`;
+
 const TimeStamp = styled.div`
-  width: 12.5%;
+  width: 100%;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -174,6 +173,15 @@ const TimeStamp = styled.div`
   }
   &.active {
     background: var(--sub-color);
+  }
+  &:nth-child(2n) {
+    border-bottom: 1px solid var(--gray-color);
+  }
+  &:nth-child(2n + 1) {
+    border-bottom: 1px solid var(--lightgray-color);
+  }
+  &:last-of-type {
+    border-bottom: none;
   }
 `;
 
@@ -193,9 +201,9 @@ const TimeInfo = styled.div`
 `;
 
 const TimeInfoContainer = styled.div`
-  overflow-y: scroll;
+  display: flex;
   height: 545px;
-  width: 100%;
+  width: 12.5%;
   &::-webkit-scrollbar {
     border-radius: 10px;
     width: 10px;
