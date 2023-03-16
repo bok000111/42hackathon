@@ -22,10 +22,7 @@ const MainPage = () => {
   const scheduleToggle = useRecoilValue(ScheduleToggleState);
   const scheduleBackToggle = useRecoilValue(ScheduleBackToggleState);
 
-  const cookie = new Cookies();
   const { closeBackground, closeScheduleBack } = customHooks();
-  console.log(cookie.get("access_token"));
-  localStorage.setItem("access_token", cookie.get("access_token"));
   const backgroundOff = () => {
     closeBackground();
   };

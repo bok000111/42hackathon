@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import { useEffect } from "react";
+import { axiosGetMatchList, getData } from "../../api/axios";
 import { HeaderContainer } from "../../Styles";
 import createMatchIndex from "./createMatchIndex";
 
@@ -48,7 +50,9 @@ function createDummyData() {
 const data = createDummyData();
 
 const MatchList = () => {
-  console.log(data.map((el) => el.type + "   " + el.target.join("-")));
+  useEffect(() => {
+    getData(axiosGetMatchList);
+  }, []);
   return (
     <MatchListContainer>
       <HeaderContainer>Mentor</HeaderContainer>

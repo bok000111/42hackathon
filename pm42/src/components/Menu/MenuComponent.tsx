@@ -4,7 +4,7 @@ const MenuComponent = () => {
   return (
     <MenuContainer>
       <div>
-        <IconContainer url="/assets/mtom.jpg" width={70} height={50} />
+        <IconContainer url="/assets/mtom.png" width={50} height={50} />
       </div>
       <RightContainer>
         <IconContainer url="/assets/info.png" height={25} width={25} />

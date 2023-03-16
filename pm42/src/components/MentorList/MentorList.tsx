@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useEffect } from "react";
+import { axiosGetAllSlots, getData } from "../../api/axios";
 import MentorCard from "./MentorCard";
 
 interface IMentorInfo {
@@ -43,6 +44,9 @@ const data: IMentorInfo[] = [
 ];
 
 const MentorList = ({}: {}) => {
+  useEffect(() => {
+    getData(axiosGetAllSlots);
+  }, []);
   return (
     <MentorListContainer>
       {data.map((info) => (
