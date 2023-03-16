@@ -2,20 +2,21 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponseNotFound, HttpResponse
 from django.views import View
 from cryptography.fernet import Fernet
-from django.db.models import Q
 
+from datetime import timedelta
+import json
 import requests
 import time
-
 from .models import User42, OpenSlot
 
 key = b'Zf3NDyN344q5gAf4L8VYdElc1lRX2-7KrEqDSYuUmDI='
+fernet = Fernet(key)
 
 class	Init(View):
 	def get(self, request):
 		return render(request, 'index.html')
 
-class	ApiToken(View):
+class	ApiLogin(View):
 	id = 'u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c'
 	secret = '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'
 	uri = 'http://localhost:5173'
@@ -29,16 +30,8 @@ class	ApiToken(View):
 		except:
 			return HttpResponse('Unauthorized', status=401)
 		token = res.json().get('access_token')
-		token = Fernet(key).encrypt(token.encode('utf-8')).decode('utf-8')
-		return JsonResponse({'token': token})
-
-class ApiMe(View):
-	def get(self, request):
-		quary_dict = request.GET
 		try:
-			token = quary_dict['token']
-			decrypted = Fernet(key).decrypt(token.encode('utf-8')).decode('utf-8')
-			res = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + decrypted})
+			res = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + token})
 			res.raise_for_status()
 		except:
 			return HttpResponse('Unauthorized', status=401)
@@ -48,8 +41,7 @@ class ApiMe(View):
 		except:
 			me = User42(id=res['id'])
 			try:
-				time.sleep(1)
-				coa = requests.get("https://api.intra.42.fr/v2/users/" + str(me.id) + "/coalitions", headers={'Authorization': 'Bearer ' + decrypted})
+				coa = requests.get("https://api.intra.42.fr/v2/users/" + str(me.id) + "/coalitions", headers={'Authorization': 'Bearer ' + token})
 				coa.raise_for_status()
 			except:
 				return HttpResponse('Unauthorized', status=401)
@@ -59,16 +51,26 @@ class ApiMe(View):
 		for cursus in res.get("cursus_users"):
 			if cursus.get('grade') is not None:
 				me.level = cursus.get('level')
-		me.token = token
+		me.token = fernet.encrypt(token.encode()).decode()
+		print(me.token)
 		me.save()
+		time.sleep(1)
 		projects = [{'name': x['project']['name'], 'final_mark': x['final_mark'], 'marked_at': x['marked_at']} for x in res['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
-		return JsonResponse({'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level,'projects': projects})
+		return JsonResponse({'token': me.token, 'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level,'projects': projects})
+
+class ApiMe(View):
+	def get(self, request):
+		try:
+			me = User42.objects.get(token=request.GET.get('token'))
+		except:
+			return HttpResponse('Unauthorized', status=401)
+		#projects = [{'name': x['project']['name'], 'final_mark': x['final_mark'], 'marked_at': x['marked_at']} for x in res['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
+		return JsonResponse({'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level})
 
 class ApiRank(View):
 	def get(self, request):
 		try:
-			print(request.GET.get('token'))
-			User42.objects.get(token=request.GET['token'])
+			User42.objects.get(token=request.GET.get('token'))
 		except:
 			return HttpResponse('Unauthorized', status=401)
 		users = list(User42.objects.all().order_by('-total_time', '-mentor_cnt', '-total_feedback', 'id').values('login', 'coa', 'total_time', 'total_feedback')[:3])
@@ -103,6 +105,7 @@ class ApiSlot(View):
 			return HttpResponse('Unauthorized', status=401)
 		return HttpResponse('Unauthorized', status=401)
 
+from django.db.models import Q
 
 class ApiSlotMe(View):
 	def get(self, request):
