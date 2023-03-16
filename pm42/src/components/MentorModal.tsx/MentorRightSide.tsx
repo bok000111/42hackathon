@@ -6,13 +6,7 @@ import {
   SelectedSubjectState,
   SubjectDescriptionState,
 } from "../../Atom";
-
-interface ITimeData {
-  date: string;
-  subject: string;
-  max: number;
-  time: string;
-}
+import { ITimeData } from "../../interface";
 
 const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
   const setScheduleToggle = useSetRecoilState(ScheduleToggleState);

@@ -1,12 +1,7 @@
 import styled from "@emotion/styled";
 import React from "react";
+import { IMentor } from "../../interface";
 
-interface IMentor {
-  type: string;
-  subject: string;
-  time: Date;
-  target: string[];
-}
 
 const createLink = (name: string) =>
   `https://profile.intra.42.fr/users/${name}`;

@@ -2,12 +2,7 @@ import styled from "@emotion/styled";
 import React, { ChangeEvent, useRef, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { SelectedSubjectState, SubjectDescriptionState } from "../../Atom";
-
-interface ISubjectData {
-  name: string;
-  final_mark: number;
-  marked_at: string;
-}
+import { ISubjectData } from "../../interface";
 
 function bonusDone({ name, final_mark: score }: ISubjectData) {
   if (name.includes("CPP")) {
@@ -35,7 +30,7 @@ const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
     setPrev(e.currentTarget.parentElement);
     setSubject(e.currentTarget.textContent || "");
     const target = ref.current as unknown as HTMLTextAreaElement;
-    target.value = "";
+    if (target) target.value = "";
   };
   const onClickBonus = (e: React.MouseEvent) => {
     if (prev) {

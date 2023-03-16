@@ -1,30 +1,24 @@
 import styled from "@emotion/styled";
-import { backgorundToggleState, mentorToggleState } from "../../Atom";
+import { CurrentMentorInfoState } from "../../Atom";
 import { useSetRecoilState } from "recoil";
-interface IMentorInfo {
-  intra: string;
-  level: number;
-  rating: number;
-  subjects: string[];
-  image?: string | undefined;
-  coalition: string;
-}
+import customHooks from "../../hooks";
+import { IMentorInfo } from "../../interface";
 
-const MentoCard = ({ info }: { info: IMentorInfo }) => {
-  const setBackgroundToggle = useSetRecoilState(backgorundToggleState);
-  const setMentorToggle = useSetRecoilState(mentorToggleState);
+const MentorCard = ({ info }: { info: IMentorInfo }) => {
+  const { openMentorInfo } = customHooks();
+  const setCurrentMentorInfo = useSetRecoilState(CurrentMentorInfoState);
   const onClick = () => {
-    setBackgroundToggle(true);
-    setMentorToggle(true);
+    openMentorInfo();
+    setCurrentMentorInfo(info);
   };
   return (
-    <MentoCardContainer onClick={onClick} url={info.coalition}>
+    <MentoCardContainer onClick={onClick} url={info.coalition || "gun"}>
       <ProfileContainer>
         <Profile src={info.image} />
         <InfoContainer>
           <NameContainer>{info.intra}</NameContainer>
           <span>Level : {info.level}</span>
-          <span>Rating : {info.rating}</span>
+          <span>Good : {info.good}</span>
         </InfoContainer>
       </ProfileContainer>
       <ContentsContainer>
@@ -126,4 +120,4 @@ const MentoCardContainer = styled.div<{ url: string }>`
   flex-direction: column;
 `;
 
-export default MentoCard;
+export default MentorCard;

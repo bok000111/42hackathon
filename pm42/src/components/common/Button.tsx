@@ -1,8 +1,14 @@
 import styled from "@emotion/styled";
 
-const Button = ({ name }: { name: string }) => {
+const Button = ({
+  name,
+  onClick,
+}: {
+  name: string;
+  onClick: React.MouseEventHandler;
+}) => {
   return (
-    <ButtonStyled>
+    <ButtonStyled onClick={onClick}>
       {name}
       <ArrowIcon />
     </ButtonStyled>

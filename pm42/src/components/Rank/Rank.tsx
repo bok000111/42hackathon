@@ -3,12 +3,6 @@ import { useEffect } from "react";
 import { axiosGetRank, getData } from "../../api/axios";
 import { HeaderContainer } from "../../Styles";
 
-interface IRank {
-  coalition: string;
-  intra: string;
-  time: number;
-  good: number;
-}
 
 const data = [
   {

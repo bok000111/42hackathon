@@ -2,12 +2,13 @@ import styled from "@emotion/styled";
 import Background from "../components/common/Background";
 import MainComponent from "../components/MainComponent";
 import { CommonContainer, Logo } from "../Styles";
-import { Cookies } from "react-cookie";
-import React, { useEffect } from "react";
+import React from "react";
 import { useRecoilValue } from "recoil";
-import axios from "axios";
 import {
   backgorundToggleState,
+  CurrentMentorInfoState,
+  MentorInfoBackToggleState,
+  MentorInfoToggleState,
   mentorToggleState,
   ScheduleBackToggleState,
   ScheduleToggleState,
@@ -15,47 +16,36 @@ import {
 import customHooks from "../hooks";
 import MentorModal from "../components/MentorModal.tsx/MentorModal";
 import ScheduleModal from "../components/ScheduleModal.tsx/ScheduleModal";
+import MentorInfoModal from "../components/MentorInfoModal/MentorInfoModal";
 
 const MainPage = () => {
   const backgroundToggle = useRecoilValue(backgorundToggleState);
   const mentorToggle = useRecoilValue(mentorToggleState);
   const scheduleToggle = useRecoilValue(ScheduleToggleState);
   const scheduleBackToggle = useRecoilValue(ScheduleBackToggleState);
+  const mentorInfoToggle = useRecoilValue(MentorInfoToggleState);
+  const mentorInfoBackToggle = useRecoilValue(MentorInfoBackToggleState);
+  const currentMentorInfo = useRecoilValue(CurrentMentorInfoState);
 
-  const { closeBackground, closeScheduleBack } = customHooks();
-  const backgroundOff = () => {
-    closeBackground();
-  };
+  const { closeSetMentoring, closeScheduleBack, closeMentorInfo } =
+    customHooks();
   const scheduleBackOff = (e: React.MouseEvent) => {
     e.stopPropagation();
     closeScheduleBack();
   };
-  //useEffect(() => {
-  //  console.log(cookie.get("access_token"));
-  //  getData();
-  //  async function getData() {
-  //    try {
-  //      axios
-  //        .get(
-  //          "http://localhost:8000/api/getme/?access_token=" +
-  //            cookie.get("access_token")
-  //        )
-  //        .then((res) => console.log(res));
-  //    } catch (e) {
-  //      console.log(e);
-  //    }
-  //  }
-  //}, []);
-
   return (
     <CommonContainer>
       <MainComponent />
       <Background />
       <Logo width={190} height={130} />
       {mentorToggle && <MentorModal />}
-      {backgroundToggle && <BackgroundContainer onClick={backgroundOff} />}
+      {backgroundToggle && <BackgroundContainer onClick={closeSetMentoring} />}
       {scheduleToggle && <ScheduleModal />}
       {scheduleBackToggle && <BackgroundContainer onClick={scheduleBackOff} />}
+      {mentorInfoToggle && <MentorInfoModal info={currentMentorInfo} />}
+      {mentorInfoBackToggle && (
+        <BackgroundContainer onClick={closeMentorInfo} />
+      )}
     </CommonContainer>
   );
 };

@@ -1,19 +1,18 @@
 import styled from "@emotion/styled";
 import Background from "../components/common/Background";
 import { CommonContainer, Logo } from "../Styles";
-import { Cookies } from "react-cookie";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosLogin } from "../api/axios";
+import LoadingAnimation from "../components/common/LoadingButton";
 //api/get_token/?code=
 const LoginPage = () => {
   const navigator = useNavigate();
-  const cookie = new Cookies();
-  console.log(cookie);
-  console.log(cookie.get("access_token"));
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const code = window.location.search.slice(1).split("=")[1];
     if (code) {
+      setLoading(true);
       getData(code);
     }
     async function getData(code: string) {
@@ -39,11 +38,18 @@ const LoginPage = () => {
         같이하면 42분
       </SecondSlogunContainer>
       <NameContainer>42 PeerMatching</NameContainer>
-      <ButtonContainer>
-        <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c&redirect_uri=http%3A%2F%2Flocalhost%3A5173&response_type=code">
-          LOG IN
-        </a>
-      </ButtonContainer>
+      {!loading && (
+        <ButtonContainer onClick={() => setLoading(true)}>
+          <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c&redirect_uri=http%3A%2F%2Flocalhost%3A5173&response_type=code">
+            LOG IN
+          </a>
+        </ButtonContainer>
+      )}
+      {loading && (
+        <ButtonContainer>
+          <LoadingAnimation />
+        </ButtonContainer>
+      )}
     </CommonContainer>
   );
 };

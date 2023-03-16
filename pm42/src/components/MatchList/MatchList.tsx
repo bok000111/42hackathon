@@ -1,15 +1,9 @@
 import styled from "@emotion/styled";
 import { useEffect } from "react";
 import { axiosGetMatchList, getData } from "../../api/axios";
+import { IMentor } from "../../interface";
 import { HeaderContainer } from "../../Styles";
 import createMatchIndex from "./createMatchIndex";
-
-interface IMentor {
-  type: string;
-  subject: string;
-  time: Date;
-  target: string[];
-}
 
 function createDummyData() {
   const time = new Date().getTime();

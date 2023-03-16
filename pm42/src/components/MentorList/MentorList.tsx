@@ -1,43 +1,35 @@
 import styled from "@emotion/styled";
 import React, { useEffect } from "react";
 import { axiosGetAllSlots, getData } from "../../api/axios";
+import { IMentorInfo } from "../../interface";
 import MentorCard from "./MentorCard";
-
-interface IMentorInfo {
-  intra: string;
-  level: number;
-  rating: number;
-  subjects: string[];
-  image?: string | undefined;
-  coalition: string;
-}
 
 const data: IMentorInfo[] = [
   {
     intra: "yooh",
     level: 7.54,
-    rating: 1250,
+    good: 1250,
     subjects: ["push_swap+", "CPP", "so_long"],
     coalition: "gun",
   },
   {
     intra: "jbok",
     level: 4.35,
-    rating: 1195,
+    good: 1195,
     subjects: ["philosopher", "libft", "fract-ol"],
     coalition: "gon",
   },
   {
     intra: "yeckim",
     level: 3.95,
-    rating: 1135,
+    good: 1135,
     subjects: ["minishell", "born_to_be_root"],
     coalition: "gam",
   },
   {
     intra: "jpark2",
     level: 6.95,
-    rating: 1335,
+    good: 1335,
     subjects: ["minishell+", "mini_rt+", "ft_container+"],
     coalition: "lee",
   },

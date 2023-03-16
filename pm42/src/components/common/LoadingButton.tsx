@@ -1,99 +1,54 @@
-const LoadingButton = () => {
-  return (
-    <div id="container">
-      <div className="stick"></div>
-      <div className="stick"></div>
-      <div className="stick"></div>
-      <div className="stick"></div>
-      <div className="stick"></div>
-      <div className="stick"></div>
+import styled, { keyframes } from "styled-components";
 
-      <h1>Loading...</h1>
-    </div>
+const LoadingAnimation = () => {
+  return (
+    <LoadingAnimationWrapperStyled>
+      <LoadingAnimationStyled></LoadingAnimationStyled>
+    </LoadingAnimationWrapperStyled>
   );
 };
 
-export default LoadingButton;
+const LoadingAnimationWrapperStyled = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
-//$text_color: white;
-//$stick_color: white; //Changes the colour of all sticks
-//$stick_length: 30px; //Changes length of all sticks
-//$stick_distance: -8px; //Changes distance between sticks (will need editing after 30px)
+const pulse = keyframes`
+  50% {
+    background: var(--white-color);
+  }
+`;
 
-//@import url(https://fonts.googleapis.com/css?family=Lato:100,300,700);
+const LoadingAnimationStyled = styled.div`
+  position: relative;
+  width: 6px;
+  height: 24px;
+  background: var(--main-color);
+  animation: ${pulse} 1.5s infinite;
+  animation-delay: 0.25s;
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 6px;
+    height: 16px;
+    background: var(--main-color);
+    top: 50%;
+    transform: translateY(-50%);
+    animation: ${pulse} 1.5s infinite;
+  }
+  &:before {
+    left: -15px;
+  }
+  &:after {
+    left: 15px;
+    animation-delay: 0.5s;
+  }
+`;
 
-//html {
-// background-color:#DC554F;
-//}
-
-//h1 {
-
-// font-family: 'Lato';
-// color:$text_color;
-// text-transform: uppercase;
-// font-size:1em;
-// letter-spacing:1.5px;
-// text-align:center;
-// width:155px;
-// margin-top:20px;
-// -webkit-animation: fade 2s infinite;
-// -moz-animation: fade 2s infinite;
-
-//}
-
-//#container {
-
-//  width:$stick_length*6;
-//  padding-top:180px;
-//  margin:auto;
-//  vertical-align: middle;
-
-//}
-
-//.stick {
-
-// width: $stick_length;
-// height:3px;
-// background:$stick_color;
-// display:inline-block;
-// margin-left:$stick_distance;
-
-//}
-
-//.stick:nth-child(n) {
-//  transform:rotate(30deg);
-//  -ms-transform:rotate(30deg); /* IE 9 */
-//  -webkit-transform:rotate(30deg); /* Safari and Chrome */
-//   -moz-transform:rotate(30deg);
-//   -webkit-animation: fall 2s infinite;
-//   -moz-animation: fall 2s infinite;
-
-//}
-//.stick:nth-child(2n) {
-//   transform:rotate(-30deg);
-//  -ms-transform:rotate(-30deg); /* IE 9 */
-//  -webkit-transform:rotate(-30deg); /* Safari and Chrome */
-//  -moz-transform:rotate(-30deg);
-//  -webkit-animation: rise 2s infinite;
-//  -moz-animation: rise 2s infinite;
-
-//}
-
-//@-webkit-keyframes rise {
-//  50% { transform:rotate(30deg);
-//  -ms-transform:rotate(30deg); /* IE 9 */
-//  -webkit-transform:rotate(30deg);
-//  -moz-transform:rotate(30deg);
-//    ;}
-//}
-//@-moz-keyframes rise {
-// 50% { transform:rotate(30deg);
-//  -ms-transform:rotate(30deg); /* IE 9 */
-//  -webkit-transform:rotate(30deg);
-//   -moz-transform:rotate(30deg);
-//}
-//}
-//@-o-keyframes rise {
-//  50% { transform:rotate(30deg);
-//  -ms-transform:rotate(30deg); /* IE 9 */
-//  -webkit
+export default LoadingAnimation;
