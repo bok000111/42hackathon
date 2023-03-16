@@ -58,15 +58,6 @@ class	ApiLogin(View):
 		projects = [{'name': x['project']['name'], 'final_mark': x['final_mark'], 'marked_at': x['marked_at']} for x in res['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
 		return JsonResponse({'token': me.token, 'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level,'projects': projects})
 
-class ApiMe(View):
-	def get(self, request):
-		try:
-			me = User42.objects.get(token=request.GET.get('token'))
-		except:
-			return HttpResponse('Unauthorized', status=401)
-		#projects = [{'name': x['project']['name'], 'final_mark': x['final_mark'], 'marked_at': x['marked_at']} for x in res['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
-		return JsonResponse({'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level})
-
 class ApiRank(View):
 	def get(self, request):
 		try:
