@@ -7,7 +7,7 @@ from datetime import timedelta
 import json
 import requests
 import time
-from .models import User42
+from .models import User42, OpenSlot
 
 key = b'Zf3NDyN344q5gAf4L8VYdElc1lRX2-7KrEqDSYuUmDI='
 
@@ -70,15 +70,44 @@ class ApiRank(View):
 			User42.objects.get(token=request.GET['token'].decode('utf-8'))
 		except:
 			return HttpResponse('Unauthorized', status=401)
-		users = User42.objects.all().order_by('-total_time', '-mentor_cnt', '-total_feedback', 'id')[:3]
-		return JsonResponse({'users': users})
+		users = list(User42.objects.all().order_by('-total_time', '-mentor_cnt', '-total_feedback', 'id').values('login', 'coa', 'total_time', 'total_feedback')[:3])
+		return JsonResponse({'rank': users})
 
 class ApiSlot(View):
 	def get(self, request):
+		try:
+			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+		except:
+			return HttpResponse('Unauthorized', status=401)
+		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start_time', 'end_time', 'description'))
+		for slot in slots:
+			slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
+		return JsonResponse({'slots': slots})
+	def post(self, request):
+		try:
+			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+		except:
+			return HttpResponse('Unauthorized', status=401)
 		return HttpResponse('Unauthorized', status=401)
-	def post(self, requset):
+	def put(self, request):
+		try:
+			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+		except:
+			return HttpResponse('Unauthorized', status=401)
 		return HttpResponse('Unauthorized', status=401)
-	def delete(self, requset):
+	def delete(self, request):
+		try:
+			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+		except:
+			return HttpResponse('Unauthorized', status=401)
+		return HttpResponse('Unauthorized', status=401)
+	
+class ApiSlotMe(View):
+	def get(self, request):
+		try:
+			User42.objects.get(token=request.GET['token'].decode('utf-8'))
+		except:
+			return HttpResponse('Unauthorized', status=401)
 		return HttpResponse('Unauthorized', status=401)
 
 class Dev(View):
@@ -87,40 +116,46 @@ class Dev(View):
 	uri = 'http://localhost:8000'
 	url = 'https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-97752de4d75913a94e9887dbe2f66519abe99042fba7fc73fe3f7e1340602529&redirect_uri=http%3A%2F%2Flocalhost%3A8000&response_type=code'
 	def get(self, request):
-		quary_dict = request.GET
-		code = quary_dict.get('code')
-		if code is None:
-			redirect(self.url)
-		data = {'grant_type': 'authorization_code', 'client_id': self.id,'client_secret': self.secret, 'code': code, 'redirect_uri': self.uri, 'scope': 'public'}
-		token = requests.post('https://api.intra.42.fr/v2/oauth/token', data=data).json().get('access_token')
-		if token is None:
-			return HttpResponseNotFound("auth fail:(")
-		token = Fernet(key).encrypt(token.encode('utf-8')).decode('utf-8')
-		print(token)
-		print()
-		token = Fernet(key).decrypt(token.encode('utf-8')).decode('utf-8')
-		print(token)
-		print()
-		res = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + token})
-		res = res.json()
-		print(res['id'])
-		try:
-			me = User42.objects.get(id=res['id'])
-		except:
-			me = User42(id=res['id'])
-			try:
-				time.sleep(1)
-				coa = requests.get("https://api.intra.42.fr/v2/users/" + str(me.id) + "/coalitions", headers={'Authorization': 'Bearer ' + token})
-				coa.raise_for_status()
-			except:
-				return HttpResponse('Unauthorized', status=401)
-			me.coa = coa.json()[0]['slug']
-		me.login=res['login']
-		me.image = res.get("image").get("link")
-		for cursus in res.get("cursus_users"):
-			if cursus.get('grade') is not None:
-				me.level = cursus.get('level')
-		me.token = token.encode()
-		#me.save()
-		projects = [{'name': x['project']['name'], 'final_mark': x['final_mark'], 'marked_at': x['marked_at']} for x in res['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
-		return JsonResponse({'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level,'projects': projects})
+		return HttpResponse({})
+	
+		#test GET api/slot/
+		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start_time', 'end_time', 'description'))
+		for slot in slots:
+			slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
+		return JsonResponse({'slots': slots})
+
+		#test api/rank/
+		# users = list(User42.objects.all().order_by('-total_time', '-mentor_cnt', '-total_feedback', 'id').values('login', 'coa', 'total_time', 'total_feedback')[:3])
+		# return JsonResponse({'rank': users})
+
+		#test api/token/ and api/me/	
+		# quary_dict = request.GET
+		# code = quary_dict.get('code')
+		# if code is None:
+		# 	redirect(self.url)
+		# data = {'grant_type': 'authorization_code', 'client_id': self.id,'client_secret': self.secret, 'code': code, 'redirect_uri': self.uri, 'scope': 'public'}
+		# token = requests.post('https://api.intra.42.fr/v2/oauth/token', data=data).json().get('access_token')
+		# if token is None:
+		# 	return HttpResponseNotFound("auth fail:(")
+		# res = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + token})
+		# res = res.json()
+		# try:
+		# 	me = User42.objects.get(id=res['id'])
+		# except:
+		# 	me = User42(id=res['id'])
+		# 	try:
+		# 		time.sleep(1)
+		# 		coa = requests.get("https://api.intra.42.fr/v2/users/" + str(me.id) + "/coalitions", headers={'Authorization': 'Bearer ' + token})
+		# 		coa.raise_for_status()
+		# 	except:
+		# 		return HttpResponse('Unauthorized', status=401)
+		# 	me.coa = coa.json()[0]['slug']
+		# me.login=res['login']
+		# me.image = res.get("image").get("link")
+		# for cursus in res.get("cursus_users"):
+		# 	if cursus.get('grade') is not None:
+		# 		me.level = cursus.get('level')
+		# me.token = Fernet(key).encrypt(token.encode('utf-8'))
+		# me.save()
+		# projects = [{'name': x['project']['name'], 'final_mark': x['final_mark'], 'marked_at': x['marked_at']} for x in res['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
+		# return JsonResponse({'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level,'projects': projects})
