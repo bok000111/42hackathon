@@ -17,7 +17,14 @@ const LoginPage = () => {
       getData(code);
     }
     async function getData(code: string) {
-      const response = axiosLogin(code);
+      try {
+        const { data } = await axiosLogin(code);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("data", JSON.stringify(data));
+        navigator("/main");
+      } catch (e) {
+        console.log(e);
+      }
     }
   }, []);
   return (

@@ -11,7 +11,7 @@ const getToken = () => `?token=${localStorage.getItem("token")}`;
 export const axiosLogin = async (code: string): Promise<any> => {
   try {
     const response = await access.get("/api/login/?code=" + code);
-    console.log(response);
+    return response;
   } catch (e) {
     console.error(e);
   }
