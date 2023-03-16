@@ -8,6 +8,15 @@ const access = axios.create({
 
 const getToken = () => `?token=${localStorage.getItem("token")}`;
 
+export const axiosLogin = async (code: string): Promise<any> => {
+  try {
+    const response = await access.get("/api/login/?code=" + code);
+    console.log(response);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 export const axiosGetMatchList = async (): Promise<any> => {
   try {
     const response = await access.get("/api/slot/me/" + getToken());
@@ -32,7 +41,7 @@ export const axiosGetRank = async (): Promise<any> => {
 
 export const axiosGetAllSlots = async (): Promise<any> => {
   try {
-    const response = await access.get("/api/slot/all/" + getToken());
+    const response = await access.get("/api/slot/" + getToken());
 
     console.log("axiosGetMatchList, /api/slot/all/");
     console.log(response);
@@ -44,3 +53,24 @@ export const axiosGetAllSlots = async (): Promise<any> => {
 export async function getData(func: any) {
   await func();
 }
+
+export const axiosAddSlot = async (
+  start: number,
+  end: number,
+  subject: string,
+  login: string,
+  max: number
+): Promise<any> => {
+  try {
+    const response = await access.post("/api/slot/" + getToken(), {
+      start,
+      end,
+      subject,
+      login,
+      max,
+    });
+    console.log(response);
+  } catch (e) {
+    console.error(e);
+  }
+};

@@ -1,7 +1,14 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useRef, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { EndIndexState, StartIndexState } from "../../Atom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { axiosAddSlot } from "../../api/axios";
+import {
+  EndIndexState,
+  MenteeNumberState,
+  SelectedSubjectState,
+  StartIndexState,
+  SubjectDescriptionState,
+} from "../../Atom";
 import {
   checkTimeOver,
   createDateInfo,
@@ -19,7 +26,25 @@ const ScheduleModal = () => {
   const mon = getMonday();
   const [start, setStart] = useRecoilState(StartIndexState);
   const [end, setEnd] = useRecoilState(EndIndexState);
+  const subject = useRecoilValue(SelectedSubjectState);
+  const description = useRecoilValue(SubjectDescriptionState);
+  const menteeNumber = useRecoilValue(MenteeNumberState);
 
+  const onConfirm = () => {
+    if (start === -1 || end === -1) {
+      alert("select time");
+      return;
+    }
+
+    console.log(
+      createDateInfo(mon, start).getTime(),
+      createDateInfo(mon, end).getTime(),
+      subject,
+      description,
+      menteeNumber
+    );
+    axiosAddSlot(start, end, subject, "yooh", menteeNumber);
+  };
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
     if (e.currentTarget.classList.contains("disabled")) return;
     if (start === -1) {
@@ -71,7 +96,7 @@ const ScheduleModal = () => {
         <ButtonContainer>
           <MemberIcon />
           <Select />
-          <ConfirmButton>Confirm</ConfirmButton>
+          <ConfirmButton onClick={onConfirm}>Confirm</ConfirmButton>
         </ButtonContainer>
       </InfoContainer>
       <CalendarContainer>

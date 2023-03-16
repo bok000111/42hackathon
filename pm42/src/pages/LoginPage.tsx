@@ -3,8 +3,8 @@ import Background from "../components/common/Background";
 import { CommonContainer, Logo } from "../Styles";
 import { Cookies } from "react-cookie";
 import { useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { axiosLogin } from "../api/axios";
 //api/get_token/?code=
 const LoginPage = () => {
   const navigator = useNavigate();
@@ -13,14 +13,12 @@ const LoginPage = () => {
   console.log(cookie.get("access_token"));
   useEffect(() => {
     const code = window.location.search.slice(1).split("=")[1];
-    if (!code) return;
-    axios
-      .get("http://localhost:8000/api/token/?code=" + code)
-      .then((res) => {
-        localStorage.setItem("token", res.data.token);
-        navigator("/main");
-      })
-      .catch((e) => console.log(e));
+    if (code) {
+      getData(code);
+    }
+    async function getData(code: string) {
+      const response = axiosLogin(code);
+    }
   }, []);
   return (
     <CommonContainer>

@@ -34,3 +34,13 @@ export const MenteeNumberState = atom({
   key: "menteeNumber",
   default: 1,
 });
+
+export const SelectedSubjectState = atom({
+  key: "selectedSubject",
+  default: "",
+});
+
+export const SubjectDescriptionState = atom({
+  key: "subjectDescription",
+  default: "",
+});

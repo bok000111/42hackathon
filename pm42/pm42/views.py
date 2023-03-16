@@ -81,7 +81,7 @@ class ApiSlot(View):
 		try:
 			User42.objects.get(token=request.POST.get('token'))
 			body = json.loads(request.body)
-			newSlot = OpenSlot(mento=body['login'], subject=body['subject'], max=body['max'], start=body['start'], end=body['end'], description=body['description'])
+			newSlot = OpenSlot(mento=body['login'], subject=body['subject'], max=body['max'], left=body['max'], start=body['start'], end=body['end'], description=body['description'])
 			newSlot.save()
 			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
 			for slot in slots:
@@ -113,9 +113,11 @@ class ApiSlot(View):
 			return JsonResponse({'slots': slots})
 	def delete(self, request):
 		try:
-			User42.objects.get(token=request.DELETE.get('token'))
+			mento = User42.objects.get(token=request.DELETE.get('token'))
 			body = json.loads(request.body)
 			toDelete = OpenSlot.objects.get(id=body['id'])
+			if toDelete.mento != mento.login:
+				raise
 			toDelete.delete()
 			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
 			for slot in slots:

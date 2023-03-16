@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import React, { ChangeEvent, useRef, useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { SelectedSubjectState, SubjectDescriptionState } from "../../Atom";
 
 interface ISubjectData {
   name: string;
@@ -14,19 +16,11 @@ function bonusDone({ name, final_mark: score }: ISubjectData) {
   return score > 100;
 }
 
-const MentorLeftSide = ({
-  data,
-  setSubject,
-  setDescription,
-  subject,
-}: {
-  data: ISubjectData[];
-  setSubject: React.Dispatch<React.SetStateAction<string>>;
-  setDescription: React.Dispatch<React.SetStateAction<string>>;
-  subject: string;
-}) => {
+const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
   const ref = useRef(null);
   const [prev, setPrev] = useState<HTMLElement | null>(null);
+  const [subject, setSubject] = useRecoilState(SelectedSubjectState);
+  const setDescription = useSetRecoilState(SubjectDescriptionState);
   const onClickMandetory = (e: React.MouseEvent) => {
     if (prev) {
       prev.classList.remove("active");
@@ -63,8 +57,9 @@ const MentorLeftSide = ({
       e.currentTarget.parentElement?.childNodes[0].textContent + " Bonus" || ""
     );
     const target = ref.current as unknown as HTMLTextAreaElement;
-    console.log(target);
-    target.value = "";
+    if (target) {
+      target.value = "";
+    }
   };
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);

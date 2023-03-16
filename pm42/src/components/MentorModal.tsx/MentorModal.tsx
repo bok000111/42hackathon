@@ -107,18 +107,10 @@ const getStartDate = () => {
 };
 
 const MentorModal = () => {
-  const [subject, setSubject] = useState("");
-  const [description, setDescription] = useState("");
-  const startDate = getStartDate();
   return (
     <MentorModalContainer>
       <Container>
-        <MentorLeftSide
-          data={subjectData}
-          setSubject={setSubject}
-          setDescription={setDescription}
-          subject={subject}
-        />
+        <MentorLeftSide data={subjectData} />
       </Container>
       <Container>
         <MentorRightSide data={timeData} />

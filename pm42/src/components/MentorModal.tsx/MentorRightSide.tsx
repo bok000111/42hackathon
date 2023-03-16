@@ -1,6 +1,11 @@
 import styled from "@emotion/styled";
-import { useSetRecoilState } from "recoil";
-import { ScheduleBackToggleState, ScheduleToggleState } from "../../Atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  ScheduleBackToggleState,
+  ScheduleToggleState,
+  SelectedSubjectState,
+  SubjectDescriptionState,
+} from "../../Atom";
 
 interface ITimeData {
   date: string;
@@ -12,7 +17,17 @@ interface ITimeData {
 const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
   const setScheduleToggle = useSetRecoilState(ScheduleToggleState);
   const setScheduleBackToggle = useSetRecoilState(ScheduleBackToggleState);
+  const subject = useRecoilValue(SelectedSubjectState);
+  const description = useRecoilValue(SubjectDescriptionState);
   const addSchedule = () => {
+    if (subject.length === 0) {
+      alert("subject 골라주세요");
+      return;
+    }
+    if (description.length === 0) {
+      alert("description 작성해주세요");
+      return;
+    }
     setScheduleBackToggle(true);
     setScheduleToggle(true);
   };
