@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import { useEffect } from "react";
+import { axiosGetRank, getData } from "../../api/axios";
 import { HeaderContainer } from "../../Styles";
 
 interface IRank {
@@ -33,6 +35,9 @@ const createLink = (name: string) =>
   `https://profile.intra.42.fr/users/${name}`;
 
 const Rank = () => {
+  useEffect(() => {
+    getData(axiosGetRank);
+  }, []);
   return (
     <RankContainer>
       <HeaderContainer>Rank</HeaderContainer>
