@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useRef, useState } from "react";
 import Select from "./Select";
 
 const getMonday = () => {
@@ -54,9 +54,9 @@ function getDayInfoList() {
 }
 
 const getTimeInfo = (monday: Date) =>
-  new Array(48).fill(0).map((_, idx) => ({
+  new Array(96).fill(0).map((_, idx) => ({
     mon: monday,
-    min: idx * 30,
+    min: idx * 15,
   }));
 
 const getTimeStamp = (monday: Date, min: number) => {
@@ -74,8 +74,7 @@ const getTimeStamp = (monday: Date, min: number) => {
 
 const checkTimeOver = (time: Date) => {
   const now = new Date().getTime();
-  console.log(Math.floor((time.getTime() - now) / 1000 / 60 / 60));
-  return Math.floor((now - time.getTime()) / 1000 / 60) <= 15;
+  return Math.floor((now - time.getTime()) / 1000 / 60) <= -15;
 };
 
 const createDateInfo = (mon: Date, day: number, min: number) => {
@@ -86,6 +85,39 @@ const createDateInfo = (mon: Date, day: number, min: number) => {
 };
 
 const ScheduleModal = () => {
+  const ref = useRef();
+  const [start, setStart] = useState<number>(-1);
+  const [end, setEnd] = useState<number>(-1);
+
+  const onClickTimeBlock = (e: any) => {
+    if (
+      e.currentTarget.classList.contains("disabled") ||
+      e.currentTarget.classList.contains("active")
+    ) {
+      console.log("disabled");
+      return;
+    }
+    if (start === -1) {
+      setStart(e.currentTarget.dataset.blockNumber);
+      e.currentTarget.classList.add("active");
+      return;
+    }
+    const num = e.currentTarget.dataset.blockNumber;
+    let i = Math.min(num, start),
+      j = Math.max(num, start);
+    console.log(ref.current);
+    const targert = ref.current as unknown as HTMLElement;
+    targert.childNodes.forEach((node) => {
+      const t = node as HTMLElement;
+      console.log(t);
+      if (
+        i <= Number(t.dataset.blockNumber && Number(t.dataset.blockNumber) <= j)
+      ) {
+        t.classList.add("active");
+      }
+    });
+  };
+
   return (
     <ScheduleModalContainer>
       <InfoContainer>
@@ -102,20 +134,22 @@ const ScheduleModal = () => {
             <DayInfo key={idx}>{info}</DayInfo>
           ))}
         </DayInfoContainer>
-        <TimeInfoContainer>
-          {getTimeInfo(getMonday()).map(({ mon, min }) => (
+        <TimeInfoContainer ref={ref}>
+          {getTimeInfo(getMonday()).map(({ mon, min }, i) => (
             <TimeInfo>
               <TimeStamp>{getTimeStamp(mon, min)}</TimeStamp>
               {new Array(7).fill(0).map((_, idx) => {
                 const time = createDateInfo(mon, idx, min);
                 return (
                   <TimeStamp
+                    key={idx}
                     className={checkTimeOver(time) ? "" : "disabled"}
                     data-time-stamp={time}
-                    onClick={(e: React.MouseEvent<HTMLElement>) => {
-                      console.log(e.currentTarget.dataset.timeStamp);
-                    }}
-                  ></TimeStamp>
+                    data-block-number={i + idx * 96}
+                    onClick={onClickTimeBlock}
+                  >
+                    {i + idx * 96}
+                  </TimeStamp>
                 );
               })}
             </TimeInfo>
@@ -137,6 +171,9 @@ const TimeStamp = styled.div`
   &.disabled {
     background: var(--lightgray-color);
     cursor: not-allowed;
+  }
+  &.active {
+    background: var(--sub-color);
   }
 `;
 
