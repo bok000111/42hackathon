@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import { useSetRecoilState } from "recoil";
+import { ScheduleBackToggleState, ScheduleToggleState } from "../Atom";
 
 interface ITimeData {
   date: string;
@@ -8,13 +10,19 @@ interface ITimeData {
 }
 
 const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
+  const setScheduleToggle = useSetRecoilState(ScheduleToggleState);
+  const setScheduleBackToggle = useSetRecoilState(ScheduleBackToggleState);
+  const addSchedule = () => {
+    setScheduleBackToggle(true);
+    setScheduleToggle(true);
+  };
   return (
     <>
       <HeaderContainer>Schedule</HeaderContainer>
       <SubHeaderContainer>
         <SubHeaderLeftContainer>
           <span>Choose time</span>
-          <AddButton />
+          <AddButton onClick={addSchedule} />
         </SubHeaderLeftContainer>
         <CountContainer>{data.length}건</CountContainer>
       </SubHeaderContainer>
@@ -27,8 +35,8 @@ const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
           <Data val={5}></Data>
         </ReserveFrame>
         <ReserveDataContainer>
-          {data.map((info) => (
-            <ReserveData>
+          {data.map((info, idx) => (
+            <ReserveData key={idx}>
               <Data val={20}>{info.date}</Data>
               <Data val={35}>{info.subject}</Data>
               <Data val={5}>{info.max}</Data>

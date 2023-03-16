@@ -9,3 +9,13 @@ export const backgorundToggleState = atom({
   key: "backgroundToggle",
   default: true,
 });
+
+export const ScheduleToggleState = atom({
+  key: "scheduleToggle",
+  default: true,
+});
+
+export const ScheduleBackToggleState = atom({
+  key: "schduleBackToggle",
+  default: true,
+});

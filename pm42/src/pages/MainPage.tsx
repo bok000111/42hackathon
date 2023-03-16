@@ -3,40 +3,52 @@ import Background from "../components/common/Background";
 import MainComponent from "../components/MainComponent";
 import { CommonContainer, Logo } from "../Styles";
 import { Cookies } from "react-cookie";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import axios from "axios";
-import { backgorundToggleState, mentorToggleState } from "../Atom";
+import {
+  backgorundToggleState,
+  mentorToggleState,
+  ScheduleBackToggleState,
+  ScheduleToggleState,
+} from "../Atom";
 import customHooks from "../hooks";
 import MentorModal from "../MentorModal.tsx/MentorModal";
+import ScheduleModal from "../components/ScheduleModal.tsx/ScheduleModal";
 
 const MainPage = () => {
   const backgroundToggle = useRecoilValue(backgorundToggleState);
   const mentorToggle = useRecoilValue(mentorToggleState);
+  const scheduleToggle = useRecoilValue(ScheduleToggleState);
+  const scheduleBackToggle = useRecoilValue(ScheduleBackToggleState);
 
   const cookie = new Cookies();
-  const { closeToggle } = customHooks();
+  const { closeBackground, closeScheduleBack } = customHooks();
   console.log(cookie.get("access_token"));
   localStorage.setItem("access_token", cookie.get("access_token"));
-  const onBackgroundOff = () => {
-    closeToggle();
+  const backgroundOff = () => {
+    closeBackground();
   };
-  useEffect(() => {
-    console.log(cookie.get("access_token"));
-    getData();
-    async function getData() {
-      try {
-        axios
-          .get(
-            "http://localhost:8000/api/getme/?access_token=" +
-              cookie.get("access_token")
-          )
-          .then((res) => console.log(res));
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  }, []);
+  const scheduleBackOff = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    closeScheduleBack();
+  };
+  //useEffect(() => {
+  //  console.log(cookie.get("access_token"));
+  //  getData();
+  //  async function getData() {
+  //    try {
+  //      axios
+  //        .get(
+  //          "http://localhost:8000/api/getme/?access_token=" +
+  //            cookie.get("access_token")
+  //        )
+  //        .then((res) => console.log(res));
+  //    } catch (e) {
+  //      console.log(e);
+  //    }
+  //  }
+  //}, []);
 
   return (
     <CommonContainer>
@@ -44,7 +56,9 @@ const MainPage = () => {
       <Background />
       <Logo width={190} height={130} />
       {mentorToggle && <MentorModal />}
-      {backgroundToggle && <BackgroundContainer onClick={onBackgroundOff} />}
+      {backgroundToggle && <BackgroundContainer onClick={backgroundOff} />}
+      {scheduleToggle && <ScheduleModal />}
+      {scheduleBackToggle && <BackgroundContainer onClick={scheduleBackOff} />}
     </CommonContainer>
   );
 };

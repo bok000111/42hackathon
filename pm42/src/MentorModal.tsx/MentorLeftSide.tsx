@@ -52,7 +52,7 @@ const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
       <SubHeaderContainer>Choose Subject</SubHeaderContainer>
       <SubjectsContainer>
         {data.map((info) => (
-          <SubjectContainer>
+          <SubjectContainer key={info.name}>
             <Subject className="notActive" onClick={onClickMandetory}>
               {info.name}
             </Subject>

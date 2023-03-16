@@ -132,10 +132,10 @@ const Line = styled.div`
 const Container = styled.div`
   height: 100%;
   padding-left: 25px;
-  &:first-child {
+  &:first-of-type {
     width: 40%;
   }
-  &:last-child {
+  &:last-of-type {
     width: 60%;
   }
 `;
