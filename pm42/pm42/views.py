@@ -79,11 +79,12 @@ class ApiSlot(View):
 		return JsonResponse({'slots': slots})
 	def post(self, request):
 		try:
-			User42.objects.get(token=request.POST.get('token'))
+			#User42.objects.get(token=request.POST.get('token'))
 			body = json.loads(request.body)
+			print(body)
 			newSlot = OpenSlot(mento=body['login'], subject=body['subject'], max=body['max'], left=body['max'], start=body['start'], end=body['end'], description=body['description'])
 			newSlot.save()
-			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
+			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'max', 'curr', 'start', 'end', 'description'))
 			for slot in slots:
 				slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
 			return JsonResponse({'slots': slots})
