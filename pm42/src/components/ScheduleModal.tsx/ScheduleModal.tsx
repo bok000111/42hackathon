@@ -43,7 +43,7 @@ const ScheduleModal = () => {
       description,
       menteeNumber
     );
-    axiosAddSlot(start, end, subject, "yooh", menteeNumber);
+    axiosAddSlot(start, end, subject, "yooh", menteeNumber, description);
   };
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
     if (e.currentTarget.classList.contains("disabled")) return;
