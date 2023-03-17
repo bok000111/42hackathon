@@ -11,6 +11,7 @@ const MentorCard = ({ info }: { info: IMentorInfo }) => {
     openMentorInfo();
     setCurrentMentorInfo(info);
   };
+  console.log(info);
   return (
     <MentoCardContainer onClick={onClick} url={info.coalition || "gun"}>
       <ProfileContainer>

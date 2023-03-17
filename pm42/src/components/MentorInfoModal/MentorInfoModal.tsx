@@ -7,14 +7,14 @@ import React, { useState } from "react";
 
 function convertToMentoringList(list: ISlotInfo[], mentorName: string) {
   const map = list
-    .filter((info) => info.mentor === mentorName)
+    .filter((info) => info.mentor.login === mentorName)
     .reduce((acc: any, info) => {
       if (!acc[info.subject]) {
         acc[info.subject] = {};
         acc[info.subject].info = [];
       }
       const temp = {
-        cur: info.cur,
+        cur: info.curr,
         max: info.max,
         description: info.description,
         start: info.start,

@@ -34,10 +34,18 @@ export interface IRank {
   good: number;
 }
 
+interface IMentorType {
+  coa: string;
+  image: string;
+  level: number;
+  login: string;
+  total_feedback: number;
+}
+
 export interface ISlotInfo {
-  mentor: string;
-  mentee: string;
-  cur: number;
+  id: number;
+  mentor: IMentorType;
+  curr: number;
   max: number;
   subject: string;
   description: string;

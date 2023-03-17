@@ -1,14 +1,29 @@
 import styled from "@emotion/styled";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
+  OpenedSlotsState,
   ScheduleBackToggleState,
   ScheduleToggleState,
   SelectedSubjectState,
   SubjectDescriptionState,
 } from "../../Atom";
 import { ITimeData } from "../../interface";
+import { getMonday } from "../ScheduleModal.tsx/ScheduleHooks";
+
+function calDate(start: number) {
+  const mon = getMonday();
+  mon.setMinutes(start * 15);
+  return `${mon.getFullYear() % 100}.${
+    mon.getMonth() < 9 ? "0" + (mon.getMonth() + 1) : mon.getMonth()
+  }.${mon.getDate() < 10 ? "0" + mon.getDate() : mon.getDate()}`;
+}
+
+function calTime(start: number, end: number) {
+  const mon = getMonday;
+}
 
 const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
+  const slots = useRecoilValue(OpenedSlotsState);
   const setScheduleToggle = useSetRecoilState(ScheduleToggleState);
   const setScheduleBackToggle = useSetRecoilState(ScheduleBackToggleState);
   const subject = useRecoilValue(SelectedSubjectState);
@@ -25,6 +40,8 @@ const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
     setScheduleBackToggle(true);
     setScheduleToggle(true);
   };
+
+  console.log("slots", slots);
   return (
     <>
       <HeaderContainer>Schedule</HeaderContainer>
@@ -44,17 +61,21 @@ const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
           <Data val={5}></Data>
         </ReserveFrame>
         <ReserveDataContainer>
-          {data.map((info, idx) => (
-            <ReserveData key={idx}>
-              <Data val={20}>{info.date}</Data>
-              <Data val={35}>{info.subject}</Data>
-              <Data val={5}>{info.max}</Data>
-              <Data val={30}>{info.time}</Data>
-              <Data val={5}>
-                <RemoveButton />
-              </Data>
-            </ReserveData>
-          ))}
+          {slots
+            .filter(
+              (slot) => slot.mentor.login === localStorage.getItem("login")
+            )
+            .map((info, idx) => (
+              <ReserveData key={idx}>
+                <Data val={20}>{calDate(info.start)}</Data>
+                <Data val={35}>{info.subject}</Data>
+                <Data val={5}>{info.max}</Data>
+                <Data val={30}>{info.time}</Data>
+                <Data val={5}>
+                  <RemoveButton />
+                </Data>
+              </ReserveData>
+            ))}
         </ReserveDataContainer>
       </ReservationContainer>
       <Button>Submit</Button>

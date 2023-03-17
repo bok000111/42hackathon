@@ -1,6 +1,9 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { OpenedSlotsState } from "../../Atom";
+import { ISlotInfo } from "../../interface";
 import MentorLeftSide from "./MentorLeftSide";
 import MentorRightSide from "./MentorRightSide";
 
@@ -105,6 +108,13 @@ const getStartDate = () => {
 
   return monday;
 };
+
+//export interface ITimeData {
+//  date: string;
+//  subject: string;
+//  max: number;
+//  time: string;
+//}
 
 const MentorModal = () => {
   return (
