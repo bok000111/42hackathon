@@ -11,7 +11,7 @@ function createDummyData() {
   const subjects = [
     "CPP",
     "push_swap",
-    "libft",
+    "Libft",
     "minishell",
     "pipex",
     "minitalk",

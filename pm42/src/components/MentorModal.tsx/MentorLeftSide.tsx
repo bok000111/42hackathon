@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { SelectedSubjectState, SubjectDescriptionState } from "../../Atom";
 import { ISubjectData } from "../../interface";

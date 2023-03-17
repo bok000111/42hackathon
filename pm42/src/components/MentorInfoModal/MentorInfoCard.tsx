@@ -4,9 +4,12 @@ import { IMentorInfo } from "../../interface";
 const MentorInfoCard = ({ info }: { info: IMentorInfo }) => {
   return (
     <MentorCardContainer url={info.coalition || "gun"}>
-      <Profile src={info.image} />
+      <Profile src={info.image} coalition={info.coalition} />
       <TextSection>
-        <NameContainer>{info.intra}</NameContainer>
+        <NameContainer>
+          {info.intra}
+          <Coalition />
+        </NameContainer>
         <ScoreContainer>
           <span>Level : {info.level}</span>
           <span>Good : {info.good}</span>
@@ -21,6 +24,16 @@ const MentorInfoCard = ({ info }: { info: IMentorInfo }) => {
     </MentorCardContainer>
   );
 };
+
+const Coalition = styled.div`
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url("/assets/gun_icon.png");
+  border-radius: 100%;
+  background-size: 100% 100%;
+  margin-left: 10px;
+`;
 const Subject = styled.div`
   display: inline-block;
   border: 1px solid var(--white-color);
@@ -64,6 +77,8 @@ const NameContainer = styled.div`
   font-weight: bold;
   margin-bottom: 5px;
   padding-left: 10px;
+  display: flex;
+  align-items: center;
 `;
 
 const TextSection = styled.div`
@@ -76,17 +91,17 @@ const TextSection = styled.div`
   padding: 10px 10px;
 `;
 
-const Profile = styled.div<{ src: string | undefined }>`
+const Profile = styled.div<{ src: string | undefined; coalition: string }>`
   width: 300px;
   height: 300px;
   border-radius: 100%;
   margin-top: 50px;
   background-image: url(${({ src }) => src || "/assets/defaultImage.png"});
   background-size: 100% 100%;
+  position: relative;
 `;
 
 const MentorCardContainer = styled.div<{ url: string }>`
-  background-image: ${({ url }) => `url(/assets/${url}_cover.png)`};
   background-size: 100% 100%;
   width: 90%;
   height: 90%;

@@ -76,6 +76,17 @@ export const CurrentSubjectInfoState = atom<{ subject: string; info: any }>({
   },
 });
 
+export const SelectedSubjectStateOnMenotrInfo = atom<{
+  subject: string;
+  info: any;
+}>({
+  key: "selectedSubjectOnMentorInfo",
+  default: {
+    subject: "",
+    info: [],
+  },
+});
+
 export const OpenedSlotsState = atom<ISlotInfo[]>({
   key: "openedSlots",
   default: [
@@ -126,8 +137,8 @@ export const OpenedSlotsState = atom<ISlotInfo[]>({
       mentee: "",
       cur: 0,
       max: 3,
-      subject: "libft",
-      description: "복준석식 libft 들어간다 입벌려",
+      subject: "Libft",
+      description: "복준석식 Libft 들어간다 입벌려",
       start: 1681833600,
       end: 1681835400,
       image: "",
@@ -140,8 +151,8 @@ export const OpenedSlotsState = atom<ISlotInfo[]>({
       mentee: "",
       cur: 0,
       max: 3,
-      subject: "libft",
-      description: "libft = 죽음이다",
+      subject: "Libft",
+      description: "Libft = 죽음이다",
       start: 1681815600,
       end: 1681818300,
       image: "",
@@ -522,8 +533,8 @@ export const OpenedSlotsState = atom<ISlotInfo[]>({
       mentee: "",
       cur: 1,
       max: 3,
-      subject: "libft",
-      description: "어서와 태초마을은 처음이지? libft와 함께라면 두렵지 않아요",
+      subject: "Libft",
+      description: "어서와 태초마을은 처음이지? Libft와 함께라면 두렵지 않아요",
       start: 1679014800,
       end: 1679015700,
       image: "",

@@ -18,7 +18,7 @@ const data: IMentorInfo[] = [
     intra: "jbok",
     level: 4.35,
     good: 1195,
-    subjects: ["philosopher", "libft", "fract-ol"],
+    subjects: ["philosopher", "Libft", "fract-ol"],
     coalition: "gon",
   },
   {
