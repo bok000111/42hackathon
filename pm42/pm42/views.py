@@ -192,7 +192,17 @@ class Dev(View):
 	uri = 'http://localhost:8000'
 	url = 'https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-97752de4d75913a94e9887dbe2f66519abe99042fba7fc73fe3f7e1340602529&redirect_uri=http%3A%2F%2Flocalhost%3A8000&response_type=code'
 	def get(self, request):
-		return HttpResponse({})
+		try:
+			code = request.GET['code']
+		except:
+			return redirect(self.url)
+		requests.get(self.url, cookies=request.COOKIES)
+		data = {'grant_type': 'authorization_code', 'client_id': self.id,'client_secret': self.secret, 'code': code, 'redirect_uri': self.uri, 'scope': 'public'}
+		try:
+			token = requests.post('https://api.intra.42.fr/v2/oauth/token', data=data).json().get('access_token')
+		except:
+			return HttpResponse('Unauthorized', status=401)
+		return JsonResponse({'token': token})
 	
 		#test GET api/slot/
 		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
