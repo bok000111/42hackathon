@@ -78,18 +78,18 @@ class ApiSlot(View):
 			slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
 		return JsonResponse({'slots': slots})
 	def post(self, request):
-		try:
-			#User42.objects.get(token=request.POST.get('token'))
-			body = json.loads(request.body)
-			print(body)
-			newSlot = OpenSlot(mentor=body['login'], subject=body['subject'], max=body['max'], left=body['max'], start=body['start'], end=body['end'], description=body['description'])
-			newSlot.save()
-			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'max', 'curr', 'start', 'end', 'description'))
-			for slot in slots:
-				slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
-			return JsonResponse({'slots': slots})
-		except:
-			return HttpResponse('Unauthorized', status=401)
+		# try:
+		#User42.objects.get(token=request.POST.get('token'))
+		body = json.loads(request.body)
+		print(body)
+		newSlot = OpenSlot(mentor=body['login'], subject=body['subject'], max=body['max'], left=body['max'], start=body['start'], end=body['end'], description=body['description'])
+		newSlot.save()
+		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'max', 'curr', 'start', 'end', 'description'))
+		for slot in slots:
+			slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
+		return JsonResponse({'slots': slots})
+		# except:
+		# 	return HttpResponse('Unauthorized', status=401)
 	def put(self, request):
 			User42.objects.get(token=request.PUT.get('token'))
 			body = json.loads(request.body)
@@ -99,13 +99,35 @@ class ApiSlot(View):
 				raise
 			toPart.left -= 1
 			if toPart.curr == 0:
-				toPart.mentee1 = mentee.level
+				toPart.mentee1 = mentee.login
 			if toPart.curr == 1:
-				toPart.mentee2 = mentee.level
+				toPart.mentee2 = mentee.login
 			if toPart.curr == 2:
-				toPart.mentee3 = mentee.level
+				toPart.mentee3 = mentee.login
 			if toPart.curr == 3:
-				toPart.mentee4 = mentee.level
+				toPart.mentee4 = mentee.login
+			toPart.curr += 1
+			toPart.save()
+			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
+			for slot in slots:
+				slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
+			return JsonResponse({'slots': slots})
+	def patch(self, request):
+			#User42.objects.get(token=request.PATCH.get('token'))
+			body = json.loads(request.body)
+			toPart = OpenSlot.objects.get(id=body['id'])
+			mentee =  User42.objects.get(login=body['mentee'])
+			if toPart.curr == 0:
+				raise
+			toPart.curr -= 1
+			if toPart.curr == 0:
+				toPart.mentee1 = mentee.login
+			if toPart.curr == 1:
+				toPart.mentee2 = mentee.login
+			if toPart.curr == 2:
+				toPart.mentee3 = mentee.login
+			if toPart.curr == 3:
+				toPart.mentee4 = mentee.login
 			toPart.curr += 1
 			toPart.save()
 			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
