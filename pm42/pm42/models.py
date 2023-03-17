@@ -21,7 +21,7 @@ class User42(models.Model):
 
 class OpenSlot(models.Model):
     id = models.AutoField(primary_key=True)
-    mento = models.CharField(max_length=16)
+    mentor = models.CharField(max_length=16)
     subject = models.CharField(max_length=256)
     max = models.IntegerField(default=1)
     curr = models.IntegerField(default=0)

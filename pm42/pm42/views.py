@@ -73,20 +73,20 @@ class ApiSlot(View):
 			User42.objects.get(token=request.GET.get('token'))
 		except:
 			return HttpResponse('Unauthorized', status=401)
-		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'max', 'curr', 'start', 'end', 'description'))
+		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'max', 'curr', 'start', 'end', 'description'))
 		for slot in slots:
-			slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
+			slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
 		return JsonResponse({'slots': slots})
 	def post(self, request):
 		try:
 			#User42.objects.get(token=request.POST.get('token'))
 			body = json.loads(request.body)
 			print(body)
-			newSlot = OpenSlot(mento=body['login'], subject=body['subject'], max=body['max'], left=body['max'], start=body['start'], end=body['end'], description=body['description'])
+			newSlot = OpenSlot(mentor=body['login'], subject=body['subject'], max=body['max'], left=body['max'], start=body['start'], end=body['end'], description=body['description'])
 			newSlot.save()
-			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'max', 'curr', 'start', 'end', 'description'))
+			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'max', 'curr', 'start', 'end', 'description'))
 			for slot in slots:
-				slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
+				slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
 			return JsonResponse({'slots': slots})
 		except:
 			return HttpResponse('Unauthorized', status=401)
@@ -108,21 +108,21 @@ class ApiSlot(View):
 				toPart.mentee4 = mentee.level
 			toPart.curr += 1
 			toPart.save()
-			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
+			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
 			for slot in slots:
-				slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
+				slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
 			return JsonResponse({'slots': slots})
 	def delete(self, request):
 		try:
-			mento = User42.objects.get(token=request.DELETE.get('token'))
+			mentor = User42.objects.get(token=request.DELETE.get('token'))
 			body = json.loads(request.body)
 			toDelete = OpenSlot.objects.get(id=body['id'])
-			if toDelete.mento != mento.login:
+			if toDelete.mentor != mentor.login:
 				raise
 			toDelete.delete()
-			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
+			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
 			for slot in slots:
-				slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
+				slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
 			return JsonResponse({'slots': slots})
 		except:
 			return HttpResponse('Unauthorized', status=401)
@@ -135,7 +135,7 @@ class ApiSlotMe(View):
 			login = User42.objects.get(token=request.GET.get('token')).login
 		except:
 			return HttpResponse('Unauthorized', status=401)
-		myslots = list(OpenSlot.objects.filter(Q(mento=login) | Q(mentee1=login) | Q(mentee2=login) | Q(mentee3=login) | Q(mentee4=login)).values('id', 'mento', 'subject', 'mentee1', 'mentee2', 'mentee3', 'mentee4', 'start', 'end'))
+		myslots = list(OpenSlot.objects.filter(Q(mentor=login) | Q(mentee1=login) | Q(mentee2=login) | Q(mentee3=login) | Q(mentee4=login)).values('id', 'mentor', 'subject', 'mentee1', 'mentee2', 'mentee3', 'mentee4', 'start', 'end'))
 		return HttpResponse({'myslots': myslots})
 
 class Dev(View):
@@ -147,9 +147,9 @@ class Dev(View):
 		return HttpResponse({})
 	
 		#test GET api/slot/
-		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mento', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
+		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
 		for slot in slots:
-			slot['mento'] = list(User42.objects.filter(login=slot['mento']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
+			slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
 		return JsonResponse({'slots': slots})
 
 		#test api/rank/
