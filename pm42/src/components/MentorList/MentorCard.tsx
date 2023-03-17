@@ -33,10 +33,9 @@ const MentorCard = ({ info }: { info: IMentorInfo }) => {
 };
 
 const ProfileContainer = styled.div`
-  margin: 0 auto;
   margin-top: 15px;
   width: 90%;
-  height: 90px;
+  height: 30%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -58,6 +57,7 @@ const SubjectContainer = styled.div`
   margin-left: 5px;
   border-radius: 10px;
   overflow-y: auto;
+  font-size: 1.1rem;
   &::-webkit-scrollbar {
     width: 5px;
   }
@@ -78,7 +78,7 @@ const InfoContainer = styled.div`
   align-items: flex-start;
   background: rgba(0, 0, 0, 0.7);
   color: var(--white-color);
-  width: 110px;
+  width: 45%;
   height: 100%;
   border-radius: 10px;
   span {
@@ -88,7 +88,7 @@ const InfoContainer = styled.div`
 
 const ContentsContainer = styled.div`
   width: 90%;
-  height: 150px;
+  height: 50%;
   background: rgba(0, 0, 0, 0.7);
   margin-bottom: 15px;
 
@@ -100,8 +100,8 @@ const ContentsContainer = styled.div`
 `;
 
 const Profile = styled.div<{ src: string | undefined }>`
-  width: 90px;
-  height: 90px;
+  width: 45%;
+  padding-bottom: 45%;
   border-radius: 100%;
   background-image: url(${({ src }) => src || "/assets/defaultImage.png"});
   background-size: 100% 100%;

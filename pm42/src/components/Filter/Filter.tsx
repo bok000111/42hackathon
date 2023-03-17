@@ -1,5 +1,15 @@
 import styled from "@emotion/styled";
 
+const circleInfo = {
+ 'Circle 0' : ['libft'],
+ 'Circle 1' : [''],
+ 'Circle 2' : [],
+ 'Circle 3' : [],
+ 'Circle 4' : [],
+ 'Circle 5' : [],
+ 'Circle 6' : [],
+};
+
 const list = [
   "ALL",
   "Circle 0",

@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 import React, { useEffect } from "react";
+import { useRecoilValue } from "recoil";
 import { axiosGetAllSlots, getData } from "../../api/axios";
-import { IMentorInfo } from "../../interface";
+import { OpenedSlotsState } from "../../Atom";
+import { IMentorInfo, ISlotInfo } from "../../interface";
 import MentorCard from "./MentorCard";
 
 const data: IMentorInfo[] = [
@@ -35,17 +37,38 @@ const data: IMentorInfo[] = [
   },
 ];
 
+function convertData(list: ISlotInfo[]) {
+  const map = list.reduce((acc: any, cur: ISlotInfo) => {
+    if (cur.mentor !== localStorage.getItem("login")) {
+      if (!acc[cur.mentor]) {
+        acc[cur.mentor] = {};
+        acc[cur.mentor].subjects = [];
+        acc[cur.mentor].level = cur.level;
+        acc[cur.mentor].good = cur.good;
+        acc[cur.mentor].coalition = cur.coalition;
+      }
+      acc[cur.mentor].subjects.push(cur.subject);
+    }
+    return acc;
+  }, {});
+
+  return Object.keys(map).map((name) => ({
+    intra: name,
+    ...map[name],
+  }));
+}
+
 const MentorList = ({}: {}) => {
-  useEffect(() => {
-    getData(axiosGetAllSlots);
-  }, []);
+  const slotList = useRecoilValue(OpenedSlotsState);
+  console.log(slotList);
   return (
     <MentorListContainer>
-      {data.map((info) => (
-        <MentoCardContainer>
-          <MentorCard info={info} />
-        </MentoCardContainer>
-      ))}
+      {slotList &&
+        convertData(slotList).map((info) => (
+          <MentoCardContainer>
+            <MentorCard info={info} />
+          </MentoCardContainer>
+        ))}
     </MentorListContainer>
   );
 };

@@ -33,3 +33,26 @@ export interface IRank {
   time: number;
   good: number;
 }
+
+export interface ISlotInfo {
+  mentor: string;
+  mentee: string;
+  cur: number;
+  max: number;
+  subject: string;
+  description: string;
+  start: number;
+  end: number;
+  image?: string;
+  level: number;
+  good: number;
+  coalition: string;
+}
+
+export interface ISubjectInfo {
+  cur: number;
+  max: number;
+  description: string;
+  start: number;
+  end: number;
+}
