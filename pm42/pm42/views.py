@@ -19,6 +19,7 @@ class	ApiLogin(View):
 	id = 'u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c'
 	secret = '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'
 	uri = 'http://localhost:5173'
+	url = 'https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c&redirect_uri=http%3A%2F%2Flocalhost%3A5173&response_type=code'
 	def get(self, request):
 		quary_dict = request.GET
 		try:
@@ -27,13 +28,13 @@ class	ApiLogin(View):
 			res = requests.post('https://api.intra.42.fr/v2/oauth/token', data=data)
 			res.raise_for_status()
 		except:
-			return HttpResponse('Unauthorized', status=401)
+			return redirect(self.url)
 		token = res.json().get('access_token')
 		try:
 			res = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + token})
 			res.raise_for_status()
 		except:
-			return HttpResponse('Unauthorized', status=401)
+			return redirect(self.url)
 		res = res.json()
 		try:
 			me = User42.objects.get(id=res['id'])
