@@ -183,7 +183,7 @@ class ApiSlotMe(View):
 			login = User42.objects.get(token=request.GET.get('token')).login
 		except:
 			return HttpResponse('Unauthorized', status=401)
-		myslots = list(OpenSlot.objects.all().filter(Q(mentor=login) | Q(mentee__contains=login)).values('id', 'mentor', 'subject', 'mentee', 'start', 'end'))
+		myslots = list(OpenSlot.objects.all().filter(Q(mentor=login) | Q(mentees__contains=login)).values('id', 'mentor', 'subject', 'mentees', 'start', 'end'))
 		return HttpResponse({'myslots': myslots})
 
 class Dev(View):
