@@ -106,49 +106,27 @@ class ApiSlot(View):
 		newSlot = OpenSlot(mentor=body['login'], subject=body['subject'], max=body['max'], left=body['max'], start=body['start'], end=body['end'], description=body['description'])
 		newSlot.save()
 		return self.SlotAll()
-	def put(self, request):
-		try:
-			User42.objects.get(token=request.GET.get('token'))
-		except:
-			return HttpResponse('Unauthorized', status=401)
-		body = json.loads(request.body)
-		toPart = OpenSlot.objects.get(id=body['id'])
-		mentee =  User42.objects.get(login=body['mentee'])
-		if toPart.left == 0:
-			raise
-		toPart.left -= 1
-		if toPart.curr == 0:
-			toPart.mentee1 = mentee.login
-		if toPart.curr == 1:
-			toPart.mentee2 = mentee.login
-		if toPart.curr == 2:
-			toPart.mentee3 = mentee.login
-		if toPart.curr == 3:
-			toPart.mentee4 = mentee.login
-		toPart.curr += 1
-		toPart.save()
-		return self.SlotAll()
 	def patch(self, request):
 		try:
-			User42.objects.get(token=request.GET.get('token'))
+			mentee = User42.objects.get(token=request.GET.get('token'))
+			body = json.loads(request.body)
+			Slot = OpenSlot.objects.get(id=body['id'])
+			if mentee.login != body['mentee'] or Slot.mentor == mentee.login:
+				raise
 		except:
 			return HttpResponse('Unauthorized', status=401)
-		body = json.loads(request.body)
-		toPart = OpenSlot.objects.get(id=body['id'])
-		mentee =  User42.objects.get(login=body['mentee'])
-		if toPart.curr == 0:
-			raise
-		toPart.curr -= 1
-		if toPart.curr == 0:
-			toPart.mentee1 = mentee.login
-		if toPart.curr == 1:
-			toPart.mentee2 = mentee.login
-		if toPart.curr == 2:
-			toPart.mentee3 = mentee.login
-		if toPart.curr == 3:
-			toPart.mentee4 = mentee.login
-		toPart.curr += 1
-		toPart.save()
+		mentees = Slot.mentees.split(' ')
+		if mentee.login in mentees:
+			mentees.remove(mentee.login)
+			Slot.curr -= 1;
+			Slot.left += 1;
+			Slot.mentees = ' '.join(mentees)
+		else:
+			mentees.append(mentee.login)
+			Slot.curr += 1;
+			Slot.left -= 1;
+			Slot.mentees = ' '.join(mentees)
+		Slot.save()
 		return self.SlotAll()
 	def delete(self, request):
 		try:
