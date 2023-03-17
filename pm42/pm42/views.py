@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponseNotFound, HttpResponse
+from django.http import JsonResponse, HttpResponse
 from django.views import View
 from cryptography.fernet import Fernet
 
-from datetime import timedelta
 import json
 import requests
 import time
@@ -105,13 +104,14 @@ class ApiSlot(View):
 		newSlot = OpenSlot(mentor=body['login'], subject=body['subject'], max=body['max'], left=body['max'], start=body['start'], end=body['end'], description=body['description'])
 		newSlot.save()
 		return self.SlotAll()
+		#return HttpResponse('Ok', status=200)
 	def patch(self, request):
 		try:
 			mentee = User42.objects.get(token=request.GET.get('token'))
 			body = json.loads(request.body)
 			Slot = OpenSlot.objects.get(id=body['id'])
-			if mentee.login != body['mentee'] or Slot.mentor == mentee.login:
-				raise
+			# if mentee.login != body['mentee'] or Slot.mentor == mentee.login:
+			# 	raise
 		except:
 			return HttpResponse('Unauthorized', status=401)
 		mentees = Slot.mentees.split(' ')
@@ -127,6 +127,39 @@ class ApiSlot(View):
 			Slot.mentees = ' '.join(mentees)
 		Slot.save()
 		return self.SlotAll()
+		#return HttpResponse('Ok', status=200)
+	def update(self, request):
+		try:
+			mentee = User42.objects.get(token=request.GET.get('token'))
+			body = json.loads(request.body)
+			Slot = OpenSlot.objects.get(id=body['id'])
+			mento = User42.objects.get(login=Slot.mentor)
+			# if mentee.login != body['mentee'] or Slot.mentor == mentee.login:
+			# 	raise
+			mentees = Slot.mentees.split(' ')
+			if mentee.login in mentees:
+				mentees.remove(mentee.login)
+			# else:
+			# 	raise
+		except:
+			return HttpResponse('Unauthorized', status=401)
+		Slot.finished += 1
+		mento.total_feedback += body['feedback1'] + body['feedback2'] + body['feedback3'] + body['feedback4'] + body['feedback5']
+		mento.feedback1 += body['feedback1']
+		mento.feedback2 += body['feedback2']
+		mento.feedback3 += body['feedback3']
+		mento.feedback4 += body['feedback4']
+		mento.feedback5 += body['feedback5']
+		if Slot.finished == Slot.max:
+			mento.total_time += Slot.end - Slot.start
+			mento.save()
+			Slot.delete()
+		else:
+			mento.save()
+			Slot.mentees = mentees
+			Slot.save()
+		return self.SlotAll()
+		#return HttpResponse('Ok', status=200)
 	def delete(self, request):
 		try:
 			mentor = User42.objects.get(token=request.GET.get('token'))
@@ -140,6 +173,7 @@ class ApiSlot(View):
 			return HttpResponse('Unauthorized', status=401)
 		toDelete.delete()
 		return self.SlotAll()
+		#return HttpResponse('Ok', status=200)
 
 from django.db.models import Q
 
