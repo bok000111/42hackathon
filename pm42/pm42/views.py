@@ -68,86 +68,88 @@ class ApiRank(View):
 		return JsonResponse({'rank': users})
 
 class ApiSlot(View):
-	def get(self, request):
-		try:
-			User42.objects.get(token=request.GET.get('token'))
-		except:
-			return HttpResponse('Unauthorized', status=401)
+	def SlotAll(self):
 		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'max', 'curr', 'start', 'end', 'description'))
 		for slot in slots:
-			slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
-		return JsonResponse({'slots': slots})
+			try:
+				mento = User42.objects.get(login=slot['mentor'])
+				slot['mentor'] = {'login': mento.login, 'image': mento.image, 'coa': mento.coa, 'level': mento.level, 'total_feedback': mento.total_feedback}
+			except:
+				slot['mentor']
+		return JsonResponse({'slots': slots})	
+	def get(self, request):
+		# try:
+		# 	User42.objects.get(token=request.GET.get('token'))
+		# except:
+		# 	return HttpResponse('Unauthorized', status=401)
+		return self.SlotAll()
 	def post(self, request):
 		# try:
-		#User42.objects.get(token=request.POST.get('token'))
+		# 	User42.objects.get(token=request.POST.get('token'))
+		# except:
+		# 	return HttpResponse('Unauthorized', status=401)
 		body = json.loads(request.body)
 		print(body)
 		newSlot = OpenSlot(mentor=body['login'], subject=body['subject'], max=body['max'], left=body['max'], start=body['start'], end=body['end'], description=body['description'])
 		newSlot.save()
-		slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'max', 'curr', 'start', 'end', 'description'))
-		for slot in slots:
-			slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
-		return JsonResponse({'slots': slots})
+		return self.SlotAll()
 		# except:
 		# 	return HttpResponse('Unauthorized', status=401)
 	def put(self, request):
-			User42.objects.get(token=request.PUT.get('token'))
-			body = json.loads(request.body)
-			toPart = OpenSlot.objects.get(id=body['id'])
-			mentee =  User42.objects.get(login=body['mentee'])
-			if toPart.left == 0:
-				raise
-			toPart.left -= 1
-			if toPart.curr == 0:
-				toPart.mentee1 = mentee.login
-			if toPart.curr == 1:
-				toPart.mentee2 = mentee.login
-			if toPart.curr == 2:
-				toPart.mentee3 = mentee.login
-			if toPart.curr == 3:
-				toPart.mentee4 = mentee.login
-			toPart.curr += 1
-			toPart.save()
-			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
-			for slot in slots:
-				slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
-			return JsonResponse({'slots': slots})
+		# try:
+		# 	User42.objects.get(token=request.PUT.get('token'))
+		# except:
+		# 	return HttpResponse('Unauthorized', status=401)
+		body = json.loads(request.body)
+		toPart = OpenSlot.objects.get(id=body['id'])
+		mentee =  User42.objects.get(login=body['mentee'])
+		if toPart.left == 0:
+			raise
+		toPart.left -= 1
+		if toPart.curr == 0:
+			toPart.mentee1 = mentee.login
+		if toPart.curr == 1:
+			toPart.mentee2 = mentee.login
+		if toPart.curr == 2:
+			toPart.mentee3 = mentee.login
+		if toPart.curr == 3:
+			toPart.mentee4 = mentee.login
+		toPart.curr += 1
+		toPart.save()
+		return self.SlotAll()
 	def patch(self, request):
-			#User42.objects.get(token=request.PATCH.get('token'))
-			body = json.loads(request.body)
-			toPart = OpenSlot.objects.get(id=body['id'])
-			mentee =  User42.objects.get(login=body['mentee'])
-			if toPart.curr == 0:
-				raise
-			toPart.curr -= 1
-			if toPart.curr == 0:
-				toPart.mentee1 = mentee.login
-			if toPart.curr == 1:
-				toPart.mentee2 = mentee.login
-			if toPart.curr == 2:
-				toPart.mentee3 = mentee.login
-			if toPart.curr == 3:
-				toPart.mentee4 = mentee.login
-			toPart.curr += 1
-			toPart.save()
-			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
-			for slot in slots:
-				slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
-			return JsonResponse({'slots': slots})
+		# try:
+		# 	User42.objects.get(token=request.PATCH.get('token'))
+		# except:
+		# 	return HttpResponse('Unauthorized', status=401)
+		body = json.loads(request.body)
+		toPart = OpenSlot.objects.get(id=body['id'])
+		mentee =  User42.objects.get(login=body['mentee'])
+		if toPart.curr == 0:
+			raise
+		toPart.curr -= 1
+		if toPart.curr == 0:
+			toPart.mentee1 = mentee.login
+		if toPart.curr == 1:
+			toPart.mentee2 = mentee.login
+		if toPart.curr == 2:
+			toPart.mentee3 = mentee.login
+		if toPart.curr == 3:
+			toPart.mentee4 = mentee.login
+		toPart.curr += 1
+		toPart.save()
+		return self.SlotAll()
 	def delete(self, request):
-		try:
-			mentor = User42.objects.get(token=request.DELETE.get('token'))
-			body = json.loads(request.body)
-			toDelete = OpenSlot.objects.get(id=body['id'])
-			if toDelete.mentor != mentor.login:
-				raise
-			toDelete.delete()
-			slots = list(OpenSlot.objects.exclude(left=0).values('id', 'mentor', 'subject', 'bonus', 'max', 'curr', 'start', 'end', 'description'))
-			for slot in slots:
-				slot['mentor'] = list(User42.objects.filter(login=slot['mentor']).values('login', 'image', 'coa', 'level', 'total_feedback'))[0]
-			return JsonResponse({'slots': slots})
-		except:
-			return HttpResponse('Unauthorized', status=401)
+		# try:
+		# 	User42.objects.get(token=request.DELETE.get('token'))
+		# except:
+		# 	return HttpResponse('Unauthorized', status=401)
+		body = json.loads(request.body)
+		toDelete = OpenSlot.objects.get(id=body['id'])
+		if toDelete.mentor != mentor.login:
+			raise
+		toDelete.delete()
+		return self.SlotAll()
 
 from django.db.models import Q
 
