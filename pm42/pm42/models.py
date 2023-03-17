@@ -18,6 +18,7 @@ class User42(models.Model):
     feedback5 = models.IntegerField(default=0)
     total_time = models.IntegerField(default=0)
     token = models.TextField(default='')
+    description = models.CharField(max_length=256, blank=True, default='')
 
 class OpenSlot(models.Model):
     id = models.AutoField(primary_key=True)
@@ -27,10 +28,7 @@ class OpenSlot(models.Model):
     curr = models.IntegerField(default=0)
     left = models.IntegerField(default=1)
     finished = models.IntegerField(default=0)
-    mentee1 = models.CharField(max_length=16, null=True)
-    mentee2 = models.CharField(max_length=16, null=True)
-    mentee3 = models.CharField(max_length=16, null=True)
-    mentee4 = models.CharField(max_length=16, null=True)
+    mentees = models.CharField(max_length=256, default='')
     start = models.IntegerField(default=0)
     end = models.IntegerField(default=0)
     description = models.CharField(max_length=256, blank=True, default='')
