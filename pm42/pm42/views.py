@@ -69,7 +69,6 @@ class	ApiLogin(View):
 			return HttpResponse('Unauthorized', status=401)
 		return HttpResponse('Ok', status=200)
 
-
 class ApiRank(View):
 	def get(self, request):
 		try:
