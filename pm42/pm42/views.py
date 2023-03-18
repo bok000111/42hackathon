@@ -165,8 +165,6 @@ class ApiSlot(View):
 		try:
 			mentor = User42.objects.get(token=request.GET.get('token'))
 			body = json.loads(request.body)
-			# if mentor.login != body['login']:
-			# 	raise
 			toDelete = OpenSlot.objects.get(id=body['id'])
 			if toDelete.mentor != mentor.login:
 				raise
