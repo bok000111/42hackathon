@@ -5,6 +5,7 @@ from cryptography.fernet import Fernet
 
 import json
 import requests
+from requests.exceptions import HTTPError
 import time
 from .models import User42, OpenSlot
 
@@ -33,8 +34,8 @@ class	ApiLogin(View):
 		try:
 			res = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + token})
 			res.raise_for_status()
-		except:
-			return redirect(self.url)
+		except HTTPError:
+			return HttpResponse('Unauthorized', status=401)
 		res = res.json()
 		try:
 			me = User42.objects.get(id=res['id'])
@@ -43,7 +44,7 @@ class	ApiLogin(View):
 			try:
 				coa = requests.get("https://api.intra.42.fr/v2/users/" + str(me.id) + "/coalitions", headers={'Authorization': 'Bearer ' + token})
 				coa.raise_for_status()
-			except:
+			except HTTPError:
 				return HttpResponse('Unauthorized', status=401)
 			me.coa = coa.json()[0]['slug']
 		me.login = res['login']
@@ -59,14 +60,14 @@ class	ApiLogin(View):
 		return JsonResponse({'token': me.token, 'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level,'projects': projects})
 	def post(self, request):
 		try:
-			me = User42.objects.get(token=request.GET.get('token'))
+			me = User42.objects.filter(token=request.GET.get('token'))
 			body = json.loads(request.body)
 			if me.login != body['login']:
 				raise
 			me.description = body['description']
 			me.save()
-		except:
-			return HttpResponse('Unauthorized', status=401)
+		except User42.DoesNotExist:
+			return HttpResponse('user not found', status=404)
 		return HttpResponse('Ok', status=200)
 
 class ApiRank(View):
@@ -85,9 +86,9 @@ class ApiSlot(View):
 			try:
 				mento = User42.objects.get(login=slot['mentor'])
 				slot['mentor'] = {'login': mento.login, 'image': mento.image, 'coa': mento.coa, 'level': mento.level, 'total_feedback': mento.total_feedback}
-			except:
-				slot['mentor']
-		return JsonResponse({'slots': slots})	
+			except User42.DoesNotExist:
+				return HttpResponse('mentor not found', status=404)
+		return JsonResponse({'slots': slots})
 	def get(self, request):
 		try:
 			User42.objects.get(token=request.GET.get('token'))
