@@ -55,12 +55,13 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
   const { closeMentorInfo } = customHooks();
 
   const onClickSubject = (idx: number) => {
+    setSelectedLectureIndex(0);
     setSelectedIndex(idx);
   };
 
   const onClickSubmit = () => {
     getData();
-    setSelectedLectureIndex;
+    setSelectedLectureIndex(0);
     closeMentorInfo();
   };
   async function getData() {

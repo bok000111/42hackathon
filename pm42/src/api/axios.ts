@@ -41,7 +41,7 @@ export const axiosAddSlot = async (
   login: string,
   max: number,
   description: string,
-  token: string
+  token: string,
 ): Promise<any> => {
   try {
     const response = await access.post("/api/slot/?token=" + token, {

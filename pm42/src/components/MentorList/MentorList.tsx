@@ -2,7 +2,12 @@ import styled from "@emotion/styled";
 import React, { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { axiosGetAllSlots } from "../../api/axios";
-import { myInfoState, OpenedSlotsState } from "../../Atom";
+import {
+  CurrentCircleInfoState,
+  myInfoState,
+  OpenedSlotsState,
+} from "../../Atom";
+import { circleInfo } from "../../hooks";
 import { IMentorInfo, ISlotInfo } from "../../interface";
 import MentorCard from "./MentorCard";
 
@@ -29,9 +34,23 @@ function convertData(list: ISlotInfo[], login: string) {
   }));
 }
 
-const MentorList = ({}: {}) => {
+function filteringList(list: any, curCircle: string): IMentorInfo[] {
+  if (curCircle === "ALL") return list;
+  return list.filter(
+    (info: any) =>
+      info.subjects.filter((subject: string) =>
+        circleInfo[curCircle].includes(subject)
+      ).length
+  );
+}
+
+const MentorList = () => {
   const [slotList, setSlotList] = useRecoilState(OpenedSlotsState);
   const { token, login } = useRecoilValue(myInfoState);
+  const currentCircleInfo = useRecoilValue(CurrentCircleInfoState);
+  console.log(circleInfo);
+  console.log(currentCircleInfo);
+  console.log(convertData(slotList, login));
   useEffect(() => {
     async function getData() {
       const response = await axiosGetAllSlots(
@@ -44,11 +63,13 @@ const MentorList = ({}: {}) => {
   return (
     <MentorListContainer>
       {slotList &&
-        convertData(slotList, login).map((info, idx) => (
-          <MentoCardContainer>
-            <MentorCard key={idx} info={info} />
-          </MentoCardContainer>
-        ))}
+        filteringList(convertData(slotList, login), currentCircleInfo).map(
+          (info, idx) => (
+            <MentoCardContainer key={idx}>
+              <MentorCard info={info} />
+            </MentoCardContainer>
+          )
+        )}
     </MentorListContainer>
   );
 };

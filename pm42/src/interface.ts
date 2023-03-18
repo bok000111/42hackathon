@@ -40,6 +40,7 @@ interface IMentorType {
   level: number;
   login: string;
   total_feedback: number;
+  description: string;
 }
 
 export interface ISlotInfo {
@@ -55,6 +56,7 @@ export interface ISlotInfo {
   level: number;
   good: number;
   coalition: string;
+  mentees: string;
 }
 
 export interface ISubjectInfo {

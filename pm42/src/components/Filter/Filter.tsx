@@ -1,32 +1,6 @@
 import styled from "@emotion/styled";
-
-const circleInfo = {
-  "Circle 0": ["Libft"],
-  "Circle 1": ["ft_printf", "get_next_line", "Born2beroot"],
-  "Circle 2": ["so_long", "FdF", "fract-ol", "minitalk", "pipex", "push_swap"],
-  "Circle 3": ["Philosophers", "minishell"],
-  "Circle 4": [
-    "miniRT",
-    "cub3d",
-    "NetPractice",
-    "CPP 00",
-    "CPP 01",
-    "CPP 02",
-    "CPP 03",
-    "CPP 04",
-  ],
-  "Circle 5": [
-    "Inception",
-    "ft_irc",
-    "webserv",
-    "CPP 05",
-    "CPP 06",
-    "CPP 07",
-    "CPP 08",
-    "CPP 09",
-  ],
-  "Circle 6": ["ft_transcendence"],
-};
+import { useRecoilState } from "recoil";
+import { CurrentCircleInfoState } from "../../Atom";
 
 const list = [
   "ALL",
@@ -40,10 +14,21 @@ const list = [
 ];
 
 const Filter = () => {
+  const [currentCircleInfo, setCurrentCircleInfo] = useRecoilState(
+    CurrentCircleInfoState
+  );
+  const onClickFilter = (circleInfo: string) => {
+    setCurrentCircleInfo(circleInfo);
+  };
   return (
     <FilterContainer>
       {list.map((str) => (
-        <FilterElement>{str}</FilterElement>
+        <FilterElement
+          className={currentCircleInfo === str ? "active" : ""}
+          onClick={() => onClickFilter(str)}
+        >
+          {str}
+        </FilterElement>
       ))}
       <label htmlFor="search">
         <SearchIcon />
@@ -99,6 +84,10 @@ const FilterElement = styled.div`
   transition: 0.5s;
   cursor: pointer;
   &:hover {
+    color: var(--main-color);
+    background: var(--white-color);
+  }
+  &.active {
     color: var(--main-color);
     background: var(--white-color);
   }

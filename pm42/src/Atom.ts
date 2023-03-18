@@ -126,3 +126,8 @@ export const SelectedSubjectIndexState = atom({
   key: "selectedSubjectIndex",
   default: 0,
 });
+
+export const CurrentCircleInfoState = atom({
+  key: "currentCircleInfo",
+  default: "ALL",
+});

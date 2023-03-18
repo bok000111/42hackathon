@@ -88,3 +88,41 @@ export function convertToLectureTime(start: number, end: number) {
 }
 
 export default customHooks;
+
+interface ICircle {
+  [key: string]: string;
+}
+export const circleInfo: ICircle = {
+  "Circle 0": ["Libft"].join(","),
+  "Circle 1": ["ft_printf", "get_next_line", "Born2beroot"].join(","),
+  "Circle 2": [
+    "so_long",
+    "FdF",
+    "fract-ol",
+    "minitalk",
+    "pipex",
+    "push_swap",
+  ].join(","),
+  "Circle 3": ["Philosophers", "minishell"].join(","),
+  "Circle 4": [
+    "miniRT",
+    "cub3d",
+    "NetPractice",
+    "CPP 00",
+    "CPP 01",
+    "CPP 02",
+    "CPP 03",
+    "CPP 04",
+  ].join(","),
+  "Circle 5": [
+    "Inception",
+    "ft_irc",
+    "webserv",
+    "CPP 05",
+    "CPP 06",
+    "CPP 07",
+    "CPP 08",
+    "CPP 09",
+  ].join(","),
+  "Circle 6": ["ft_transcendence"].join(","),
+};
