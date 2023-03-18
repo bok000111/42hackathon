@@ -99,12 +99,13 @@ class ApiSlot(View):
 			return False
 		return True
 	def SlotAll(self):
-		slots = list(OpenSlot.objects.all().values('id', 'mentor', 'subject', 'max', 'curr', 'start', 'end', 'description'))
+		slots = list(OpenSlot.objects.all().values('id', 'mentor', 'subject', 'mentees', 'max', 'curr', 'start', 'end', 'description'))
 		slots = [x for x in slots if self.isDel(x)]
 		for slot in slots:
 			try:
 				mento = User42.objects.get(login=slot['mentor'])
 				slot['mentor'] = {'login': mento.login, 'image': mento.image, 'coa': mento.coa, 'level': mento.level, 'total_feedback': mento.total_feedback}
+				slot['mentees'] = slot['mentees'].split(' ')
 			except User42.DoesNotExist:
 				return HttpResponse('mentor not found', status=404)
 		return JsonResponse({'slots': slots})
