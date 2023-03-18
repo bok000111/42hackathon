@@ -31,7 +31,6 @@ function convertData(list: ISlotInfo[], login: string) {
 const MentorList = ({}: {}) => {
   const [slotList, setSlotList] = useRecoilState(OpenedSlotsState);
   const { token, login } = useRecoilValue(myInfoState);
-  console.log(token, login);
   useEffect(() => {
     async function getData() {
       const response = await axiosGetAllSlots(

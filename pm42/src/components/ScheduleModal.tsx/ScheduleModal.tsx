@@ -6,10 +6,12 @@ import {
   EndIndexState,
   MenteeNumberState,
   myInfoState,
+  OpenedSlotsState,
   SelectedSubjectState,
   StartIndexState,
   SubjectDescriptionState,
 } from "../../Atom";
+import customHooks from "../../hooks";
 import {
   checkTimeOver,
   createDateInfo,
@@ -27,36 +29,47 @@ const ScheduleModal = () => {
   const mon = getMonday();
   const [start, setStart] = useRecoilState(StartIndexState);
   const [end, setEnd] = useRecoilState(EndIndexState);
-  const subject = useRecoilValue(SelectedSubjectState);
-  const description = useRecoilValue(SubjectDescriptionState);
-  const menteeNumber = useRecoilValue(MenteeNumberState);
-  const { token } = useRecoilValue(myInfoState);
+  const [subject, setSubject] = useRecoilState(SelectedSubjectState);
+  const [description, setDescription] = useRecoilState(SubjectDescriptionState);
+  const [menteeNumber, setMenteeNumber] = useRecoilState(MenteeNumberState);
+  const { token, login } = useRecoilValue(myInfoState);
+  const [slots, setSlots] = useRecoilState(OpenedSlotsState);
+  const { closeScheduleBack } = customHooks();
+  const myData = slots.filter((data) => data.mentor.login === login);
 
+  console.log("in schedule", myData);
   const onConfirm = () => {
     if (start === -1 || end === -1) {
       alert("select time");
       return;
     }
-
-    console.log(
-      createDateInfo(mon, start).getTime(),
-      createDateInfo(mon, end).getTime(),
-      subject,
-      description,
-      menteeNumber
-    );
-    axiosAddSlot(
-      start,
-      end,
-      subject,
-      localStorage.getItem("login"),
-      menteeNumber,
-      description,
-      token || localStorage.getItem("token")
-    );
+    async function getData() {
+      const response = await axiosAddSlot(
+        start,
+        end,
+        subject,
+        login,
+        menteeNumber,
+        description,
+        token || localStorage.getItem("token")
+      );
+      console.log(start, end, subject, login, menteeNumber, description, token);
+      setSubject("");
+      setDescription("");
+      setMenteeNumber(1);
+      setStart(-1);
+      setEnd(-1);
+      setSlots(response.slots);
+    }
+    getData();
+    closeScheduleBack();
   };
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
-    if (e.currentTarget.classList.contains("disabled")) return;
+    if (
+      e.currentTarget.classList.contains("disabled") ||
+      e.currentTarget.classList.contains("onReserved")
+    )
+      return;
     if (start === -1) {
       e.currentTarget.classList.add("blockActive");
       setStart(Number(e.currentTarget.dataset.idx));
@@ -75,6 +88,15 @@ const ScheduleModal = () => {
       j = Math.max(start, Number(e.currentTarget.dataset.idx));
 
     const target = e.currentTarget.parentElement as HTMLElement;
+    let flag = 0;
+    target.childNodes.forEach((node: any) => {
+      const t = Number(node.dataset.idx);
+      if (t >= i && t <= j && node.classList.contains("onReserved")) flag = 1;
+    });
+    if (flag) {
+      alert("중간에 뭐 있음");
+      return;
+    }
     target.childNodes.forEach((node: any) => {
       const t = Number(node.dataset.idx);
       if (t >= i && t <= j) node.classList.add("blockActive");
@@ -85,19 +107,32 @@ const ScheduleModal = () => {
   };
 
   useEffect(() => {
+    const target = ref.current as unknown as HTMLElement;
+    const onReserved = myData.map((info) => [info.start, info.end]);
+    target.childNodes.forEach((node: any) => {
+      const t = Number(node.dataset.idx);
+      onReserved.forEach(([x, y]) => {
+        if (t >= x && t <= y) node.classList.add("onReserved");
+      });
+    });
     if (start !== -1 && end !== -1) {
-      const target = ref.current as unknown as HTMLElement;
+      const onReserved = myData.map((info) => [info.start, info.end]);
       target.childNodes.forEach((node: any) => {
         const t = Number(node.dataset.idx);
+        onReserved.forEach(([x, y]) => {
+          if (t >= x && t <= y) node.classList.add("onReserved");
+        });
         if (t >= start && t <= end) node.classList.add("blockActive");
         else node.classList.remove("blockActive");
       });
     }
-    return () => {
-      if (end === -1) {
-        setStart(-1);
-      }
-    };
+    //return () => {
+    //  setStart(-1);
+    //  setEnd(-1);
+    //  setSubject("");
+    //  setDescription("");
+    //  setMenteeNumber(1);
+    //};
   }, []);
   return (
     <ScheduleModalContainer>
@@ -134,9 +169,7 @@ const ScheduleModal = () => {
                   } ${checkTimeOver(createDateInfo(mon, i)) ? "" : "disabled"}`}
                   data-time-info={createDateInfo(mon, calIdx(idx))}
                   data-idx={i}
-                >
-                  {i}
-                </TimeBlock>
+                ></TimeBlock>
               );
             })}
           </TimeBlockContainer>
@@ -156,7 +189,11 @@ const TimeBlock = styled.div`
     border-bottom: 1px solid var(--gray-color);
   }
   &.disabled {
-    background: var(--lightgray-color);
+    background: var(--lightgray-color) !important;
+    cursor: not-allowed;
+  }
+  &.onReserved {
+    background: pink;
     cursor: not-allowed;
   }
   &.active {

@@ -19,48 +19,16 @@ const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
   const myInfo = useRecoilValue(myInfoState);
   const projects = JSON.parse(myInfo.projects) || [];
   const ref = useRef(null);
-  const [prev, setPrev] = useState<HTMLElement | null>(null);
   const [subject, setSubject] = useRecoilState(SelectedSubjectState);
   const setDescription = useSetRecoilState(SubjectDescriptionState);
   const onClickMandetory = (e: React.MouseEvent) => {
-    if (prev) {
-      prev.classList.remove("active");
-      prev.childNodes.forEach((node) => {
-        const target = node as HTMLElement;
-        target.classList.remove("active");
-        target.classList.add("notActive");
-      });
-    }
-    e.currentTarget.classList.add("active");
-    e.currentTarget.classList.remove("notActive");
-    setPrev(e.currentTarget.parentElement);
-    setSubject(e.currentTarget.textContent || "");
-    const target = ref.current as unknown as HTMLTextAreaElement;
-    if (target) target.value = "";
+    setSubject(e.currentTarget.textContent);
+    console.log(e.currentTarget.textContent);
   };
-  const onClickBonus = (e: React.MouseEvent) => {
-    if (prev) {
-      prev.classList.remove("active");
-      prev.childNodes.forEach((node) => {
-        const target = node as HTMLElement;
-        target.classList.remove("active");
-        target.classList.add("notActive");
-      });
-    }
-    e.currentTarget.parentElement?.classList.add("active");
-    e.currentTarget.parentElement?.childNodes.forEach((node) => {
-      const target = node as HTMLElement;
-      target.classList.add("active");
-      target.classList.remove("notActive");
-    });
-    setPrev(e.currentTarget.parentElement);
-    setSubject(
-      e.currentTarget.parentElement?.childNodes[0].textContent + " Bonus" || ""
-    );
-    const target = ref.current as unknown as HTMLTextAreaElement;
-    if (target) {
-      target.value = "";
-    }
+  const onClickBonus = (e: React.MouseEvent<HTMLElement>) => {
+    const targetName = e.currentTarget.parentElement.children[0].textContent;
+    console.log(targetName);
+    setSubject(targetName + " Bonus");
   };
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
@@ -71,8 +39,22 @@ const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
       <SubHeaderContainer>Choose Subject</SubHeaderContainer>
       <SubjectsContainer>
         {projects.map((info: ISubjectData) => (
-          <SubjectContainer key={info.name}>
-            <Subject className="notActive" onClick={onClickMandetory}>
+          <SubjectContainer
+            key={info.name}
+            className={
+              subject === info.name.replace("Module ", "") + " Bonus"
+                ? "parentActive"
+                : "parentNotActive"
+            }
+          >
+            <Subject
+              className={`${
+                info.name.replace("Module ", "") === subject
+                  ? "active"
+                  : "notActive"
+              }`}
+              onClick={onClickMandetory}
+            >
               {info.name.replaceAll(" Module", "")}
             </Subject>
             {bonusDone(info) && (
@@ -116,9 +98,15 @@ const SubjectContainer = styled.div`
   border-radius: 10px;
   margin: 5px 15px 5px 15px;
   color: var(--gray-color);
-  &.active {
+  &.parentActive {
     background: var(--main-color);
     color: var(--white-color);
+  }
+  &.parentNotActive {
+    color: var(--main-color);
+  }
+  &.parentNotActive > .notActive:hover {
+    color: var(--main-color);
   }
 `;
 
@@ -128,9 +116,6 @@ const Subject = styled.div`
   padding: 5px 10px;
   transition: 0.5s;
 
-  &.notActive:hover {
-    color: var(--main-color);
-  }
   &.active {
     background: var(--main-color);
     color: var(--white-color);
@@ -142,9 +127,9 @@ const Bonus = styled.div`
   border-radius: 10px;
   padding: 5px 10px;
   font-size: 0.9rem;
-  &.notActive:hover {
+  /*&.notActive:hover {
     color: var(--main-color);
-  }
+  }*/
   &.active {
     background: var(--main-color);
     color: var(--white-color);

@@ -31,8 +31,6 @@ function convertToMentoringList(list: ISlotInfo[], mentorName: string) {
   }));
 }
 
-
-
 const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
   const slotInfo = useRecoilValue(OpenedSlotsState);
   const list = convertToMentoringList(slotInfo, info.intra);
@@ -58,6 +56,7 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
         <SubjectContainer>
           {convertToMentoringList(slotInfo, info.intra).map((info, idx) => (
             <Subject
+              key={idx}
               className={idx === selectedIndex ? "active" : ""}
               onClick={() => onClickSubject(idx)}
             >
@@ -86,6 +85,7 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
             <IndexInfo>
               {list[selectedIndex].info.map((_: any, idx: any) => (
                 <Index
+                  key={idx}
                   onClick={() => setSelectedLectureIndex(idx)}
                   className={idx === selectedLectureIndex ? "indexActive" : ""}
                 >

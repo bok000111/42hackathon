@@ -28,6 +28,11 @@ export const ScheduleToggleState = atom({
   default: false,
 });
 
+export const MenteeScheduleBackToggleState = atom({
+  key: "menteeScheduleBackToggle",
+  default: false,
+});
+
 export const MenteeScheduleToggleState = atom({
   key: "menteeScheduleToggle",
   default: false,

@@ -56,9 +56,6 @@ const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
     getData();
   };
 
-  console.log("slots", slots);
-  console.log(myInfo);
-  console.log("mySlots", myData);
   return (
     <>
       <HeaderContainer>Schedule</HeaderContainer>

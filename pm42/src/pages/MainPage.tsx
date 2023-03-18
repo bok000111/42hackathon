@@ -3,16 +3,22 @@ import Background from "../components/common/Background";
 import MainComponent from "../components/MainComponent";
 import { CommonContainer, Logo } from "../Styles";
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   backgorundToggleState,
   CurrentMentorInfoState,
+  EndIndexState,
+  MenteeNumberState,
+  MenteeScheduleBackToggleState,
   MenteeScheduleToggleState,
   MentorInfoBackToggleState,
   MentorInfoToggleState,
   mentorToggleState,
   ScheduleBackToggleState,
   ScheduleToggleState,
+  SelectedSubjectState,
+  StartIndexState,
+  SubjectDescriptionState,
 } from "../Atom";
 import customHooks from "../hooks";
 import MentorModal from "../components/MentorModal.tsx/MentorModal";
@@ -29,12 +35,29 @@ const MainPage = () => {
   const mentorInfoBackToggle = useRecoilValue(MentorInfoBackToggleState);
   const currentMentorInfo = useRecoilValue(CurrentMentorInfoState);
   const menteeScheduleToggle = useRecoilValue(MenteeScheduleToggleState);
+  const menteeScheduleBackToggle = useRecoilValue(
+    MenteeScheduleBackToggleState
+  );
+  const setSubject = useSetRecoilState(SelectedSubjectState);
+  const setDescription = useSetRecoilState(SubjectDescriptionState);
+  const setMenteeNumber = useSetRecoilState(MenteeNumberState);
+  const setStart = useSetRecoilState(StartIndexState);
+  const setEnd = useSetRecoilState(EndIndexState);
 
-  const { closeSetMentoring, closeScheduleBack, closeMentorInfo } =
-    customHooks();
+  const {
+    closeSetMentoring,
+    closeScheduleBack,
+    closeMentorInfo,
+    closeMenteeSchedule,
+  } = customHooks();
   const scheduleBackOff = (e: React.MouseEvent) => {
     e.stopPropagation();
     closeScheduleBack();
+    setSubject("");
+    setDescription("");
+    setMenteeNumber(1);
+    setStart(-1);
+    setEnd(-1);
   };
   return (
     <CommonContainer>
@@ -42,19 +65,26 @@ const MainPage = () => {
       <Background />
       <Logo width={190} height={130} />
       {mentorToggle && <MentorModal />}
-      {backgroundToggle && <BackgroundContainer onClick={closeSetMentoring} />}
+      {backgroundToggle && (
+        <BackgroundContainer zIndex={2} onClick={closeSetMentoring} />
+      )}
+      {menteeScheduleBackToggle && (
+        <BackgroundContainer zIndex={3} onClick={closeMenteeSchedule} />
+      )}
       {scheduleToggle && <ScheduleModal />}
-      {scheduleBackToggle && <BackgroundContainer onClick={scheduleBackOff} />}
+      {scheduleBackToggle && (
+        <BackgroundContainer zIndex={3} onClick={scheduleBackOff} />
+      )}
       {menteeScheduleToggle && <MenteeSchedule />}
       {mentorInfoToggle && <MentorInfoModal info={currentMentorInfo} />}
       {mentorInfoBackToggle && (
-        <BackgroundContainer onClick={closeMentorInfo} />
+        <BackgroundContainer zIndex={2} onClick={closeMentorInfo} />
       )}
     </CommonContainer>
   );
 };
 
-const BackgroundContainer = styled.div`
+const BackgroundContainer = styled.div<{ zIndex: number }>`
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
@@ -62,6 +92,7 @@ const BackgroundContainer = styled.div`
   left: 0;
   top: 0;
   cursor: pointer;
+  z-index: ${({ zIndex }) => zIndex};
 `;
 
 export default MainPage;

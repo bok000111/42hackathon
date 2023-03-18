@@ -1,6 +1,7 @@
 import { useSetRecoilState } from "recoil";
 import {
   backgorundToggleState,
+  MenteeScheduleBackToggleState,
   MenteeScheduleToggleState,
   MentorInfoBackToggleState,
   MentorInfoToggleState,
@@ -18,6 +19,9 @@ function customHooks() {
   const setMentorInfoToggle = useSetRecoilState(MentorInfoToggleState);
   const setMentorInfoBackToggle = useSetRecoilState(MentorInfoBackToggleState);
   const setMenteeScheduleToggle = useSetRecoilState(MenteeScheduleToggleState);
+  const setMenteeScheduleBackToggle = useSetRecoilState(
+    MenteeScheduleBackToggleState
+  );
 
   const closeSetMentoring = () => {
     setBackgroundToggle(false);
@@ -42,7 +46,12 @@ function customHooks() {
 
   const openMenteeSchedule = () => {
     setMenteeScheduleToggle(true);
-    setScheduleBackToggle(true);
+    setMenteeScheduleBackToggle(true);
+  };
+
+  const closeMenteeSchedule = () => {
+    setMenteeScheduleBackToggle(false);
+    setMenteeScheduleToggle(false);
   };
 
   return {
@@ -51,6 +60,7 @@ function customHooks() {
     closeMentorInfo,
     openMentorInfo,
     openMenteeSchedule,
+    closeMenteeSchedule,
   };
 }
 
