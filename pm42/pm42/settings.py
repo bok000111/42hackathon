@@ -131,13 +131,12 @@ USE_TZ = True
 import os
 
 STATIC_ROOT = ''
-STATIC_URL = "dist/"
+STATIC_URL = "assets/"
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "myproject", "myapp", "static"),
+    #os.path.join(BASE_DIR, "myproject", "myapp", "static"),
     BASE_DIR / "dist",
-    BASE_DIR,
-    "dist",
-    "dist/assets",
+    BASE_DIR / "dist" / 'assets',
+    BASE_DIR / 'assets',
 ]
 
 # Default primary key field type
