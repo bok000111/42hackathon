@@ -140,12 +140,18 @@ class ApiSlot(View):
 			mentees.remove(mentee.login)
 			Slot.curr -= 1;
 			Slot.left += 1;
-			Slot.mentees = ' '.join(mentees)
+			if Slot.curr == 0:
+				Slot.mentees = ''
+			else:
+				Slot.mentees = ' '.join(mentees)
 		else:
 			mentees.append(mentee.login)
 			Slot.curr += 1;
 			Slot.left -= 1;
-			Slot.mentees = ' '.join(mentees)
+			if Slot.curr == 1:
+				Slot.mentees = mentee.login
+			else:
+				Slot.mentees = ' '.join(mentees)
 		Slot.save()
 		return self.SlotAll()
 		#return HttpResponse('Ok', status=200)
