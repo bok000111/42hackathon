@@ -1,53 +1,23 @@
 import styled from "@emotion/styled";
 import React, { useEffect } from "react";
-import { useRecoilValue } from "recoil";
-import { axiosGetAllSlots, getData } from "../../api/axios";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { axiosGetAllSlots } from "../../api/axios";
 import { OpenedSlotsState } from "../../Atom";
 import { IMentorInfo, ISlotInfo } from "../../interface";
 import MentorCard from "./MentorCard";
 
-const data: IMentorInfo[] = [
-  {
-    intra: "yooh",
-    level: 7.54,
-    good: 1250,
-    subjects: ["push_swap+", "CPP", "so_long"],
-    coalition: "gun",
-  },
-  {
-    intra: "jbok",
-    level: 4.35,
-    good: 1195,
-    subjects: ["philosopher", "libft", "fract-ol"],
-    coalition: "gon",
-  },
-  {
-    intra: "yeckim",
-    level: 3.95,
-    good: 1135,
-    subjects: ["minishell", "born_to_be_root"],
-    coalition: "gam",
-  },
-  {
-    intra: "jpark2",
-    level: 6.95,
-    good: 1335,
-    subjects: ["minishell+", "mini_rt+", "ft_container+"],
-    coalition: "lee",
-  },
-];
-
 function convertData(list: ISlotInfo[]) {
   const map = list.reduce((acc: any, cur: ISlotInfo) => {
-    if (cur.mentor !== localStorage.getItem("login")) {
-      if (!acc[cur.mentor]) {
-        acc[cur.mentor] = {};
-        acc[cur.mentor].subjects = [];
-        acc[cur.mentor].level = cur.level;
-        acc[cur.mentor].good = cur.good;
-        acc[cur.mentor].coalition = cur.coalition;
+    if (cur.mentor.login !== localStorage.getItem("login")) {
+      if (!acc[cur.mentor.login]) {
+        acc[cur.mentor.login] = {};
+        acc[cur.mentor.login].intra = cur.mentor.login;
+        acc[cur.mentor.login].subjects = [];
+        acc[cur.mentor.login].level = cur.mentor.level;
+        acc[cur.mentor.login].good = cur.mentor.total_feedback;
+        acc[cur.mentor.login].coalition = cur.mentor.coa;
       }
-      acc[cur.mentor].subjects.push(cur.subject);
+      acc[cur.mentor.login].subjects.push(cur.subject);
     }
     return acc;
   }, {});
@@ -59,14 +29,22 @@ function convertData(list: ISlotInfo[]) {
 }
 
 const MentorList = ({}: {}) => {
-  const slotList = useRecoilValue(OpenedSlotsState);
-  console.log(slotList);
+  const [slotList, setSlotList] = useRecoilState(OpenedSlotsState);
+  useEffect(() => {
+    async function getData() {
+      const response = await axiosGetAllSlots();
+      console.log(response.slots);
+      console.log(convertData(response.slots));
+      setSlotList(response.slots);
+    }
+    getData();
+  }, []);
   return (
     <MentorListContainer>
       {slotList &&
-        convertData(slotList).map((info) => (
+        convertData(slotList).map((info, idx) => (
           <MentoCardContainer>
-            <MentorCard info={info} />
+            <MentorCard key={idx} info={info} />
           </MentoCardContainer>
         ))}
     </MentorListContainer>

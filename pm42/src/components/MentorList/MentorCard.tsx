@@ -11,10 +11,11 @@ const MentorCard = ({ info }: { info: IMentorInfo }) => {
     openMentorInfo();
     setCurrentMentorInfo(info);
   };
+  console.log(info);
   return (
     <MentoCardContainer onClick={onClick} url={info.coalition || "gun"}>
       <ProfileContainer>
-        <Profile src={info.image} />
+        <Profile src={info.image} coalition={info.coalition} />
         <InfoContainer>
           <NameContainer>{info.intra}</NameContainer>
           <span>Level : {info.level}</span>
@@ -99,16 +100,32 @@ const ContentsContainer = styled.div`
   border-radius: 10px;
 `;
 
-const Profile = styled.div<{ src: string | undefined }>`
+const Profile = styled.div<{ src: string | undefined; coalition: string }>`
   width: 45%;
   padding-bottom: 45%;
   border-radius: 100%;
   background-image: url(${({ src }) => src || "/assets/defaultImage.png"});
   background-size: 100% 100%;
+  position: relative;
+  &::after {
+    content: "";
+    width: 30px;
+    height: 30px;
+    display: block;
+    position: absolute;
+    background-image: ${({ coalition }) =>
+      `url(/assets/${coalition}_icon.png)`};
+    background-size: 100% 100%;
+    right: 0;
+    bottom: 0;
+    border-radius: 100%;
+    background-position: 45% 45%;
+  }
 `;
 
 const MentoCardContainer = styled.div<{ url: string }>`
-  background-image: ${({ url }) => `url(/assets/${url}_cover.png)`};
+  /*background-image: ${({ url }) => `url(/assets/${url}_cover.png)`};*/
+  background: lightgray;
   background-size: 100% 100%;
   width: 90%;
   height: 90%;

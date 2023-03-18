@@ -43,8 +43,9 @@ export const axiosGetAllSlots = async (): Promise<any> => {
   try {
     const response = await access.get("/api/slot/" + getToken());
 
-    console.log("axiosGetMatchList, /api/slot/all/");
+    console.log("axiosGetMatchList, /api/slot/");
     console.log(response);
+    return response.data;
   } catch (e) {
     console.error(e);
   }
@@ -72,6 +73,7 @@ export const axiosAddSlot = async (
       description,
     });
     console.log(response);
+    const { data } = response;
   } catch (e) {
     console.error(e);
   }

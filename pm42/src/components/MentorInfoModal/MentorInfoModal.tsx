@@ -3,17 +3,18 @@ import { IMentorInfo, ISlotInfo } from "../../interface";
 import { useRecoilValue } from "recoil";
 import { OpenedSlotsState } from "../../Atom";
 import MentorInfoCard from "./MentorInfoCard";
+import React, { useState } from "react";
 
 function convertToMentoringList(list: ISlotInfo[], mentorName: string) {
   const map = list
-    .filter((info) => info.mentor === mentorName)
+    .filter((info) => info.mentor.login === mentorName)
     .reduce((acc: any, info) => {
       if (!acc[info.subject]) {
         acc[info.subject] = {};
         acc[info.subject].info = [];
       }
       const temp = {
-        cur: info.cur,
+        cur: info.curr,
         max: info.max,
         description: info.description,
         start: info.start,
@@ -28,10 +29,36 @@ function convertToMentoringList(list: ISlotInfo[], mentorName: string) {
   }));
 }
 
+function convertToLectureTime(start: number, end: number) {
+  const s = new Date(start * 1000),
+    e = new Date(end * 1000);
+  const sM = s.getMonth() + 1,
+    sD = s.getDate();
+  const sH = s.getHours(),
+    sMin = s.getMinutes();
+  const eH = e.getHours(),
+    eMin = e.getMinutes();
+  return `${sM < 10 ? "0" + sM : sM}.${sD < 10 ? "0" + sD : sD} ${
+    sH < 12 ? "AM" : "PM"
+  } ${sH % 12 === 0 ? 12 : sH % 12 < 0 ? "0" + (sH % 12) : sH % 12}:${
+    sM < 10 ? "0" + sMin : sMin
+  } ~ ${eH < 12 ? "AM" : "PM"} ${
+    eH % 12 === 0 ? 12 : eH % 12 < 0 ? "0" + (eH % 12) : eH % 12
+  }:${eMin < 10 ? "0" + eMin : eMin}`;
+}
+
 const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
   const slotInfo = useRecoilValue(OpenedSlotsState);
-  console.log(slotInfo);
-  console.log(convertToMentoringList(slotInfo, info.intra));
+  const list = convertToMentoringList(slotInfo, info.intra);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedLectureIndex, setSelectedLectureIndex] = useState(0);
+  console.log(list);
+  const onClickSubject = (idx: number) => {
+    setSelectedIndex(idx);
+  };
+  const onClickLectureIndex = (idx: number) => {
+    setSelectedLectureIndex(idx);
+  };
   return (
     <MentorInfoModalContainer>
       <Container>
@@ -39,11 +66,17 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
       </Container>
       <Container>
         <SubjectContainer>
-          {convertToMentoringList(slotInfo, info.intra).map((info) => (
-            <Subject onClick={() => console.log(info)}>
+          {convertToMentoringList(slotInfo, info.intra).map((info, idx) => (
+            <Subject
+              className={idx === selectedIndex ? "active" : ""}
+              onClick={() => onClickSubject(idx)}
+            >
               <SubjectName>{info.subject}</SubjectName>
               <SubjectIconsContainer>
-                <SubjectIcons url="/assets/calendar.png" />
+                <SubjectIcons
+                  className="subjectIcon"
+                  url="/assets/calendar.png"
+                />
               </SubjectIconsContainer>
             </Subject>
           ))}
@@ -53,20 +86,92 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
             <DescriptionHeader>Description</DescriptionHeader>
           </DescriptionNav>
           <DescriptionInfo>
-            <DateInfo>23.3.15 11:00 15:00</DateInfo>
+            <DateInfo>
+              {convertToLectureTime(
+                list[selectedIndex].info[selectedLectureIndex].start,
+                list[selectedIndex].info[selectedLectureIndex].end
+              )}
+            </DateInfo>
             <IndexInfo>
-              <Index className="indexActive">1</Index>
-              <Index>2</Index>
+              {list[selectedIndex].info.map((_: any, idx: any) => (
+                <Index
+                  onClick={() => setSelectedLectureIndex(idx)}
+                  className={idx === selectedLectureIndex ? "indexActive" : ""}
+                >
+                  {idx + 1}
+                </Index>
+              ))}
             </IndexInfo>
           </DescriptionInfo>
-          <DescriptionBox />
+          <DescriptionBox>
+            {list[selectedIndex].info[selectedLectureIndex].description}
+          </DescriptionBox>
         </DescriptionContainer>
-        <SubjectInfo></SubjectInfo>
+        <SubjectInfo>
+          <SubjectHeader>
+            <SubjectTitle>{list[selectedIndex].subject}</SubjectTitle>
+            <SubjectStudentCount>
+              <StudentsIcon />[
+              {list[selectedIndex].info[selectedLectureIndex].cur} /{" "}
+              {list[selectedIndex].info[selectedLectureIndex].max}]
+            </SubjectStudentCount>
+          </SubjectHeader>
+          <SubjectTimeStamp>
+            {convertToLectureTime(
+              list[selectedIndex].info[selectedLectureIndex].start,
+              list[selectedIndex].info[selectedLectureIndex].end
+            )}
+          </SubjectTimeStamp>
+        </SubjectInfo>
         <Button>Select</Button>
       </Container>
     </MentorInfoModalContainer>
   );
 };
+
+const SubjectTimeStamp = styled.div`
+  font-size: 1.5rem;
+  color: var(--main-color);
+  margin: 0 auto;
+  margin-top: 25px;
+  margin-bottom: 50px;
+`;
+
+const SubjectHeader = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+`;
+
+const StudentsIcon = styled.div`
+  width: 25px;
+  height: 25px;
+  background-image: url("/assets/member.png");
+  background-size: 100% 100%;
+`;
+
+const SubjectStudentCount = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+  color: var(--main-color);
+  font-weight: bold;
+  & > div:first-of-type {
+    margin-right: 10px;
+  }
+`;
+
+const SubjectTitle = styled.div`
+  color: var(--main-color);
+  font-size: 2rem;
+  font-weight: bold;
+  max-width: 50%;
+  height: 90px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+`;
 
 const Index = styled.div`
   width: 35px;
@@ -104,9 +209,24 @@ const DescriptionInfo = styled.div`
 `;
 
 const DescriptionBox = styled.div`
-  height: 75%;
+  height: 70%;
   border-radius: 10px;
   border: 1px solid var(--main-color);
+  padding: 10px;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    border-radius: 10px;
+    width: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--sub-color);
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    width: 2px;
+    background: var(--main-color);
+    border-radius: 10px;
+  }
 `;
 const DescriptionNav = styled.div``;
 const DescriptionHeader = styled.div`
@@ -119,6 +239,8 @@ const DescriptionContainer = styled.div`
   width: 80%;
   height: 30%;
   border-radius: 10px;
+  margin: 0 auto;
+  margin-top: 20px;
 `;
 
 const SubjectIcons = styled.div<{ url: string }>`
@@ -139,7 +261,6 @@ const SubjectIconsContainer = styled.div`
 
 const SubjectName = styled.div`
   font-size: 1.25rem;
-  color: var(--main-color);
   font-weight: bold;
   border-radius: 10px;
   padding: 8px;
@@ -150,11 +271,25 @@ const SubjectName = styled.div`
 
 const Subject = styled.div`
   width: 90%;
-  height: 50px;
-  margin: 2px auto;
+  height: 45px;
+  margin: 5px auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-radius: 10px;
+  color: var(--main-color);
+  padding-right: 10px;
+  cursor: pointer;
+  & > .subjectIcon {
+    background-image: url("/assets/calendar.png");
+  }
+  &.active {
+    background: var(--main-color);
+    color: var(--white-color);
+    & .subjectIcon {
+      background-image: url("/assets/selectedCalendar.png");
+    }
+  }
 `;
 
 const SubjectContainer = styled.div`
@@ -162,7 +297,8 @@ const SubjectContainer = styled.div`
   height: 20%;
   border: 1px solid var(--main-color);
   border-radius: 10px;
-  margin-top: 20px;
+  margin: 0 auto;
+  margin-top: 40px;
   overflow-y: auto;
   &::-webkit-scrollbar {
     border-radius: 10px;
@@ -180,9 +316,10 @@ const SubjectContainer = styled.div`
 `;
 
 const SubjectInfo = styled.div`
-  background: green;
   width: 80%;
   height: 15%;
+  margin: 0 auto;
+  margin-bottom: 50px;
 `;
 const Button = styled.div`
   border-radius: 10px;
@@ -195,7 +332,7 @@ const Button = styled.div`
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  margin-bottom: 25px;
+  margin: 0 auto;
 `;
 
 const Container = styled.div`
@@ -205,6 +342,9 @@ const Container = styled.div`
   justify-content: space-around;
   align-items: center;
   flex-direction: column;
+  &:last-of-type {
+    display: block;
+  }
 `;
 
 const MentorInfoModalContainer = styled.div`
