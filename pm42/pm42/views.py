@@ -95,16 +95,15 @@ class ApiSlot(View):
 		now = datetime.now(pytz.timezone('Asia/Seoul'))
 		index = now.weekday() * 24 * 4 + now.hour * 4 + now.minute // 15
 		if slot['start'] < index:
-			OpenSlot.objects.get(id=slot['id']).delete()
 			return False
 		return True
 	def SlotAll(self):
 		slots = list(OpenSlot.objects.all().values('id', 'mentor', 'subject', 'mentees', 'max', 'curr', 'start', 'end', 'description'))
-		slots = [x for x in slots if self.isDel(x)]
+		#slots = [x for x in slots if self.isDel(x)]
 		for slot in slots:
 			try:
 				mento = User42.objects.get(login=slot['mentor'])
-				slot['mentor'] = {'login': mento.login, 'image': mento.image, 'coa': mento.coa, 'level': mento.level, 'total_feedback': mento.total_feedback}
+				slot['mentor'] = {'login': mento.login, 'image': mento.image, 'coa': mento.coa, 'level': mento.level, 'total_feedback': mento.total_feedback, 'description': mento.description}
 			except User42.DoesNotExist:
 				return HttpResponse('mentor not found', status=404)
 		return JsonResponse({'slots': slots})
@@ -124,6 +123,35 @@ class ApiSlot(View):
 			return HttpResponse('Unauthorized', status=401)
 		newSlot = OpenSlot(mentor=body['login'], subject=body['subject'], max=body['max'], left=body['max'], start=body['start'], end=body['end'], description=body['description'])
 		newSlot.save()
+		return self.SlotAll()
+		#return HttpResponse('Ok', status=200)
+	def put(self, request):
+		try:
+			Slot = OpenSlot.objects.get(id=body['id'])
+			mentor = User42.objects.get(login=Slot.mentor)
+			mentees = Slot.mentees.split(' ')
+			body = json.loads(request.body)
+			# if mentee.login not in mentees:
+			# 	raise
+			# if mentor.login != body['login']:
+			# 	raise
+			mentees.remove(body['login'])
+		except:
+			return HttpResponse('Unauthorized', status=401)
+		Slot.finished += 1
+		mentor.feedback1 += body['1']
+		mentor.feedback2 += body['2']
+		mentor.feedback3 += body['3']
+		mentor.feedback4 += body['4']
+		mentor.feedback5 += body['5']
+		mentor.total_feedback += body['1'] + body['2'] + body['3'] + body['4'] + body['5']
+		if Slot.curr == Slot.finished:
+			mentor.total_time += Slot.end - Slot.start
+			Slot.delete()
+		else:
+			Slot.mentees = ' '.join(mentees)
+			Slot.save()
+		mentor.save()
 		return self.SlotAll()
 		#return HttpResponse('Ok', status=200)
 	def patch(self, request):
