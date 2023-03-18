@@ -2,13 +2,13 @@ import styled from "@emotion/styled";
 import React, { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { axiosGetAllSlots } from "../../api/axios";
-import { OpenedSlotsState } from "../../Atom";
+import { myInfoState, OpenedSlotsState } from "../../Atom";
 import { IMentorInfo, ISlotInfo } from "../../interface";
 import MentorCard from "./MentorCard";
 
-function convertData(list: ISlotInfo[]) {
+function convertData(list: ISlotInfo[], login: string) {
   const map = list.reduce((acc: any, cur: ISlotInfo) => {
-    if (cur.mentor.login !== localStorage.getItem("login")) {
+    if (cur.mentor.login !== login) {
       if (!acc[cur.mentor.login]) {
         acc[cur.mentor.login] = {};
         acc[cur.mentor.login].intra = cur.mentor.login;
@@ -30,11 +30,15 @@ function convertData(list: ISlotInfo[]) {
 
 const MentorList = ({}: {}) => {
   const [slotList, setSlotList] = useRecoilState(OpenedSlotsState);
+  const { token, login } = useRecoilValue(myInfoState);
+  console.log(token, login);
   useEffect(() => {
     async function getData() {
-      const response = await axiosGetAllSlots();
+      const response = await axiosGetAllSlots(
+        token || localStorage.getItem("token")
+      );
       console.log(response.slots);
-      console.log(convertData(response.slots));
+      console.log(convertData(response.slots, login));
       setSlotList(response.slots);
     }
     getData();
@@ -42,7 +46,7 @@ const MentorList = ({}: {}) => {
   return (
     <MentorListContainer>
       {slotList &&
-        convertData(slotList).map((info, idx) => (
+        convertData(slotList, login).map((info, idx) => (
           <MentoCardContainer>
             <MentorCard key={idx} info={info} />
           </MentoCardContainer>

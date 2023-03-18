@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
 import { IMentorInfo, ISlotInfo } from "../../interface";
-import { useRecoilValue } from "recoil";
-import { OpenedSlotsState } from "../../Atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { MenteeScheduleToggleState, OpenedSlotsState } from "../../Atom";
 import MentorInfoCard from "./MentorInfoCard";
 import React, { useState } from "react";
+import { getMonday } from "../ScheduleModal.tsx/ScheduleHooks";
+import customHooks, { convertToLectureTime } from "../../hooks";
 
 function convertToMentoringList(list: ISlotInfo[], mentorName: string) {
   const map = list
@@ -29,35 +31,23 @@ function convertToMentoringList(list: ISlotInfo[], mentorName: string) {
   }));
 }
 
-function convertToLectureTime(start: number, end: number) {
-  const s = new Date(start * 1000),
-    e = new Date(end * 1000);
-  const sM = s.getMonth() + 1,
-    sD = s.getDate();
-  const sH = s.getHours(),
-    sMin = s.getMinutes();
-  const eH = e.getHours(),
-    eMin = e.getMinutes();
-  return `${sM < 10 ? "0" + sM : sM}.${sD < 10 ? "0" + sD : sD} ${
-    sH < 12 ? "AM" : "PM"
-  } ${sH % 12 === 0 ? 12 : sH % 12 < 0 ? "0" + (sH % 12) : sH % 12}:${
-    sM < 10 ? "0" + sMin : sMin
-  } ~ ${eH < 12 ? "AM" : "PM"} ${
-    eH % 12 === 0 ? 12 : eH % 12 < 0 ? "0" + (eH % 12) : eH % 12
-  }:${eMin < 10 ? "0" + eMin : eMin}`;
-}
+
 
 const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
   const slotInfo = useRecoilValue(OpenedSlotsState);
   const list = convertToMentoringList(slotInfo, info.intra);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedLectureIndex, setSelectedLectureIndex] = useState(0);
-  console.log(list);
+  const { openMenteeSchedule } = customHooks();
   const onClickSubject = (idx: number) => {
     setSelectedIndex(idx);
   };
-  const onClickLectureIndex = (idx: number) => {
-    setSelectedLectureIndex(idx);
+  const onClickSubmit = () => {
+    console.log("submit", list[selectedIndex].info[selectedLectureIndex]);
+  };
+  const onClickCalendar = () => {
+    console.log(slotInfo[selectedIndex]);
+    openMenteeSchedule();
   };
   return (
     <MentorInfoModalContainer>
@@ -76,6 +66,7 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
                 <SubjectIcons
                   className="subjectIcon"
                   url="/assets/calendar.png"
+                  onClick={onClickCalendar}
                 />
               </SubjectIconsContainer>
             </Subject>
@@ -123,7 +114,7 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
             )}
           </SubjectTimeStamp>
         </SubjectInfo>
-        <Button>Select</Button>
+        <Button onClick={onClickSubmit}>Select</Button>
       </Container>
     </MentorInfoModalContainer>
   );
@@ -333,6 +324,7 @@ const Button = styled.div`
   align-items: center;
   font-weight: bold;
   margin: 0 auto;
+  cursor: pointer;
 `;
 
 const Container = styled.div`

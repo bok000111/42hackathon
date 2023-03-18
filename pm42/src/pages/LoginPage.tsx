@@ -5,11 +5,17 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosLogin } from "../api/axios";
 import LoadingAnimation from "../components/common/LoadingButton";
+import { useRecoilState } from "recoil";
+import { myInfoState } from "../Atom";
 //api/get_token/?code=
 const LoginPage = () => {
   const navigator = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [myInfo, setMyInfo] = useRecoilState(myInfoState);
   useEffect(() => {
+    if (myInfo.token.length) {
+      navigator("/main");
+    }
     const code = window.location.search.slice(1).split("=")[1];
     if (code) {
       setLoading(true);
@@ -18,8 +24,15 @@ const LoginPage = () => {
     async function getData(code: string) {
       try {
         const { data } = await axiosLogin(code);
+        setMyInfo({
+          token: data.token,
+          image: data.image,
+          login: data.login,
+          level: data.level,
+          coa: data.coa,
+          projects: JSON.stringify(data.projects),
+        });
         localStorage.setItem("token", data.token);
-        localStorage.setItem("data", JSON.stringify(data));
         navigator("/main");
       } catch (e) {
         console.log(e);
@@ -39,10 +52,13 @@ const LoginPage = () => {
       </SecondSlogunContainer>
       <NameContainer>42 PeerMatching</NameContainer>
       {!loading && (
-        <ButtonContainer onClick={() => setLoading(true)}>
-          <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-704d2685a6d5772b24b1c01b713439a29f2ebc33f8ec8ac99d27305213871b3c&redirect_uri=http%3A%2F%2Flocalhost%3A5173&response_type=code">
-            LOG IN
-          </a>
+        <ButtonContainer
+          onClick={() => {
+            setLoading(true);
+            window.location.replace("http://localhost:8000/api/login/");
+          }}
+        >
+          LOG IN
         </ButtonContainer>
       )}
       {loading && (

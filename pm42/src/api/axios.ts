@@ -1,4 +1,5 @@
 import axios from "axios";
+import { redirect } from "react-router-dom";
 
 const access = axios.create({
   baseURL: "http://localhost:8000",
@@ -6,44 +7,9 @@ const access = axios.create({
   withCredentials: false,
 });
 
-const getToken = () => `?token=${localStorage.getItem("token")}`;
-
-export const axiosLogin = async (code: string): Promise<any> => {
+export const axiosGetMatchList = async (token: string): Promise<any> => {
   try {
-    const response = await access.get("/api/login/?code=" + code);
-    return response;
-  } catch (e) {
-    console.error(e);
-  }
-};
-
-export const axiosGetMatchList = async (): Promise<any> => {
-  try {
-    const response = await access.get("/api/slot/me/" + getToken());
-
-    console.log("axiosGetMatchList, /api/slot/me/");
-    console.log(response);
-  } catch (e) {
-    console.error(e);
-  }
-};
-
-export const axiosGetRank = async (): Promise<any> => {
-  try {
-    const response = await access.get("/api/rank/" + getToken());
-
-    console.log("axiosGetMatchList, /api/rank/");
-    console.log(response);
-  } catch (e) {
-    console.error(e);
-  }
-};
-
-export const axiosGetAllSlots = async (): Promise<any> => {
-  try {
-    const response = await access.get("/api/slot/" + getToken());
-
-    console.log("axiosGetMatchList, /api/slot/");
+    const response = await access.get("/api/slot/me/?token=" + token);
     console.log(response);
     return response.data;
   } catch (e) {
@@ -51,9 +17,25 @@ export const axiosGetAllSlots = async (): Promise<any> => {
   }
 };
 
-export async function getData(func: any) {
-  await func();
-}
+export const axiosGetRank = async (token: string): Promise<any> => {
+  try {
+    const response = await access.get("/api/rank/?token=" + token);
+
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const axiosGetAllSlots = async (token: string): Promise<any> => {
+  try {
+    const response = await access.get("/api/slot/?token=" + token);
+
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 export const axiosAddSlot = async (
   start: number,
@@ -61,10 +43,11 @@ export const axiosAddSlot = async (
   subject: string,
   login: string,
   max: number,
-  description: string
+  description: string,
+  token: string
 ): Promise<any> => {
   try {
-    const response = await access.post("/api/slot/" + getToken(), {
+    const response = await access.post("/api/slot/?token=" + token, {
       start,
       end,
       subject,
@@ -72,9 +55,34 @@ export const axiosAddSlot = async (
       max,
       description,
     });
-    console.log(response);
-    const { data } = response;
+    return response.data;
   } catch (e) {
     console.error(e);
+  }
+};
+
+export const axiosRemoveSlot = async (
+  token: string,
+  id: number
+): Promise<any> => {
+  try {
+    const response = await access.delete("/api/slot/?token=" + token, {
+      data: {
+        id,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const axiosLogin = async (code: string): Promise<any> => {
+  try {
+    const response = await access.get("/api/login/?code=" + code);
+    console.log("axiosLogin", response);
+    return response;
+  } catch (e) {
+    console.error("hi", e);
   }
 };

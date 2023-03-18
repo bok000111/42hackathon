@@ -24,8 +24,8 @@ const MentorCard = ({ info }: { info: IMentorInfo }) => {
       </ProfileContainer>
       <ContentsContainer>
         <SubjectContainer>
-          {info.subjects.map((subject) => (
-            <Subject>{subject}</Subject>
+          {Array.from(new Set(info.subjects)).map((subject, idx) => (
+            <Subject key={idx}>{subject}</Subject>
           ))}
         </SubjectContainer>
       </ContentsContainer>

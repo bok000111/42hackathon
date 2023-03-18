@@ -1,7 +1,11 @@
 import styled from "@emotion/styled";
 import React, { useRef, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { SelectedSubjectState, SubjectDescriptionState } from "../../Atom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  myInfoState,
+  SelectedSubjectState,
+  SubjectDescriptionState,
+} from "../../Atom";
 import { ISubjectData } from "../../interface";
 
 function bonusDone({ name, final_mark: score }: ISubjectData) {
@@ -12,6 +16,8 @@ function bonusDone({ name, final_mark: score }: ISubjectData) {
 }
 
 const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
+  const myInfo = useRecoilValue(myInfoState);
+  const projects = JSON.parse(myInfo.projects) || [];
   const ref = useRef(null);
   const [prev, setPrev] = useState<HTMLElement | null>(null);
   const [subject, setSubject] = useRecoilState(SelectedSubjectState);
@@ -64,7 +70,7 @@ const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
       <HeaderContainer>Mentoring</HeaderContainer>
       <SubHeaderContainer>Choose Subject</SubHeaderContainer>
       <SubjectsContainer>
-        {data.map((info) => (
+        {projects.map((info: ISubjectData) => (
           <SubjectContainer key={info.name}>
             <Subject className="notActive" onClick={onClickMandetory}>
               {info.name.replaceAll(" Module", "")}

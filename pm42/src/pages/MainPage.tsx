@@ -7,6 +7,7 @@ import { useRecoilValue } from "recoil";
 import {
   backgorundToggleState,
   CurrentMentorInfoState,
+  MenteeScheduleToggleState,
   MentorInfoBackToggleState,
   MentorInfoToggleState,
   mentorToggleState,
@@ -17,6 +18,7 @@ import customHooks from "../hooks";
 import MentorModal from "../components/MentorModal.tsx/MentorModal";
 import ScheduleModal from "../components/ScheduleModal.tsx/ScheduleModal";
 import MentorInfoModal from "../components/MentorInfoModal/MentorInfoModal";
+import MenteeSchedule from "../components/ScheduleModal.tsx/MenteeSchedule";
 
 const MainPage = () => {
   const backgroundToggle = useRecoilValue(backgorundToggleState);
@@ -26,6 +28,7 @@ const MainPage = () => {
   const mentorInfoToggle = useRecoilValue(MentorInfoToggleState);
   const mentorInfoBackToggle = useRecoilValue(MentorInfoBackToggleState);
   const currentMentorInfo = useRecoilValue(CurrentMentorInfoState);
+  const menteeScheduleToggle = useRecoilValue(MenteeScheduleToggleState);
 
   const { closeSetMentoring, closeScheduleBack, closeMentorInfo } =
     customHooks();
@@ -42,6 +45,7 @@ const MainPage = () => {
       {backgroundToggle && <BackgroundContainer onClick={closeSetMentoring} />}
       {scheduleToggle && <ScheduleModal />}
       {scheduleBackToggle && <BackgroundContainer onClick={scheduleBackOff} />}
+      {menteeScheduleToggle && <MenteeSchedule />}
       {mentorInfoToggle && <MentorInfoModal info={currentMentorInfo} />}
       {mentorInfoBackToggle && (
         <BackgroundContainer onClick={closeMentorInfo} />

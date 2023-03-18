@@ -1,36 +1,44 @@
 import styled from "@emotion/styled";
-import { useEffect } from "react";
-import { axiosGetRank, getData } from "../../api/axios";
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { axiosGetRank } from "../../api/axios";
+import { myInfoState } from "../../Atom";
 import { HeaderContainer } from "../../Styles";
-
-
-const data = [
-  {
-    coalition: "gun",
-    intra: "yooh",
-    time: 12.5,
-    good: 132,
-  },
-  {
-    coalition: "lee",
-    intra: "jbok",
-    time: 7.5,
-    good: 66,
-  },
-  {
-    coalition: "gam",
-    intra: "yeckim",
-    time: 4.5,
-    good: 12,
-  },
-];
 
 const createLink = (name: string) =>
   `https://profile.intra.42.fr/users/${name}`;
 
 const Rank = () => {
+  const { token } = useRecoilValue(myInfoState);
+  const [data, setData] = useState([
+    {
+      login: "-",
+      coa: "-",
+      total_time: "-",
+      total_feedback: "-",
+    },
+    {
+      login: "-",
+      coa: "-",
+      total_time: "-",
+      total_feedback: "-",
+    },
+    {
+      login: "-",
+      coa: "-",
+      total_time: "-",
+      total_feedback: "-",
+    },
+  ]);
   useEffect(() => {
-    getData(axiosGetRank);
+    async function getData() {
+      const response = await axiosGetRank(
+        token || localStorage.getItem("token")
+      );
+      console.log("in Rank", response);
+      setData([...response.rank]);
+    }
+    getData();
   }, []);
   return (
     <RankContainer>
@@ -51,17 +59,17 @@ const Rank = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((info, idx) => (
+          {data.map((info: any, idx) => (
             <tr>
-              <td>{idx + 1}</td>
+              <td>{info.login ? idx + 1 : "-"}</td>
               <td>
-                <a target="_blank" href={createLink(info.intra)}>
-                  <CoalitionIcon src={info.coalition} />
-                  {info.intra}
+                <a target="_blank" href={createLink(info.login)}>
+                  <CoalitionIcon src={info.coa} />
+                  {info.login}
                 </a>
               </td>
-              <td>{info.time}H</td>
-              <td>{info.good}</td>
+              <td>{info.total_time}H</td>
+              <td>{info.total_feedback}</td>
             </tr>
           ))}
         </tbody>

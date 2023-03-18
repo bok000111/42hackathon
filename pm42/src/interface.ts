@@ -64,3 +64,12 @@ export interface ISubjectInfo {
   start: number;
   end: number;
 }
+
+export interface IMyInfo {
+  token: string;
+  image: string;
+  login: string;
+  level: number;
+  coa: string;
+  projects: string;
+}

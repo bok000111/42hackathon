@@ -1,51 +1,22 @@
 import styled from "@emotion/styled";
-import { useEffect } from "react";
-import { axiosGetMatchList, getData } from "../../api/axios";
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { axiosGetMatchList } from "../../api/axios";
+import { myInfoState } from "../../Atom";
 import { IMentor } from "../../interface";
 import { HeaderContainer } from "../../Styles";
 import createMatchIndex from "./createMatchIndex";
 
-function createDummyData() {
-  const time = new Date().getTime();
-
-  const subjects = [
-    "CPP",
-    "push_swap",
-    "Libft",
-    "minishell",
-    "pipex",
-    "minitalk",
-    "so_long",
-  ];
-  const result = [];
-  for (let i = 0; i < 15; i++) {
-    const num = (Math.random() * 1000 * 60 * 100) | 0;
-    const typeNum = Math.floor(Math.random() * 2);
-    const subNum = Math.floor(Math.random() * subjects.length);
-    const targetNum = Math.floor(Math.random() * 2);
-
-    const temp: IMentor = {
-      type: typeNum ? "mentor" : "mentee",
-      subject: subjects[subNum],
-      time: new Date(time + num),
-      target:
-        typeNum === 0
-          ? ["jbok"]
-          : targetNum === 1
-          ? ["jbok", "jpark2", "yeckim", "sanan"]
-          : ["jbok"],
-    };
-
-    result.push(temp);
-  }
-  return result;
-}
-
-const data = createDummyData();
-
 const MatchList = () => {
+  const { token } = useRecoilValue(myInfoState);
+  const [data, setData] = useState([]);
   useEffect(() => {
-    getData(axiosGetMatchList);
+    getData();
+    async function getData() {
+      const result = await axiosGetMatchList(token || localStorage.getItem('token'));
+      console.log("in MatchList", result);
+      //setData(result);
+    }
   }, []);
   return (
     <MatchListContainer>

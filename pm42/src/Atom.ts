@@ -6,6 +6,18 @@ export const mentorToggleState = atom({
   default: false,
 });
 
+export const myInfoState = atom({
+  key: "myInfo",
+  default: {
+    token: "",
+    image: "",
+    login: "",
+    level: "",
+    coa: "",
+    projects: "",
+  },
+});
+
 export const backgorundToggleState = atom({
   key: "backgroundToggle",
   default: false,
@@ -13,6 +25,11 @@ export const backgorundToggleState = atom({
 
 export const ScheduleToggleState = atom({
   key: "scheduleToggle",
+  default: false,
+});
+
+export const MenteeScheduleToggleState = atom({
+  key: "menteeScheduleToggle",
   default: false,
 });
 

@@ -5,7 +5,6 @@ import { axiosAddSlot } from "../../api/axios";
 import {
   EndIndexState,
   MenteeNumberState,
-  myInfoState,
   SelectedSubjectState,
   StartIndexState,
   SubjectDescriptionState,
@@ -22,83 +21,8 @@ import Select from "./Select";
 
 const calIdx = (idx: number) => 96 * (idx % 7) + Math.floor(idx / 7);
 
-const ScheduleModal = () => {
-  const ref = useRef(null);
+const MenteeSchedule = () => {
   const mon = getMonday();
-  const [start, setStart] = useRecoilState(StartIndexState);
-  const [end, setEnd] = useRecoilState(EndIndexState);
-  const subject = useRecoilValue(SelectedSubjectState);
-  const description = useRecoilValue(SubjectDescriptionState);
-  const menteeNumber = useRecoilValue(MenteeNumberState);
-  const { token } = useRecoilValue(myInfoState);
-
-  const onConfirm = () => {
-    if (start === -1 || end === -1) {
-      alert("select time");
-      return;
-    }
-
-    console.log(
-      createDateInfo(mon, start).getTime(),
-      createDateInfo(mon, end).getTime(),
-      subject,
-      description,
-      menteeNumber
-    );
-    axiosAddSlot(
-      start,
-      end,
-      subject,
-      localStorage.getItem("login"),
-      menteeNumber,
-      description,
-      token || localStorage.getItem("token")
-    );
-  };
-  const onClick = (e: React.MouseEvent<HTMLElement>) => {
-    if (e.currentTarget.classList.contains("disabled")) return;
-    if (start === -1) {
-      e.currentTarget.classList.add("blockActive");
-      setStart(Number(e.currentTarget.dataset.idx));
-      return;
-    }
-    if (Number(e.currentTarget.dataset.idx) === start) {
-      e.currentTarget.classList.remove("blockActive");
-      setStart(-1);
-      const target = e.currentTarget.parentElement as HTMLElement;
-      target.childNodes.forEach((node: any) => {
-        node.classList.remove("blockActive");
-      });
-      return;
-    }
-    const i = Math.min(start, Number(e.currentTarget.dataset.idx)),
-      j = Math.max(start, Number(e.currentTarget.dataset.idx));
-
-    const target = e.currentTarget.parentElement as HTMLElement;
-    target.childNodes.forEach((node: any) => {
-      const t = Number(node.dataset.idx);
-      if (t >= i && t <= j) node.classList.add("blockActive");
-      else node.classList.remove("blockActive");
-    });
-    setStart(i);
-    setEnd(j);
-  };
-
-  useEffect(() => {
-    if (start !== -1 && end !== -1) {
-      const target = ref.current as unknown as HTMLElement;
-      target.childNodes.forEach((node: any) => {
-        const t = Number(node.dataset.idx);
-        if (t >= start && t <= end) node.classList.add("blockActive");
-        else node.classList.remove("blockActive");
-      });
-    }
-    return () => {
-      if (end === -1) {
-        setStart(-1);
-      }
-    };
-  }, []);
   return (
     <ScheduleModalContainer>
       <InfoContainer>
@@ -106,7 +30,6 @@ const ScheduleModal = () => {
         <ButtonContainer>
           <MemberIcon />
           <Select />
-          <ConfirmButton onClick={onConfirm}>Confirm</ConfirmButton>
         </ButtonContainer>
       </InfoContainer>
       <CalendarContainer>
@@ -123,12 +46,11 @@ const ScheduleModal = () => {
               ))}
             </TimeStampContainer>
           </TimeInfoContainer>
-          <TimeBlockContainer ref={ref}>
+          <TimeBlockContainer>
             {new Array(96 * 7).fill(0).map((_, idx) => {
               const i = calIdx(idx);
               return (
                 <TimeBlock
-                  onClick={onClick}
                   className={`${
                     Math.floor(idx / 7) % 2 === 0 ? "odd" : "even"
                   } ${checkTimeOver(createDateInfo(mon, i)) ? "" : "disabled"}`}
@@ -318,7 +240,7 @@ const ScheduleModalContainer = styled.div`
   left: calc(50% - 500px);
   top: calc(50% - 400px);
   background: var(--white-color);
-  z-index: 3;
+  z-index: 4;
 `;
 
-export default ScheduleModal;
+export default MenteeSchedule;
