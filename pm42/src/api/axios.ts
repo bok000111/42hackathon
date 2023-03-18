@@ -1,5 +1,5 @@
 import axios from "axios";
-import { redirect } from "react-router-dom";
+import { Cookies } from "react-cookie";
 
 const access = axios.create({
   baseURL: "http://localhost:8000",
@@ -80,10 +80,30 @@ export const axiosRemoveSlot = async (
 
 export const axiosLogin = async (code: string): Promise<any> => {
   try {
-    const response = await access.get("/api/login/?code=" + code);
+    const cookie = new Cookies();
+    const headers = {
+      _intra_42_session_production: cookie.get("_intra_42_session_production"),
+    };
+    const response = await access.get("/api/login/?code=" + code, { headers });
     console.log("axiosLogin", response);
     return response;
   } catch (e) {
     console.error("hi", e);
+  }
+};
+
+export const axiosJoinLecture = async (
+  token: string,
+  id: number,
+  mentee: string
+) => {
+  try {
+    const response = await access.patch("/api/login/?token=" + token, {
+      id,
+      mentee,
+    });
+    console.log(response);
+  } catch (e) {
+    console.error(e);
   }
 };
