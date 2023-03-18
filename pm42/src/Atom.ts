@@ -163,3 +163,13 @@ export const AlertMessageState = atom({
   key: "alertMessage",
   default: "",
 });
+
+export const FeedbackToggleState = atom({
+  key: "feedbackToggle",
+  default: false,
+});
+
+export const FeedbackBackToggleState = atom({
+  key: "feedbackBackToggle",
+  default: false,
+});

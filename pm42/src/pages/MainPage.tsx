@@ -11,6 +11,8 @@ import {
   backgorundToggleState,
   CurrentMentorInfoState,
   EndIndexState,
+  FeedbackBackToggleState,
+  FeedbackToggleState,
   MenteeNumberState,
   MenteeScheduleBackToggleState,
   MenteeScheduleToggleState,
@@ -32,6 +34,7 @@ import MentorInfoModal from "../components/MentorInfoModal/MentorInfoModal";
 import MenteeSchedule from "../components/ScheduleModal.tsx/MenteeSchedule";
 import MyInfoModal from "../components/MyInfo/MyInfoModal";
 import Alert from "../components/common/Alert";
+import Feedback from "../components/Feedback/Feedback";
 
 const MainPage = () => {
   const backgroundToggle = useRecoilValue(backgorundToggleState);
@@ -50,6 +53,8 @@ const MainPage = () => {
   const myInfoToggle = useRecoilValue(MyInfoToggleState);
   const myInfoBackToggle = useRecoilValue(MyInfoBackToggleState);
   const alertMessage = useRecoilValue(AlertMessageState);
+  const feedbackToggle = useRecoilValue(FeedbackToggleState);
+  const feedbackBackToggle = useRecoilValue(FeedbackBackToggleState);
   const setSubject = useSetRecoilState(SelectedSubjectState);
   const setDescription = useSetRecoilState(SubjectDescriptionState);
   const setMenteeNumber = useSetRecoilState(MenteeNumberState);
@@ -102,6 +107,8 @@ const MainPage = () => {
         <BackgroundContainer onClick={closeAlert} zIndex={3} />
       )}
       {alertToggle && <Alert msg={alertMessage} />}
+      {feedbackBackToggle && <BackgroundContainer zIndex={2} />}
+      {feedbackToggle && <Feedback />}
     </CommonContainer>
   );
 };
