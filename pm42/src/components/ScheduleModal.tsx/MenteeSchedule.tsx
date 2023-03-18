@@ -3,12 +3,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { axiosAddSlot } from "../../api/axios";
 import {
+  CurrentMentorInfoState,
   EndIndexState,
   MenteeNumberState,
+  myInfoState,
+  OpenedSlotsState,
+  SelectedSubjectInfoState,
   SelectedSubjectState,
   StartIndexState,
   SubjectDescriptionState,
 } from "../../Atom";
+import customHooks from "../../hooks";
 import {
   checkTimeOver,
   createDateInfo,
@@ -21,12 +26,18 @@ import Select from "./Select";
 
 const calIdx = (idx: number) => 96 * (idx % 7) + Math.floor(idx / 7);
 
-const MenteeSchedule = () => {
+const ScheduleModal = () => {
   const mon = getMonday();
+  const mentorInfo = useRecoilValue(CurrentMentorInfoState);
+  const subjectInfo = useRecoilValue(SelectedSubjectInfoState);
+  console.log(subjectInfo);
+  console.log("mentorInfo", mentorInfo);
+
   return (
     <ScheduleModalContainer>
       <InfoContainer>
         <WeekInfo>{getWeekInfo(getMonday())}</WeekInfo>
+        <SubjectName>{subjectInfo.subject}</SubjectName>
         <ButtonContainer>
           <MemberIcon />
           <Select />
@@ -54,11 +65,8 @@ const MenteeSchedule = () => {
                   className={`${
                     Math.floor(idx / 7) % 2 === 0 ? "odd" : "even"
                   } ${checkTimeOver(createDateInfo(mon, i)) ? "" : "disabled"}`}
-                  data-time-info={createDateInfo(mon, calIdx(idx))}
                   data-idx={i}
-                >
-                  {i}
-                </TimeBlock>
+                ></TimeBlock>
               );
             })}
           </TimeBlockContainer>
@@ -67,6 +75,12 @@ const MenteeSchedule = () => {
     </ScheduleModalContainer>
   );
 };
+
+const SubjectName = styled.div`
+  color: var(--main-color);
+  font-size: 1.5rem;
+  font-weight: bold;
+`;
 
 const TimeBlock = styled.div`
   height: 40px;
@@ -78,7 +92,11 @@ const TimeBlock = styled.div`
     border-bottom: 1px solid var(--gray-color);
   }
   &.disabled {
-    background: var(--lightgray-color);
+    background: var(--lightgray-color) !important;
+    cursor: not-allowed;
+  }
+  &.onReserved {
+    background: pink;
     cursor: not-allowed;
   }
   &.active {
@@ -243,4 +261,4 @@ const ScheduleModalContainer = styled.div`
   z-index: 4;
 `;
 
-export default MenteeSchedule;
+export default ScheduleModal;

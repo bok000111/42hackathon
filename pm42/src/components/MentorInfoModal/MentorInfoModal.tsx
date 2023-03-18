@@ -1,7 +1,11 @@
 import styled from "@emotion/styled";
 import { IMentorInfo, ISlotInfo } from "../../interface";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { MenteeScheduleToggleState, OpenedSlotsState } from "../../Atom";
+import {
+  CurrentMentorInfoState,
+  OpenedSlotsState,
+  SelectedSubjectInfoState,
+} from "../../Atom";
 import MentorInfoCard from "./MentorInfoCard";
 import React, { useState } from "react";
 import { getMonday } from "../ScheduleModal.tsx/ScheduleHooks";
@@ -37,15 +41,24 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedLectureIndex, setSelectedLectureIndex] = useState(0);
   const { openMenteeSchedule } = customHooks();
+  const setSelectedMentorSubjectInfo = useSetRecoilState(
+    SelectedSubjectInfoState
+  );
+  const currentMentor = useRecoilValue(CurrentMentorInfoState);
+
+  console.log(currentMentor);
+
   const onClickSubject = (idx: number) => {
     setSelectedIndex(idx);
   };
+
   const onClickSubmit = () => {
     console.log("submit", list[selectedIndex].info[selectedLectureIndex]);
   };
+
   const onClickCalendar = () => {
-    console.log(slotInfo[selectedIndex]);
     openMenteeSchedule();
+    setSelectedMentorSubjectInfo(list[selectedIndex]);
   };
   return (
     <MentorInfoModalContainer>

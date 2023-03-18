@@ -167,7 +167,6 @@ const ScheduleModal = () => {
                   className={`${
                     Math.floor(idx / 7) % 2 === 0 ? "odd" : "even"
                   } ${checkTimeOver(createDateInfo(mon, i)) ? "" : "disabled"}`}
-                  data-time-info={createDateInfo(mon, calIdx(idx))}
                   data-idx={i}
                 ></TimeBlock>
               );
@@ -355,7 +354,7 @@ const ScheduleModalContainer = styled.div`
   left: calc(50% - 500px);
   top: calc(50% - 400px);
   background: var(--white-color);
-  z-index: 3;
+  z-index: 4;
 `;
 
 export default ScheduleModal;

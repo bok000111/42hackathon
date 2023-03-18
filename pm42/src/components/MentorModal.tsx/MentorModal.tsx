@@ -158,7 +158,7 @@ const MentorModalContainer = styled.div`
   position: fixed;
   left: calc(50% - 500px);
   top: calc(50% - 350px);
-  z-index: 2;
+  z-index: 3;
   overflow: hidden;
   display: flex;
 `;

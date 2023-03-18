@@ -97,7 +97,9 @@ const Profile = styled.div<{ src: string | undefined; coalition: string }>`
   border-radius: 100%;
   margin-top: 50px;
   background-image: url(${({ src }) => src || "/assets/defaultImage.png"});
-  background-size: 100% 100%;
+  background-size: 100% 120%;
+  background-position-x: 30%;
+  background-position-y: 50%;
   position: relative;
 `;
 

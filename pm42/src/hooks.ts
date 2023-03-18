@@ -68,7 +68,7 @@ export function convertToLectureTime(start: number, end: number) {
   const mon = getMonday();
   const startDate = new Date(mon),
     endDate = new Date(mon);
-  startDate.setMinutes(start * 15), endDate.setMinutes(end * 15);
+  startDate.setMinutes(start * 15), endDate.setMinutes((end + 1) * 15);
   const sM = startDate.getMonth() + 1,
     sD = startDate.getDate();
   const sH = startDate.getHours(),

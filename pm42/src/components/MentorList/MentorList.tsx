@@ -13,6 +13,7 @@ function convertData(list: ISlotInfo[], login: string) {
         acc[cur.mentor.login] = {};
         acc[cur.mentor.login].intra = cur.mentor.login;
         acc[cur.mentor.login].subjects = [];
+        acc[cur.mentor.login].image = cur.mentor.image;
         acc[cur.mentor.login].level = cur.mentor.level;
         acc[cur.mentor.login].good = cur.mentor.total_feedback;
         acc[cur.mentor.login].coalition = cur.mentor.coa;

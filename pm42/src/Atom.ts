@@ -113,3 +113,11 @@ export const OpenedSlotsState = atom<ISlotInfo[]>({
   key: "openedSlots",
   default: [],
 });
+
+export const SelectedSubjectInfoState = atom({
+  key: "selectedSubjectInfo",
+  default: {
+    subject: "",
+    info: [],
+  },
+});

@@ -1,12 +1,19 @@
 import styled from "@emotion/styled";
-import { CurrentMentorInfoState } from "../../Atom";
-import { useSetRecoilState } from "recoil";
+import {
+  CurrentMentorInfoState,
+  myInfoState,
+  OpenedSlotsState,
+} from "../../Atom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import customHooks from "../../hooks";
 import { IMentorInfo } from "../../interface";
 
 const MentorCard = ({ info }: { info: IMentorInfo }) => {
   const { openMentorInfo } = customHooks();
-  const setCurrentMentorInfo = useSetRecoilState(CurrentMentorInfoState);
+  const [currentMentorInfo, setCurrentMentorInfo] = useRecoilState(
+    CurrentMentorInfoState
+  );
+
   const onClick = () => {
     openMentorInfo();
     setCurrentMentorInfo(info);
@@ -104,7 +111,10 @@ const Profile = styled.div<{ src: string | undefined; coalition: string }>`
   padding-bottom: 45%;
   border-radius: 100%;
   background-image: url(${({ src }) => src || "/assets/defaultImage.png"});
-  background-size: 100% 100%;
+  background-size: 100% 120%;
+  background-position-x: 30%;
+  background-position-y: 50%;
+  background-repeat: no-repeat;
   position: relative;
   &::after {
     content: "";
@@ -123,7 +133,6 @@ const Profile = styled.div<{ src: string | undefined; coalition: string }>`
 `;
 
 const MentoCardContainer = styled.div<{ url: string }>`
-  /*background-image: ${({ url }) => `url(/assets/${url}_cover.png)`};*/
   background: lightgray;
   background-size: 100% 100%;
   width: 90%;
