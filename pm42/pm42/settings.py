@@ -128,10 +128,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+import os
+
+STATIC_ROOT = ''
 STATIC_URL = "dist/"
 STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "myproject", "myapp", "static"),
     BASE_DIR / "dist",
-    BASE_DIR / "dist" / "assets",
+    BASE_DIR,
+    "dist",
+    "dist/assets",
 ]
 
 # Default primary key field type

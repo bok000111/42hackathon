@@ -19,8 +19,8 @@ from .views import Init, Dev, ApiLogin, ApiRank, ApiSlot, ApiSlotMe
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('', Init.as_view()),
-    path('', Dev.as_view()),
+    path('', Init.as_view()),
+    #path('', Dev.as_view()),
     path('api/login/', ApiLogin.as_view()),
     path('api/rank/', ApiRank.as_view()),
     path('api/slot/me/', ApiSlotMe.as_view()),
