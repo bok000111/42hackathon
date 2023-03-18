@@ -105,7 +105,6 @@ class ApiSlot(View):
 			try:
 				mento = User42.objects.get(login=slot['mentor'])
 				slot['mentor'] = {'login': mento.login, 'image': mento.image, 'coa': mento.coa, 'level': mento.level, 'total_feedback': mento.total_feedback}
-				slot['mentees'] = slot['mentees'].split(' ')
 			except User42.DoesNotExist:
 				return HttpResponse('mentor not found', status=404)
 		return JsonResponse({'slots': slots})
