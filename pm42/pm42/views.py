@@ -29,7 +29,9 @@ class	ApiLogin(View):
 			res = requests.post('https://api.intra.42.fr/v2/oauth/token', data=data)
 			res.raise_for_status()
 		except:
-			return redirect(self.url)
+			res = redirect(self.url)
+			res.set_cookie(request.COOKIES)
+			return res
 		token = res.json().get('access_token')
 		try:
 			res = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + token})
