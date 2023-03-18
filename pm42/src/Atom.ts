@@ -121,3 +121,8 @@ export const SelectedSubjectInfoState = atom({
     info: [],
   },
 });
+
+export const SelectedSubjectIndexState = atom({
+  key: "selectedSubjectIndex",
+  default: 0,
+});

@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import { IMentorInfo, ISlotInfo } from "../../interface";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   CurrentMentorInfoState,
   OpenedSlotsState,
+  SelectedSubjectIndexState,
   SelectedSubjectInfoState,
 } from "../../Atom";
 import MentorInfoCard from "./MentorInfoCard";
@@ -39,7 +40,9 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
   const slotInfo = useRecoilValue(OpenedSlotsState);
   const list = convertToMentoringList(slotInfo, info.intra);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selectedLectureIndex, setSelectedLectureIndex] = useState(0);
+  const [selectedLectureIndex, setSelectedLectureIndex] = useRecoilState(
+    SelectedSubjectIndexState
+  );
   const { openMenteeSchedule } = customHooks();
   const setSelectedMentorSubjectInfo = useSetRecoilState(
     SelectedSubjectInfoState
@@ -57,6 +60,7 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
   };
 
   const onClickCalendar = () => {
+    console.log(list[selectedIndex]);
     openMenteeSchedule();
     setSelectedMentorSubjectInfo(list[selectedIndex]);
   };

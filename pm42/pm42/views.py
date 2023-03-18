@@ -81,17 +81,17 @@ class ApiRank(View):
 		return JsonResponse({'rank': users})
 
 from datetime import datetime, timezone
+import pytz
 
 class ApiSlot(View):
 	def isDel(self, slot: OpenSlot) -> bool:
-		now = datetime.now(timezone('Asia/Seoul'))
-		index = now.weekday() * 24 * 4 + now.hour() * 4 + now.minute() // 15
-		if slot.start < index:
-			return True
-		slot.delete()
-		return False
+		now = datetime.now(pytz.timezone('Asia/Seoul'))
+		index = now.weekday() * 24 * 4 + now.hour * 4 + now.minute // 15
+		if slot['start'] < index:
+			OpenSlot.objects.get(id=slot['id']).delete()
+			return False
+		return True
 	def SlotAll(self):
-		self.refresh()
 		slots = list(OpenSlot.objects.all().values('id', 'mentor', 'subject', 'max', 'curr', 'start', 'end', 'description'))
 		slots = [x for x in slots if self.isDel(x)]
 		for slot in slots:

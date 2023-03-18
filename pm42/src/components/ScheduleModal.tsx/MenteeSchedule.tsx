@@ -8,6 +8,7 @@ import {
   MenteeNumberState,
   myInfoState,
   OpenedSlotsState,
+  SelectedSubjectIndexState,
   SelectedSubjectInfoState,
   SelectedSubjectState,
   StartIndexState,
@@ -28,7 +29,7 @@ const calIdx = (idx: number) => 96 * (idx % 7) + Math.floor(idx / 7);
 
 function getSubjectIndex(list: any, idx: number, num: number) {
   for (let i = 0; i < list.length; i++) {
-    if (list.start <= idx && idx <= list.end) return Number;
+    if (list[i].start <= idx && idx <= list[i].end) return i;
   }
   return -1;
 }
@@ -37,8 +38,16 @@ const ScheduleModal = () => {
   const mon = getMonday();
   const mentorInfo = useRecoilValue(CurrentMentorInfoState);
   const subjectInfo = useRecoilValue(SelectedSubjectInfoState);
+  const setSelectedSubjectIndex = useSetRecoilState(SelectedSubjectIndexState);
+  const { closeMenteeSchedule } = customHooks();
   console.log(subjectInfo);
   console.log("mentorInfo", mentorInfo);
+  const onSelectSection = (e: React.MouseEvent<HTMLElement>) => {
+    const idx = Number(e.currentTarget.dataset.sectionIndex);
+    if (idx === -1) return;
+    setSelectedSubjectIndex(idx);
+    closeMenteeSchedule();
+  };
   let num = 0;
   return (
     <ScheduleModalContainer>
@@ -69,6 +78,7 @@ const ScheduleModal = () => {
               const i = calIdx(idx);
 
               const timeIndex = getSubjectIndex(subjectInfo.info, i, num++);
+              console.log(timeIndex);
               return (
                 <TimeBlock
                   className={`${
@@ -77,7 +87,9 @@ const ScheduleModal = () => {
                     checkTimeOver(createDateInfo(mon, i)) ? "" : "disabled"
                   } ${timeIndex !== -1 ? "onReserved" : ""}`}
                   data-idx={i}
-                ></TimeBlock>
+                  data-section-index={timeIndex}
+                  onClick={onSelectSection}
+                />
               );
             })}
           </TimeBlockContainer>
@@ -107,8 +119,8 @@ const TimeBlock = styled.div`
     cursor: not-allowed;
   }
   &.onReserved {
-    background: pink;
-    cursor: not-allowed;
+    background: var(--sub-color);
+    cursor: grab;
   }
   &.active {
     background: var(--sub-color);
@@ -116,7 +128,6 @@ const TimeBlock = styled.div`
   &.blockActive {
     background: var(--sub-color);
   }
-  cursor: grab;
 `;
 
 const TimeBlockContainer = styled.div`
@@ -155,21 +166,6 @@ const TimeStamp = styled.div`
   }
   &:nth-child(2n + 1) {
     border-bottom: 1px solid var(--lightgray-color);
-  }
-  &:last-of-type {
-    border-bottom: none;
-  }
-`;
-
-const TimeInfo = styled.div`
-  display: flex;
-  width: 100%;
-  height: 40px;
-  &:nth-child(2n + 1) {
-    border-bottom: 1px solid var(--lightgray-color);
-  }
-  &:nth-child(2n) {
-    border-bottom: 1px solid var(--gray-color);
   }
   &:last-of-type {
     border-bottom: none;
