@@ -26,13 +26,20 @@ import Select from "./Select";
 
 const calIdx = (idx: number) => 96 * (idx % 7) + Math.floor(idx / 7);
 
+function getSubjectIndex(list: any, idx: number, num: number) {
+  for (let i = 0; i < list.length; i++) {
+    if (list.start <= idx && idx <= list.end) return Number;
+  }
+  return -1;
+}
+
 const ScheduleModal = () => {
   const mon = getMonday();
   const mentorInfo = useRecoilValue(CurrentMentorInfoState);
   const subjectInfo = useRecoilValue(SelectedSubjectInfoState);
   console.log(subjectInfo);
   console.log("mentorInfo", mentorInfo);
-
+  let num = 0;
   return (
     <ScheduleModalContainer>
       <InfoContainer>
@@ -60,11 +67,15 @@ const ScheduleModal = () => {
           <TimeBlockContainer>
             {new Array(96 * 7).fill(0).map((_, idx) => {
               const i = calIdx(idx);
+
+              const timeIndex = getSubjectIndex(subjectInfo.info, i, num++);
               return (
                 <TimeBlock
                   className={`${
                     Math.floor(idx / 7) % 2 === 0 ? "odd" : "even"
-                  } ${checkTimeOver(createDateInfo(mon, i)) ? "" : "disabled"}`}
+                  } ${
+                    checkTimeOver(createDateInfo(mon, i)) ? "" : "disabled"
+                  } ${timeIndex !== -1 ? "onReserved" : ""}`}
                   data-idx={i}
                 ></TimeBlock>
               );

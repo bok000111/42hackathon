@@ -30,7 +30,6 @@ class	ApiLogin(View):
 			res.raise_for_status()
 		except:
 			res = redirect(self.url)
-			res.set_cookie(request.COOKIES)
 			return res
 		token = res.json().get('access_token')
 		try:
