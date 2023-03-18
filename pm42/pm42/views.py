@@ -34,8 +34,8 @@ class	ApiLogin(View):
 		try:
 			res = requests.get("https://api.intra.42.fr/v2/me", headers={'Authorization': 'Bearer ' + token})
 			res.raise_for_status()
-		except:
-			return redirect(self.url)
+		except HTTPError:
+			return HttpResponse('Unauthorized', status=401)
 		res = res.json()
 		try:
 			me = User42.objects.get(id=res['id'])
@@ -44,7 +44,7 @@ class	ApiLogin(View):
 			try:
 				coa = requests.get("https://api.intra.42.fr/v2/users/" + str(me.id) + "/coalitions", headers={'Authorization': 'Bearer ' + token})
 				coa.raise_for_status()
-			except:
+			except HTTPError:
 				return HttpResponse('Unauthorized', status=401)
 			me.coa = coa.json()[0]['slug']
 		me.login = res['login']
