@@ -40,8 +40,6 @@ const ScheduleModal = () => {
   const subjectInfo = useRecoilValue(SelectedSubjectInfoState);
   const setSelectedSubjectIndex = useSetRecoilState(SelectedSubjectIndexState);
   const { closeMenteeSchedule } = customHooks();
-  console.log(subjectInfo);
-  console.log("mentorInfo", mentorInfo);
   const onSelectSection = (e: React.MouseEvent<HTMLElement>) => {
     const idx = Number(e.currentTarget.dataset.sectionIndex);
     if (idx === -1) return;
@@ -76,9 +74,7 @@ const ScheduleModal = () => {
           <TimeBlockContainer>
             {new Array(96 * 7).fill(0).map((_, idx) => {
               const i = calIdx(idx);
-
               const timeIndex = getSubjectIndex(subjectInfo.info, i, num++);
-              console.log(timeIndex);
               return (
                 <TimeBlock
                   className={`${

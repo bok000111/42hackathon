@@ -10,7 +10,6 @@ const access = axios.create({
 export const axiosGetMatchList = async (token: string): Promise<any> => {
   try {
     const response = await access.get("/api/slot/me/?token=" + token);
-    console.log(response);
     return response.data;
   } catch (e) {
     console.error(e);
@@ -20,7 +19,6 @@ export const axiosGetMatchList = async (token: string): Promise<any> => {
 export const axiosGetRank = async (token: string): Promise<any> => {
   try {
     const response = await access.get("/api/rank/?token=" + token);
-
     return response.data;
   } catch (e) {
     console.error(e);
@@ -30,7 +28,6 @@ export const axiosGetRank = async (token: string): Promise<any> => {
 export const axiosGetAllSlots = async (token: string): Promise<any> => {
   try {
     const response = await access.get("/api/slot/?token=" + token);
-
     return response.data;
   } catch (e) {
     console.error(e);
@@ -55,7 +52,6 @@ export const axiosAddSlot = async (
       max,
       description,
     });
-    console.log("what~~~!");
     return response.data;
   } catch (e) {
     console.error(e);
@@ -85,7 +81,6 @@ export const axiosLogin = async (code: string): Promise<any> => {
       _intra_42_session_production: cookie.get("_intra_42_session_production"),
     };
     const response = await access.get("/api/login/?code=" + code, { headers });
-    console.log("axiosLogin", response);
     return response;
   } catch (e) {
     console.error("hi", e);
@@ -98,11 +93,11 @@ export const axiosJoinLecture = async (
   mentee: string
 ) => {
   try {
-    const response = await access.patch("/api/login/?token=" + token, {
+    const response = await access.patch("/api/slot/?token=" + token, {
       id,
       mentee,
     });
-    console.log(response);
+    return response;
   } catch (e) {
     console.error(e);
   }

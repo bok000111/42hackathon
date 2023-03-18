@@ -35,7 +35,6 @@ const Rank = () => {
       const response = await axiosGetRank(
         token || localStorage.getItem("token")
       );
-      console.log("in Rank", response);
       setData([...response.rank]);
     }
     getData();

@@ -37,8 +37,6 @@ const MentorList = ({}: {}) => {
       const response = await axiosGetAllSlots(
         token || localStorage.getItem("token")
       );
-      console.log(response.slots);
-      console.log(convertData(response.slots, login));
       setSlotList(response.slots);
     }
     getData();

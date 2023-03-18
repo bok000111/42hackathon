@@ -23,11 +23,9 @@ const MentorLeftSide = ({ data }: { data: ISubjectData[] }) => {
   const setDescription = useSetRecoilState(SubjectDescriptionState);
   const onClickMandetory = (e: React.MouseEvent) => {
     setSubject(e.currentTarget.textContent);
-    console.log(e.currentTarget.textContent);
   };
   const onClickBonus = (e: React.MouseEvent<HTMLElement>) => {
     const targetName = e.currentTarget.parentElement.children[0].textContent;
-    console.log(targetName);
     setSubject(targetName + " Bonus");
   };
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

@@ -37,7 +37,6 @@ const ScheduleModal = () => {
   const { closeScheduleBack } = customHooks();
   const myData = slots.filter((data) => data.mentor.login === login);
 
-  console.log("in schedule", myData);
   const onConfirm = () => {
     if (start === -1 || end === -1) {
       alert("select time");
@@ -53,7 +52,6 @@ const ScheduleModal = () => {
         description,
         token || localStorage.getItem("token")
       );
-      console.log(start, end, subject, login, menteeNumber, description, token);
       setSubject("");
       setDescription("");
       setMenteeNumber(1);

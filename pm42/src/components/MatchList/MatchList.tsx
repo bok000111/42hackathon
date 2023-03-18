@@ -2,27 +2,27 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { axiosGetMatchList } from "../../api/axios";
-import { myInfoState } from "../../Atom";
+import { myInfoState, OpenedSlotsState } from "../../Atom";
 import { IMentor } from "../../interface";
 import { HeaderContainer } from "../../Styles";
 import createMatchIndex from "./createMatchIndex";
 
+//export interface IMentor {
+//  type: string;
+//  subject: string;
+//  time: Date;
+//  target: string[];
+//}
+
 const MatchList = () => {
-  const { token } = useRecoilValue(myInfoState);
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    getData();
-    async function getData() {
-      const result = await axiosGetMatchList(token || localStorage.getItem('token'));
-      console.log("in MatchList", result);
-      //setData(result);
-    }
-  }, []);
+  const { login } = useRecoilValue(myInfoState);
+  //const slots = useRecoilValue(OpenedSlotsState).filter(slot => slot.mentor.login === login || slot.);
+  //console.log(slots);
   return (
     <MatchListContainer>
       <HeaderContainer>Mentor</HeaderContainer>
       <MatchInfoContainer>
-        {data.map((info, idx) => createMatchIndex(info, idx, data.length))}
+        {/*{data.map((info, idx) => createMatchIndex(info, idx, data.length))}*/}
       </MatchInfoContainer>
     </MatchListContainer>
   );

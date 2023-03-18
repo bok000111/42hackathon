@@ -3,6 +3,7 @@ import { IMentorInfo, ISlotInfo } from "../../interface";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   CurrentMentorInfoState,
+  myInfoState,
   OpenedSlotsState,
   SelectedSubjectIndexState,
   SelectedSubjectInfoState,
@@ -11,6 +12,7 @@ import MentorInfoCard from "./MentorInfoCard";
 import React, { useState } from "react";
 import { getMonday } from "../ScheduleModal.tsx/ScheduleHooks";
 import customHooks, { convertToLectureTime } from "../../hooks";
+import { axiosJoinLecture } from "../../api/axios";
 
 function convertToMentoringList(list: ISlotInfo[], mentorName: string) {
   const map = list
@@ -26,6 +28,7 @@ function convertToMentoringList(list: ISlotInfo[], mentorName: string) {
         description: info.description,
         start: info.start,
         end: info.end,
+        id: info.id,
       };
       acc[info.subject].info.push(temp);
       return acc;
@@ -43,24 +46,33 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
   const [selectedLectureIndex, setSelectedLectureIndex] = useRecoilState(
     SelectedSubjectIndexState
   );
+  const setSlots = useSetRecoilState(OpenedSlotsState);
+  const { token, login } = useRecoilValue(myInfoState);
   const { openMenteeSchedule } = customHooks();
   const setSelectedMentorSubjectInfo = useSetRecoilState(
     SelectedSubjectInfoState
   );
-  const currentMentor = useRecoilValue(CurrentMentorInfoState);
-
-  console.log(currentMentor);
+  const { closeMentorInfo } = customHooks();
 
   const onClickSubject = (idx: number) => {
     setSelectedIndex(idx);
   };
 
   const onClickSubmit = () => {
-    console.log("submit", list[selectedIndex].info[selectedLectureIndex]);
+    getData();
+    setSelectedLectureIndex;
+    closeMentorInfo();
   };
+  async function getData() {
+    const response = await axiosJoinLecture(
+      token,
+      list[selectedIndex].info[selectedLectureIndex].id,
+      login
+    );
+    setSlots(response.data.slots);
+  }
 
   const onClickCalendar = () => {
-    console.log(list[selectedIndex]);
     openMenteeSchedule();
     setSelectedMentorSubjectInfo(list[selectedIndex]);
   };

@@ -16,8 +16,8 @@ const MentorInfoCard = ({ info }: { info: IMentorInfo }) => {
         </ScoreContainer>
         <ScoreContainer></ScoreContainer>
         <SubjectContainer>
-          {info.subjects.map((subject) => (
-            <Subject>{subject}</Subject>
+          {info.subjects.map((subject, idx) => (
+            <Subject key={idx}>{subject}</Subject>
           ))}
         </SubjectContainer>
       </TextSection>

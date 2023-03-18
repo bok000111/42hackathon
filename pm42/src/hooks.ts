@@ -8,6 +8,7 @@ import {
   mentorToggleState,
   ScheduleBackToggleState,
   ScheduleToggleState,
+  SelectedSubjectIndexState,
 } from "./Atom";
 import { getMonday } from "./components/ScheduleModal.tsx/ScheduleHooks";
 
@@ -19,6 +20,7 @@ function customHooks() {
   const setMentorInfoToggle = useSetRecoilState(MentorInfoToggleState);
   const setMentorInfoBackToggle = useSetRecoilState(MentorInfoBackToggleState);
   const setMenteeScheduleToggle = useSetRecoilState(MenteeScheduleToggleState);
+  const setSelectedSubjectIndex = useSetRecoilState(SelectedSubjectIndexState);
   const setMenteeScheduleBackToggle = useSetRecoilState(
     MenteeScheduleBackToggleState
   );
@@ -36,6 +38,7 @@ function customHooks() {
   const openMentorInfo = () => {
     setMentorInfoBackToggle(true);
     setMentorInfoToggle(true);
+    setSelectedSubjectIndex(0);
   };
 
   const closeScheduleBack = () => {
