@@ -8,11 +8,12 @@ import {
   SelectedSubjectIndexState,
   SelectedSubjectInfoState,
 } from "../../Atom";
-import MentorInfoCard from "./MentorInfoCard";
+//import MentorInfoCard from "./MentorInfoCard";
 import React, { useState } from "react";
 import { getMonday } from "../ScheduleModal.tsx/ScheduleHooks";
 import customHooks, { convertToLectureTime } from "../../hooks";
 import { axiosJoinLecture } from "../../api/axios";
+import MentorInfoCard from "../common/MentorInfoCard";
 
 function convertToMentoringList(list: ISlotInfo[], mentorName: string) {
   const map = list
@@ -77,10 +78,19 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
     openMenteeSchedule();
     setSelectedMentorSubjectInfo(list[selectedIndex]);
   };
+  console.log(info);
+  //intra: string; description: string; level: string; good: number; image: string
   return (
     <MentorInfoModalContainer>
       <Container>
-        <MentorInfoCard info={info}></MentorInfoCard>
+        <MentorInfoCard
+          my={false}
+          intra={info.intra}
+          level={info.level.toString()}
+          good={info.good}
+          image={info.image}
+          description={info.description}
+        ></MentorInfoCard>
       </Container>
       <Container>
         <SubjectContainer>

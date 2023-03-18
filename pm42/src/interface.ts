@@ -5,6 +5,7 @@ export interface IMentorInfo {
   subjects: string[];
   image?: string | undefined;
   coalition: string;
+  description: string;
 }
 
 export interface IMentor {

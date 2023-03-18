@@ -89,6 +89,7 @@ export const CurrentMentorInfoState = atom<IMentorInfo>({
     subjects: ["ft_transcendence"],
     image: "",
     coalition: "gon",
+    description: "",
   },
 });
 
