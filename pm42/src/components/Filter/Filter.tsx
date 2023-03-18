@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
-import { useRecoilState } from "recoil";
-import { CurrentCircleInfoState } from "../../Atom";
+import React from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { CurrentCircleInfoState, FilterInfoState } from "../../Atom";
 
 const list = [
   "ALL",
@@ -17,8 +18,15 @@ const Filter = () => {
   const [currentCircleInfo, setCurrentCircleInfo] = useRecoilState(
     CurrentCircleInfoState
   );
+  const setFilterInfo = useSetRecoilState(FilterInfoState);
+
   const onClickFilter = (circleInfo: string) => {
     setCurrentCircleInfo(circleInfo);
+  };
+
+  const onChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterInfo(e.target.value);
+    setCurrentCircleInfo("ALL");
   };
   return (
     <FilterContainer>
@@ -33,13 +41,13 @@ const Filter = () => {
       <label htmlFor="search">
         <SearchIcon />
       </label>
-      <Input id="search" type="text" maxLength={15} />
+      <Input id="search" type="text" maxLength={15} onChange={onChangeFilter} />
     </FilterContainer>
   );
 };
 
 const Input = styled.input`
-  height: 30px;
+  height: 40px;
   margin-left: 5px;
   outline: none;
   border: none;

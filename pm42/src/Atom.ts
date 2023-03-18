@@ -131,3 +131,8 @@ export const CurrentCircleInfoState = atom({
   key: "currentCircleInfo",
   default: "ALL",
 });
+
+export const FilterInfoState = atom({
+  key: "filterInfo",
+  default: "",
+});

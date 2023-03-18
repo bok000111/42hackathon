@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { axiosGetAllSlots } from "../../api/axios";
 import {
   CurrentCircleInfoState,
+  FilterInfoState,
   myInfoState,
   OpenedSlotsState,
 } from "../../Atom";
@@ -34,8 +35,19 @@ function convertData(list: ISlotInfo[], login: string) {
   }));
 }
 
-function filteringList(list: any, curCircle: string): IMentorInfo[] {
-  if (curCircle === "ALL") return list;
+function filteringList(
+  list: any,
+  curCircle: string,
+  filter: string
+): IMentorInfo[] {
+  if (curCircle === "ALL" && !filter) return list;
+  if (filter) {
+    return list.filter(
+      (info: any) =>
+        info.subjects.join("!@#$%").includes(filter) ||
+        info.intra.includes(filter)
+    );
+  }
   return list.filter(
     (info: any) =>
       info.subjects.filter((subject: string) =>
@@ -48,6 +60,7 @@ const MentorList = () => {
   const [slotList, setSlotList] = useRecoilState(OpenedSlotsState);
   const { token, login } = useRecoilValue(myInfoState);
   const currentCircleInfo = useRecoilValue(CurrentCircleInfoState);
+  const filterInfo = useRecoilValue(FilterInfoState);
   console.log(circleInfo);
   console.log(currentCircleInfo);
   console.log(convertData(slotList, login));
@@ -63,13 +76,15 @@ const MentorList = () => {
   return (
     <MentorListContainer>
       {slotList &&
-        filteringList(convertData(slotList, login), currentCircleInfo).map(
-          (info, idx) => (
-            <MentoCardContainer key={idx}>
-              <MentorCard info={info} />
-            </MentoCardContainer>
-          )
-        )}
+        filteringList(
+          convertData(slotList, login),
+          currentCircleInfo,
+          filterInfo
+        ).map((info, idx) => (
+          <MentoCardContainer key={idx}>
+            <MentorCard info={info} />
+          </MentoCardContainer>
+        ))}
     </MentorListContainer>
   );
 };
