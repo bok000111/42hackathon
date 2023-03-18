@@ -1,11 +1,15 @@
 import { useSetRecoilState } from "recoil";
 import {
+  AlertBackToggleState,
+  AlertToggleState,
   backgorundToggleState,
   MenteeScheduleBackToggleState,
   MenteeScheduleToggleState,
   MentorInfoBackToggleState,
   MentorInfoToggleState,
   mentorToggleState,
+  MyInfoBackToggleState,
+  MyInfoToggleState,
   ScheduleBackToggleState,
   ScheduleToggleState,
   SelectedSubjectIndexState,
@@ -24,6 +28,10 @@ function customHooks() {
   const setMenteeScheduleBackToggle = useSetRecoilState(
     MenteeScheduleBackToggleState
   );
+  const setMyInfoToggle = useSetRecoilState(MyInfoToggleState);
+  const setMyInfoBackToggle = useSetRecoilState(MyInfoBackToggleState);
+  const setAlertToggle = useSetRecoilState(AlertToggleState);
+  const setAlertBackToggle = useSetRecoilState(AlertBackToggleState);
 
   const closeSetMentoring = () => {
     setBackgroundToggle(false);
@@ -57,13 +65,38 @@ function customHooks() {
     setMenteeScheduleToggle(false);
   };
 
+  const openMyInfoModal = () => {
+    setMyInfoToggle(true);
+    setMyInfoBackToggle(true);
+  };
+
+  const closeMyInfoModal = () => {
+    console.log("closeMyInfoModal");
+    setMyInfoToggle(false);
+    setMyInfoBackToggle(false);
+  };
+
+  const openAlert = () => {
+    setAlertToggle(true);
+    setAlertBackToggle(true);
+  };
+
+  const closeAlert = () => {
+    setAlertToggle(false);
+    setAlertBackToggle(false);
+  };
+
   return {
+    closeMyInfoModal,
+    openMyInfoModal,
     closeSetMentoring,
     closeScheduleBack,
     closeMentorInfo,
     openMentorInfo,
     openMenteeSchedule,
     closeMenteeSchedule,
+    openAlert,
+    closeAlert,
   };
 }
 
@@ -125,4 +158,11 @@ export const circleInfo: ICircle = {
     "CPP 09",
   ].join(","),
   "Circle 6": ["ft_transcendence"].join(","),
+};
+
+export const convertDate = (str: string) => {
+  const time = new Date(str);
+  return `${time.getFullYear() % 100}.${
+    time.getMonth() + 1 < 10 ? "0" + (time.getMonth() + 1) : time.getMonth() + 1
+  }.${time.getDate() < 10 ? "0" + time.getDate() : time.getDate()}`;
 };

@@ -9,6 +9,7 @@ import customHooks from "../../hooks";
 import { IMentorInfo } from "../../interface";
 
 const MentorCard = ({ info }: { info: IMentorInfo }) => {
+  console.log(info);
   const { openMentorInfo } = customHooks();
   const [currentMentorInfo, setCurrentMentorInfo] = useRecoilState(
     CurrentMentorInfoState

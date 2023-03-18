@@ -65,10 +65,10 @@ class	ApiLogin(View):
 		me.save()
 		time.sleep(1)
 		projects = [{'name': x['project']['name'], 'final_mark': x['final_mark'], 'marked_at': x['marked_at']} for x in res['projects_users'] if x['validated?'] and 'C Piscine' not in x['project']['name'] and 'Exam' not in x['project']['name']]
-		return JsonResponse({'token': me.token, 'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level,'projects': projects})
+		return JsonResponse({'token': me.token, 'login': me.login, 'image': me.image, 'coa': me.coa, 'level': me.level, 'total_feedback': me.total_feedback, 'description': me.description, 'projects': projects})
 	def post(self, request):
 		try:
-			me = User42.objects.filter(token=request.GET.get('token'))
+			me = User42.objects.get(token=request.GET.get('token'))
 			body = json.loads(request.body)
 			if me.login != body['login']:
 				raise

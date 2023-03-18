@@ -24,6 +24,7 @@ const LoginPage = () => {
     async function getData(code: string) {
       try {
         const { data } = await axiosLogin(code);
+        console.log(data);
         setMyInfo({
           token: data.token,
           image: data.image,
@@ -31,6 +32,8 @@ const LoginPage = () => {
           level: data.level,
           coa: data.coa,
           projects: JSON.stringify(data.projects),
+          description: data.description,
+          total_feedback: data.total_feedback,
         });
         localStorage.setItem("token", data.token);
         navigator("/main");

@@ -1,13 +1,22 @@
 import styled from "@emotion/styled";
+import { useSetRecoilState } from "recoil";
+import { MyInfoToggleState } from "../../Atom";
+import customHooks from "../../hooks";
 
 const MenuComponent = () => {
+  const { openMyInfoModal } = customHooks();
   return (
     <MenuContainer>
       <div>
         <IconContainer url="/assets/mtom.png" width={50} height={50} />
       </div>
       <RightContainer>
-        <IconContainer url="/assets/info.png" height={25} width={25} />
+        <IconContainer
+          onClick={openMyInfoModal}
+          url="/assets/info.png"
+          height={25}
+          width={25}
+        />
         <IconContainer url="/assets/record.png" height={25} width={25} />
         <IconContainer url="/assets/logout.png" height={25} width={25} />
       </RightContainer>

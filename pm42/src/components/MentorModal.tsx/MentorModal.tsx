@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { OpenedSlotsState } from "../../Atom";
+import { convertDate } from "../../hooks";
 import { ISlotInfo } from "../../interface";
 import MentorLeftSide from "./MentorLeftSide";
 import MentorRightSide from "./MentorRightSide";
@@ -83,13 +84,6 @@ const subjectData = [
   { name: "ft_printf", final_mark: 100, marked_at: "2022-11-22T01:54:40.422Z" },
   { name: "Libft", final_mark: 125, marked_at: "2022-11-18T05:21:53.003Z" },
 ];
-
-const convertDate = (str: string) => {
-  const time = new Date(str);
-  return `${time.getFullYear() % 100}.${
-    time.getMonth() + 1 < 10 ? "0" + (time.getMonth() + 1) : time.getMonth() + 1
-  }.${time.getDate() < 10 ? "0" + time.getDate() : time.getDate()}`;
-};
 
 const timeData = subjectData.map((el) => ({
   date: convertDate(el.marked_at),

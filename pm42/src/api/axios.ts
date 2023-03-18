@@ -41,7 +41,7 @@ export const axiosAddSlot = async (
   login: string,
   max: number,
   description: string,
-  token: string,
+  token: string
 ): Promise<any> => {
   try {
     const response = await access.post("/api/slot/?token=" + token, {
@@ -98,6 +98,22 @@ export const axiosJoinLecture = async (
       mentee,
     });
     return response;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const axiosPatchMyGreetings = async (
+  token: string,
+  login: string,
+  description: string
+) => {
+  try {
+    const response = await access.post("/api/login/?token=" + token, {
+      login,
+      description,
+    });
+    console.log(response);
   } catch (e) {
     console.error(e);
   }

@@ -15,6 +15,8 @@ export const myInfoState = atom({
     level: "",
     coa: "",
     projects: "",
+    description: "",
+    total_feedback: 0,
   },
 });
 
@@ -134,5 +136,30 @@ export const CurrentCircleInfoState = atom({
 
 export const FilterInfoState = atom({
   key: "filterInfo",
+  default: "",
+});
+
+export const MyInfoToggleState = atom({
+  key: "myInfoToggle",
+  default: false,
+});
+
+export const MyInfoBackToggleState = atom({
+  key: "MyInfoBackToggle",
+  default: false,
+});
+
+export const AlertToggleState = atom({
+  key: "alertToggle",
+  default: false,
+});
+
+export const AlertBackToggleState = atom({
+  key: "alertBackToggle",
+  default: false,
+});
+
+export const AlertMessageState = atom({
+  key: "alertMessage",
   default: "",
 });

@@ -5,6 +5,9 @@ import { CommonContainer, Logo } from "../Styles";
 import React from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
+  AlertBackToggleState,
+  AlertMessageState,
+  AlertToggleState,
   backgorundToggleState,
   CurrentMentorInfoState,
   EndIndexState,
@@ -14,6 +17,8 @@ import {
   MentorInfoBackToggleState,
   MentorInfoToggleState,
   mentorToggleState,
+  MyInfoBackToggleState,
+  MyInfoToggleState,
   ScheduleBackToggleState,
   ScheduleToggleState,
   SelectedSubjectState,
@@ -25,6 +30,8 @@ import MentorModal from "../components/MentorModal.tsx/MentorModal";
 import ScheduleModal from "../components/ScheduleModal.tsx/ScheduleModal";
 import MentorInfoModal from "../components/MentorInfoModal/MentorInfoModal";
 import MenteeSchedule from "../components/ScheduleModal.tsx/MenteeSchedule";
+import MyInfoModal from "../components/MyInfo/MyInfoModal";
+import Alert from "../components/common/Alert";
 
 const MainPage = () => {
   const backgroundToggle = useRecoilValue(backgorundToggleState);
@@ -38,6 +45,11 @@ const MainPage = () => {
   const menteeScheduleBackToggle = useRecoilValue(
     MenteeScheduleBackToggleState
   );
+  const alertToggle = useRecoilValue(AlertToggleState);
+  const alertBackToggle = useRecoilValue(AlertBackToggleState);
+  const myInfoToggle = useRecoilValue(MyInfoToggleState);
+  const myInfoBackToggle = useRecoilValue(MyInfoBackToggleState);
+  const alertMessage = useRecoilValue(AlertMessageState);
   const setSubject = useSetRecoilState(SelectedSubjectState);
   const setDescription = useSetRecoilState(SubjectDescriptionState);
   const setMenteeNumber = useSetRecoilState(MenteeNumberState);
@@ -49,6 +61,8 @@ const MainPage = () => {
     closeScheduleBack,
     closeMentorInfo,
     closeMenteeSchedule,
+    closeMyInfoModal,
+    closeAlert,
   } = customHooks();
   const scheduleBackOff = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -80,6 +94,14 @@ const MainPage = () => {
       {mentorInfoBackToggle && (
         <BackgroundContainer zIndex={2} onClick={closeMentorInfo} />
       )}
+      {myInfoBackToggle && (
+        <BackgroundContainer zIndex={2} onClick={closeMyInfoModal} />
+      )}
+      {myInfoToggle && <MyInfoModal />}
+      {alertBackToggle && (
+        <BackgroundContainer onClick={closeAlert} zIndex={3} />
+      )}
+      {alertToggle && <Alert msg={alertMessage} />}
     </CommonContainer>
   );
 };

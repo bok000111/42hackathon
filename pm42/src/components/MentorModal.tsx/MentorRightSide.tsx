@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { axiosRemoveSlot } from "../../api/axios";
 import {
+  AlertMessageState,
   myInfoState,
   OpenedSlotsState,
   ScheduleBackToggleState,
@@ -9,7 +10,7 @@ import {
   SelectedSubjectState,
   SubjectDescriptionState,
 } from "../../Atom";
-import { convertToLectureTime } from "../../hooks";
+import customHooks, { convertToLectureTime } from "../../hooks";
 import { ITimeData } from "../../interface";
 import { getMonday } from "../ScheduleModal.tsx/ScheduleHooks";
 
@@ -34,14 +35,19 @@ const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
   const subject = useRecoilValue(SelectedSubjectState);
   const description = useRecoilValue(SubjectDescriptionState);
   const setSlots = useSetRecoilState(OpenedSlotsState);
+  const setAlertMessage = useSetRecoilState(AlertMessageState);
+
+  const { openAlert } = customHooks();
 
   const addSchedule = () => {
     if (subject.length === 0) {
-      alert("subject 골라주세요");
+      setAlertMessage("Choose Subject!");
+      openAlert();
       return;
     }
     if (description.length === 0) {
-      alert("description 작성해주세요");
+      setAlertMessage("Write Description!");
+      openAlert();
       return;
     }
     setScheduleBackToggle(true);

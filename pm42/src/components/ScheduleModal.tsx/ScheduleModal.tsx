@@ -161,6 +161,7 @@ const ScheduleModal = () => {
               const i = calIdx(idx);
               return (
                 <TimeBlock
+                  key={idx}
                   onClick={onClick}
                   className={`${
                     Math.floor(idx / 7) % 2 === 0 ? "odd" : "even"
