@@ -128,35 +128,6 @@ class ApiSlot(View):
 		newSlot.save()
 		return self.SlotAll()
 		#return HttpResponse('Ok', status=200)
-	def put(self, request):
-		try:
-			Slot = OpenSlot.objects.get(id=body['id'])
-			mentor = User42.objects.get(login=Slot.mentor)
-			mentees = Slot.mentees.split(' ')
-			body = json.loads(request.body)
-			# if mentee.login not in mentees:
-			# 	raise
-			# if mentor.login != body['login']:
-			# 	raise
-			mentees.remove(body['login'])
-		except:
-			return HttpResponse('Unauthorized', status=401)
-		Slot.finished += 1
-		mentor.feedback1 += body['1']
-		mentor.feedback2 += body['2']
-		mentor.feedback3 += body['3']
-		mentor.feedback4 += body['4']
-		mentor.feedback5 += body['5']
-		mentor.total_feedback += body['1'] + body['2'] + body['3'] + body['4'] + body['5']
-		if Slot.curr == Slot.finished:
-			mentor.total_time += Slot.end - Slot.start
-			Slot.delete()
-		else:
-			Slot.mentees = ' '.join(mentees)
-			Slot.save()
-		mentor.save()
-		return self.SlotAll()
-		#return HttpResponse('Ok', status=200)
 	def patch(self, request):
 		try:
 			mentee = User42.objects.get(token=request.GET.get('token'))
@@ -186,7 +157,7 @@ class ApiSlot(View):
 		Slot.save()
 		return self.SlotAll()
 		#return HttpResponse('Ok', status=200)
-	def update(self, request):
+	def put(self, request):
 		try:
 			mentee = User42.objects.get(token=request.GET.get('token'))
 			body = json.loads(request.body)
@@ -202,19 +173,14 @@ class ApiSlot(View):
 		except:
 			return HttpResponse('Unauthorized', status=401)
 		Slot.finished += 1
-		mento.total_feedback += body['feedback1'] + body['feedback2'] + body['feedback3'] + body['feedback4'] + body['feedback5']
-		mento.feedback1 += body['feedback1']
-		mento.feedback2 += body['feedback2']
-		mento.feedback3 += body['feedback3']
-		mento.feedback4 += body['feedback4']
-		mento.feedback5 += body['feedback5']
+		mento.total_feedback += body['feedback']
 		if Slot.finished == Slot.max:
 			mento.total_time += Slot.end - Slot.start
 			mento.save()
 			Slot.delete()
 		else:
 			mento.save()
-			Slot.mentees = mentees
+			Slot.mentees = ' '.join(mentees)
 			Slot.save()
 		return self.SlotAll()
 		#return HttpResponse('Ok', status=200)
