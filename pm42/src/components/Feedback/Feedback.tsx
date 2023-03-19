@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
+import { convertToLectureTime } from "../../hooks";
+import { ISlotInfo } from "../../interface";
 
 const data = [
   "친절하고 매너가 좋았습니다!",
@@ -9,13 +11,17 @@ const data = [
   "다양한 지식들을 전수해주셨어요!",
 ];
 
-const Feedback = () => {
+const Feedback = ({ mentor, subject, start, end, id }: ISlotInfo) => {
   const [count, setCount] = useState([0, 0, 0, 0, 0]);
   return (
     <FeedbackContainer>
       <FeedbackHeader>Feedback</FeedbackHeader>
-      <FeedbackInfo>jbok - philosopher</FeedbackInfo>
-      <FeedbackInfo>23.03.17 AM 10:00 ~ 11:00</FeedbackInfo>
+      <FeedbackInfo>
+        {mentor.login} - {subject}
+      </FeedbackInfo>
+      <FeedbackInfo className="time">
+        {convertToLectureTime(start, end)}
+      </FeedbackInfo>
       {data.map((str: string, idx) => (
         <FeedbackRow
           onClick={() =>
@@ -42,9 +48,13 @@ const FeedbackInfo = styled.div`
   color: var(--main-color);
   margin: 0 auto;
   margin-bottom: 15px;
-  text-align: right;
+  text-align: left;
   &:last-of-type {
     margin-bottom: 30px;
+  }
+  &.time {
+    text-align: right;
+    font-size: 1rem !important;
   }
 `;
 

@@ -11,18 +11,15 @@ import {
   SubjectDescriptionState,
 } from "../../Atom";
 import customHooks, { convertToLectureTime } from "../../hooks";
-import { ITimeData } from "../../interface";
-import { getMonday } from "../ScheduleModal.tsx/ScheduleHooks";
 
 function calDate(start: number) {
-  const mon = getMonday();
-  mon.setMinutes(start * 15);
-  return `${mon.getFullYear() % 100}.${
-    mon.getMonth() < 9 ? "0" + (mon.getMonth() + 1) : mon.getMonth()
-  }.${mon.getDate() < 10 ? "0" + mon.getDate() : mon.getDate()}`;
+  const temp = new Date(start * 1000);
+  return `${temp.getFullYear() % 100}.${
+    temp.getMonth() < 9 ? "0" + (temp.getMonth() + 1) : temp.getMonth()
+  }.${temp.getDate() < 10 ? "0" + temp.getDate() : temp.getDate()}`;
 }
 
-const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
+const MentorRightSide = () => {
   const slots = useRecoilValue(OpenedSlotsState);
   const myInfo = useRecoilValue(myInfoState);
   const myData = slots.filter((data) => data.mentor.login === myInfo.login);
@@ -85,11 +82,14 @@ const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
                 [{info.curr} / {info.max}]
               </Data>
               <Data val={30}>
-                {convertToLectureTime(info.start, info.end).split(" ")[0]}
+                {convertToLectureTime(info.start, info.end)
+                  .split(" ")
+                  .slice(0, 2)
+                  .join(" ")}{" "}
                 <br />
                 {convertToLectureTime(info.start, info.end)
                   .split(" ")
-                  .slice(1)
+                  .slice(2)
                   .join(" ")}
               </Data>
               <Data val={5}>

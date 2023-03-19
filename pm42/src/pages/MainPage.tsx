@@ -21,6 +21,7 @@ import {
   mentorToggleState,
   MyInfoBackToggleState,
   MyInfoToggleState,
+  OpenedSlotsState,
   RecordsBackToggle,
   RecordsToggle,
   ScheduleBackToggleState,
@@ -37,7 +38,7 @@ import MenteeSchedule from "../components/ScheduleModal.tsx/MenteeSchedule";
 import MyInfoModal from "../components/MyInfo/MyInfoModal";
 import Alert from "../components/common/Alert";
 import Feedback from "../components/Feedback/Feedback";
-import RecordsModal from "../components/RecordsModal";
+import RecordsModal from "../components/Records/RecordsModal";
 
 const MainPage = () => {
   const backgroundToggle = useRecoilValue(backgroundToggleState);
@@ -66,6 +67,8 @@ const MainPage = () => {
   const setStart = useSetRecoilState(StartIndexState);
   const setEnd = useSetRecoilState(EndIndexState);
 
+  const slots = useRecoilValue(OpenedSlotsState);
+
   const {
     closeSetMentoring,
     closeScheduleBack,
@@ -73,6 +76,7 @@ const MainPage = () => {
     closeMenteeSchedule,
     closeMyInfoModal,
     closeAlert,
+    closeRecords,
   } = customHooks();
   const scheduleBackOff = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -83,6 +87,7 @@ const MainPage = () => {
     setStart(-1);
     setEnd(-1);
   };
+
   return (
     <CommonContainer>
       <MainComponent />
@@ -112,10 +117,12 @@ const MainPage = () => {
         <BackgroundContainer onClick={closeAlert} zIndex={4} />
       )}
       {alertToggle && <Alert msg={alertMessage} />}
-      {feedbackBackToggle && <BackgroundContainer zIndex={2} />}
-      {feedbackToggle && <Feedback />}
+      {slots.length && <BackgroundContainer zIndex={2} />}
+      {slots.length && <Feedback {...slots[0]} />}
       {recordsToggle && <RecordsModal />}
-      {recordsBackToggle && <BackgroundContainer zIndex={3} />}
+      {recordsBackToggle && (
+        <BackgroundContainer zIndex={3} onClick={closeRecords} />
+      )}
     </CommonContainer>
   );
 };

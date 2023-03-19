@@ -176,11 +176,11 @@ export const FeedbackBackToggleState = atom({
 });
 
 export const RecordsBackToggle = atom({
-  key: 'recordsBackToggle',
-  default: true,
-})
+  key: "recordsBackToggle",
+  default: false,
+});
 
 export const RecordsToggle = atom({
-  key:'recordsToggle',
-  default: true,
-})
+  key: "recordsToggle",
+  default: false,
+});

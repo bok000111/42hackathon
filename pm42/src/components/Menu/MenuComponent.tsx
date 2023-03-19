@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import customHooks from "../../hooks";
 
 const MenuComponent = () => {
-  const { openMyInfoModal } = customHooks();
+  const { openMyInfoModal, openRecords } = customHooks();
   return (
     <MenuContainer>
       <div>
@@ -15,7 +15,16 @@ const MenuComponent = () => {
           height={25}
           width={25}
         />
+<<<<<<< HEAD
         <IconContainer url="/static/assets/records.png" height={25} width={25} />
+=======
+        <IconContainer
+          onClick={openRecords}
+          url="/assets/records.png"
+          height={25}
+          width={25}
+        />
+>>>>>>> refs/remotes/origin/master
       </RightContainer>
     </MenuContainer>
   );
