@@ -91,15 +91,15 @@ from datetime import datetime, timezone
 import pytz
 
 class ApiSlot(View):
-	def isDel(self, slot: OpenSlot) -> bool:
-		now = datetime.now(pytz.timezone('Asia/Seoul'))
-		index = now.weekday() * 24 * 4 + now.hour * 4 + now.minute // 15
-		if slot['start'] < index:
+	def isDel(self, slot) -> bool:
+		now = time.time()
+		if slot['start'] < now and slot['curr'] == 0:
+			OpenSlot.objects.get(id=slot['id']).delete()
 			return False
 		return True
 	def SlotAll(self):
 		slots = list(OpenSlot.objects.all().values('id', 'mentor', 'subject', 'mentees', 'max', 'curr', 'start', 'end', 'description'))
-		#slots = [x for x in slots if self.isDel(x)]
+		slots = [x for x in slots if self.isDel(x)]
 		for slot in slots:
 			try:
 				mento = User42.objects.get(login=slot['mentor'])
