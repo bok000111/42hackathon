@@ -20,14 +20,14 @@ export const myInfoState = atom({
   },
 });
 
-export const backgorundToggleState = atom({
+export const backgroundToggleState = atom({
   key: "backgroundToggle",
   default: false,
 });
 
 export const ScheduleToggleState = atom({
   key: "scheduleToggle",
-  default: false,
+  default: true,
 });
 
 export const MenteeScheduleBackToggleState = atom({
@@ -42,7 +42,7 @@ export const MenteeScheduleToggleState = atom({
 
 export const ScheduleBackToggleState = atom({
   key: "schduleBackToggle",
-  default: false,
+  default: true,
 });
 
 export const StartIndexState = atom({

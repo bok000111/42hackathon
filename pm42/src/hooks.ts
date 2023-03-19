@@ -2,7 +2,7 @@ import { useSetRecoilState } from "recoil";
 import {
   AlertBackToggleState,
   AlertToggleState,
-  backgorundToggleState,
+  backgroundToggleState,
   MenteeScheduleBackToggleState,
   MenteeScheduleToggleState,
   MentorInfoBackToggleState,
@@ -17,7 +17,7 @@ import {
 import { getMonday } from "./components/ScheduleModal.tsx/ScheduleHooks";
 
 function customHooks() {
-  const setBackgroundToggle = useSetRecoilState(backgorundToggleState);
+  const setBackgroundToggle = useSetRecoilState(backgroundToggleState);
   const setMentorToggle = useSetRecoilState(mentorToggleState);
   const setScheduleToggle = useSetRecoilState(ScheduleToggleState);
   const setScheduleBackToggle = useSetRecoilState(ScheduleBackToggleState);

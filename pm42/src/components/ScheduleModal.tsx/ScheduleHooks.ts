@@ -29,8 +29,9 @@ export const getTimeStamp = (monday: Date, min: number) => {
 };
 
 export const checkTimeOver = (time: Date) => {
-  const now = new Date().getTime();
-  return Math.floor((now - time.getTime()) / 1000 / 60) <= -15;
+  const now = new Date();
+  console.log("in checkTimeOver", (now.getTime() - time.getTime()) / 1000 / 60);
+  return Math.floor((now.getTime() - time.getTime()) / 1000 / 60) <= 0;
 };
 
 export const createDateInfo = (mon: Date, idx: number) => {
@@ -41,6 +42,15 @@ export const createDateInfo = (mon: Date, idx: number) => {
 
 export const getMonday = () => {
   const now = new Date();
+  if (now.getDay() === 0) {
+    const monday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - now.getDay() - 6
+    );
+
+    return monday;
+  }
   const monday = new Date(
     now.getFullYear(),
     now.getMonth(),

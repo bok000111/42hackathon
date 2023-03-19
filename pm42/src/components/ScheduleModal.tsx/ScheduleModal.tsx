@@ -167,7 +167,9 @@ const ScheduleModal = () => {
                     Math.floor(idx / 7) % 2 === 0 ? "odd" : "even"
                   } ${checkTimeOver(createDateInfo(mon, i)) ? "" : "disabled"}`}
                   data-idx={i}
-                ></TimeBlock>
+                >
+                  {idx}
+                </TimeBlock>
               );
             })}
           </TimeBlockContainer>

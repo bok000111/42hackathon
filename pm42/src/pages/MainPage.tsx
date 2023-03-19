@@ -8,7 +8,7 @@ import {
   AlertBackToggleState,
   AlertMessageState,
   AlertToggleState,
-  backgorundToggleState,
+  backgroundToggleState,
   CurrentMentorInfoState,
   EndIndexState,
   FeedbackBackToggleState,
@@ -37,7 +37,7 @@ import Alert from "../components/common/Alert";
 import Feedback from "../components/Feedback/Feedback";
 
 const MainPage = () => {
-  const backgroundToggle = useRecoilValue(backgorundToggleState);
+  const backgroundToggle = useRecoilValue(backgroundToggleState);
   const mentorToggle = useRecoilValue(mentorToggleState);
   const scheduleToggle = useRecoilValue(ScheduleToggleState);
   const scheduleBackToggle = useRecoilValue(ScheduleBackToggleState);

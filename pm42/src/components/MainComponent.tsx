@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useSetRecoilState } from "recoil";
-import { backgorundToggleState, mentorToggleState } from "../Atom";
+import { backgroundToggleState, mentorToggleState } from "../Atom";
 import Button from "./common/Button";
 import Filter from "./Filter/Filter";
 import MatchList from "./MatchList/MatchList";
@@ -9,7 +9,7 @@ import MenuComponent from "./Menu/MenuComponent";
 import Rank from "./Rank/Rank";
 
 const MainComponent = () => {
-  const setBackgroundToggle = useSetRecoilState(backgorundToggleState);
+  const setBackgroundToggle = useSetRecoilState(backgroundToggleState);
   const setMentorToggle = useSetRecoilState(mentorToggleState);
   const onClick = () => {
     setBackgroundToggle(true);
