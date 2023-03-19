@@ -37,8 +37,9 @@ const Rank = () => {
       );
       setData([...response.rank]);
     }
-    getData();
+    if (token) getData();
   }, []);
+  console.log(data);
   return (
     <RankContainer>
       <HeaderContainer>Rank</HeaderContainer>
@@ -67,7 +68,7 @@ const Rank = () => {
                   {info.login}
                 </a>
               </td>
-              <td>{info.total_time}H</td>
+              <td>{info.total_time === "-" ? "-" : info.total_time + "H"}</td>
               <td>{info.total_feedback}</td>
             </tr>
           ))}

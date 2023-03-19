@@ -37,7 +37,7 @@ import MenteeSchedule from "../components/ScheduleModal.tsx/MenteeSchedule";
 import MyInfoModal from "../components/MyInfo/MyInfoModal";
 import Alert from "../components/common/Alert";
 import Feedback from "../components/Feedback/Feedback";
-import RecordsModal from "../components/RecordsModal";
+import RecordsModal from "../components/Records/RecordsModal";
 
 const MainPage = () => {
   const backgroundToggle = useRecoilValue(backgroundToggleState);
@@ -73,6 +73,7 @@ const MainPage = () => {
     closeMenteeSchedule,
     closeMyInfoModal,
     closeAlert,
+    closeRecords,
   } = customHooks();
   const scheduleBackOff = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -115,7 +116,9 @@ const MainPage = () => {
       {feedbackBackToggle && <BackgroundContainer zIndex={2} />}
       {feedbackToggle && <Feedback />}
       {recordsToggle && <RecordsModal />}
-      {recordsBackToggle && <BackgroundContainer zIndex={3} />}
+      {recordsBackToggle && (
+        <BackgroundContainer zIndex={3} onClick={closeRecords} />
+      )}
     </CommonContainer>
   );
 };

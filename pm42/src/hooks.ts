@@ -10,6 +10,8 @@ import {
   mentorToggleState,
   MyInfoBackToggleState,
   MyInfoToggleState,
+  RecordsBackToggle,
+  RecordsToggle,
   ScheduleBackToggleState,
   ScheduleToggleState,
   SelectedSubjectIndexState,
@@ -32,6 +34,8 @@ function customHooks() {
   const setMyInfoBackToggle = useSetRecoilState(MyInfoBackToggleState);
   const setAlertToggle = useSetRecoilState(AlertToggleState);
   const setAlertBackToggle = useSetRecoilState(AlertBackToggleState);
+  const setRecordsToggle = useSetRecoilState(RecordsToggle);
+  const setRecordsBackToggle = useSetRecoilState(RecordsBackToggle);
 
   const closeSetMentoring = () => {
     setBackgroundToggle(false);
@@ -85,6 +89,16 @@ function customHooks() {
     setAlertBackToggle(false);
   };
 
+  const openRecords = () => {
+    setRecordsToggle(true);
+    setRecordsBackToggle(true);
+  };
+
+  const closeRecords = () => {
+    setRecordsToggle(false);
+    setRecordsBackToggle(false);
+  };
+
   return {
     closeMyInfoModal,
     openMyInfoModal,
@@ -96,10 +110,13 @@ function customHooks() {
     closeMenteeSchedule,
     openAlert,
     closeAlert,
+    openRecords,
+    closeRecords,
   };
 }
 
 export function convertToLectureTime(start: number, end: number) {
+  const Days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const startDate = new Date(start * 1000),
     endDate = new Date(end * 1000);
   //startDate.setMinutes(start * 10), endDate.setMinutes((end + 1) * 15);
@@ -110,10 +127,10 @@ export function convertToLectureTime(start: number, end: number) {
   const eH = endDate.getHours(),
     eMin = endDate.getMinutes();
   return `${sM < 10 ? "0" + sM : sM}.${sD < 10 ? "0" + sD : sD} ${
-    sH < 12 ? "AM" : "PM"
-  } ${sH % 12 === 0 ? 12 : sH % 12 < 10 ? "0" + (sH % 12) : sH % 12}:${
-    sMin < 10 ? "0" + sMin : sMin
-  } ~ ${eH < 12 ? "AM" : "PM"} ${
+    Days[startDate.getDay() - 1]
+  } ${sH < 12 ? "AM" : "PM"} ${
+    sH % 12 === 0 ? 12 : sH % 12 < 10 ? "0" + (sH % 12) : sH % 12
+  }:${sMin < 10 ? "0" + sMin : sMin} ~ ${eH < 12 ? "AM" : "PM"} ${
     eH % 12 === 0 ? 12 : eH % 12 < 10 ? "0" + (eH % 12) : eH % 12
   }:${eMin < 10 ? "0" + eMin : eMin}`;
 }

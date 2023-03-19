@@ -11,7 +11,6 @@ import {
   SubjectDescriptionState,
 } from "../../Atom";
 import customHooks, { convertToLectureTime } from "../../hooks";
-import { ITimeData } from "../../interface";
 import { getMonday } from "../ScheduleModal.tsx/ScheduleHooks";
 
 function calDate(start: number) {
@@ -22,7 +21,7 @@ function calDate(start: number) {
   }.${mon.getDate() < 10 ? "0" + mon.getDate() : mon.getDate()}`;
 }
 
-const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
+const MentorRightSide = () => {
   const slots = useRecoilValue(OpenedSlotsState);
   const myInfo = useRecoilValue(myInfoState);
   const myData = slots.filter((data) => data.mentor.login === myInfo.login);
@@ -85,11 +84,14 @@ const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
                 [{info.curr} / {info.max}]
               </Data>
               <Data val={30}>
-                {convertToLectureTime(info.start, info.end).split(" ")[0]}
+                {convertToLectureTime(info.start, info.end)
+                  .split(" ")
+                  .slice(0, 2)
+                  .join(" ")}{" "}
                 <br />
                 {convertToLectureTime(info.start, info.end)
                   .split(" ")
-                  .slice(1)
+                  .slice(2)
                   .join(" ")}
               </Data>
               <Data val={5}>
