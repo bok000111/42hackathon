@@ -104,8 +104,11 @@ class ApiSlot(View):
 			try:
 				mento = User42.objects.get(login=slot['mentor'])
 				slot['mentor'] = {'login': mento.login, 'image': mento.image, 'coa': mento.coa, 'level': mento.level, 'total_feedback': mento.total_feedback, 'description': mento.description}
-			except User42.DoesNotExist:
-				return HttpResponse('mentor not found', status=404)
+				if slot['subject'] == '':
+					raise
+			except:
+				OpenSlot.objects.get(id=slot['id']).delete()
+				slots.remove(slot)
 		return JsonResponse({'slots': slots})
 	def get(self, request):
 		try:
