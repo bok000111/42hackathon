@@ -28,10 +28,9 @@ export const getTimeStamp = (monday: Date, min: number) => {
     : "";
 };
 
-export const checkTimeOver = (time: Date) => {
+export const checkTimeOver = (time: number) => {
   const now = new Date();
-  console.log("in checkTimeOver", (now.getTime() - time.getTime()) / 1000 / 60);
-  return Math.floor((now.getTime() - time.getTime()) / 1000 / 60) <= 0;
+  return (now.getTime() - time * 1000) / 1000 / 60 < 15;
 };
 
 export const createDateInfo = (mon: Date, idx: number) => {

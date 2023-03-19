@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useRef, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import React, { useEffect, useRef } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { axiosAddSlot } from "../../api/axios";
 import {
   EndIndexState,
@@ -22,7 +22,12 @@ import {
 } from "./ScheduleHooks";
 import Select from "./Select";
 
-const calIdx = (idx: number) => 96 * (idx % 7) + Math.floor(idx / 7);
+const calIdx = (mon: Date, idx: number) => {
+  const i = 96 * (idx % 7) + Math.floor(idx / 7);
+  const temp = new Date(mon);
+  temp.setMinutes(i * 15);
+  return temp.getTime() / 1000;
+};
 
 const ScheduleModal = () => {
   const ref = useRef(null);
@@ -62,6 +67,7 @@ const ScheduleModal = () => {
     getData();
     closeScheduleBack();
   };
+
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
     if (
       e.currentTarget.classList.contains("disabled") ||
@@ -124,13 +130,6 @@ const ScheduleModal = () => {
         else node.classList.remove("blockActive");
       });
     }
-    //return () => {
-    //  setStart(-1);
-    //  setEnd(-1);
-    //  setSubject("");
-    //  setDescription("");
-    //  setMenteeNumber(1);
-    //};
   }, []);
   return (
     <ScheduleModalContainer>
@@ -158,17 +157,17 @@ const ScheduleModal = () => {
           </TimeInfoContainer>
           <TimeBlockContainer ref={ref}>
             {new Array(96 * 7).fill(0).map((_, idx) => {
-              const i = calIdx(idx);
+              const i = calIdx(mon, idx);
               return (
                 <TimeBlock
                   key={idx}
                   onClick={onClick}
                   className={`${
                     Math.floor(idx / 7) % 2 === 0 ? "odd" : "even"
-                  } ${checkTimeOver(createDateInfo(mon, i)) ? "" : "disabled"}`}
+                  } ${checkTimeOver(i) ? "" : "disabled"}`}
                   data-idx={i}
                 >
-                  {idx}
+                  {i}
                 </TimeBlock>
               );
             })}
