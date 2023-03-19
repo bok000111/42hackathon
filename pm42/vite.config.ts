@@ -9,4 +9,11 @@ export default defineConfig({
     //host: "yooh",
     port: 5173,
   },
+  base : "/static/",
+  build: {
+    outDir: "static/dist/",
+    manifest: true,
+    modulePreload: true,
+    assetsDir: 'assets/',
+  },
 });

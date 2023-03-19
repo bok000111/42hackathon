@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-&@vu-7r51y3y+q=kecqriq7_tze(j1!s6z-ngj#@$^@w8y##17'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ["*"]
 #ALLOWED_HOSTS = ['django']
 
@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'pm42'
+    'django_vite',
+    'pm42',
 ]
 
 MIDDLEWARE = [
@@ -67,7 +68,7 @@ ROOT_URLCONF = 'pm42.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'dist'],
+        'DIRS': [BASE_DIR / 'collectedstatic'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,14 +131,11 @@ USE_TZ = True
 
 import os
 
-STATIC_ROOT = ''
-STATIC_URL = "assets/"
-STATICFILES_DIRS = [
-    #os.path.join(BASE_DIR, "myproject", "myapp", "static"),
-    BASE_DIR / "dist",
-    BASE_DIR / "dist" / 'assets',
-    BASE_DIR / 'assets',
-]
+STATIC_ROOT = BASE_DIR / "collectedstatic"
+STATIC_URL = "/static/"
+DJANGO_VITE_ASSETS_PATH = BASE_DIR / "static" / "dist"
+STATICFILES_DIRS = [DJANGO_VITE_ASSETS_PATH]
+DJANGO_VITE_DEV_MODE = False
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -103,7 +103,7 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
               <SubjectIconsContainer>
                 <SubjectIcons
                   className="subjectIcon"
-                  url="/assets/calendar.png"
+                  url="/static/assets/calendar.png"
                   onClick={onClickCalendar}
                 />
               </SubjectIconsContainer>
@@ -177,7 +177,7 @@ const SubjectHeader = styled.div`
 const StudentsIcon = styled.div`
   width: 25px;
   height: 25px;
-  background-image: url("/assets/member.png");
+  background-image: url("/static/assets/member.png");
   background-size: 100% 100%;
 `;
 
@@ -311,13 +311,13 @@ const Subject = styled.div`
   padding-right: 10px;
   cursor: pointer;
   & > .subjectIcon {
-    background-image: url("/assets/calendar.png");
+    background-image: url("/static/assets/calendar.png");
   }
   &.active {
     background: var(--main-color);
     color: var(--white-color);
     & .subjectIcon {
-      background-image: url("/assets/selectedCalendar.png");
+      background-image: url("/static/assets/selectedCalendar.png");
     }
   }
 `;

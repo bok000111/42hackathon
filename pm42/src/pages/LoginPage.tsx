@@ -103,7 +103,7 @@ const Illust = styled.div`
   left: 43%;
   top: 24%;
   background-repeat: no-repeat;
-  background-image: url("/assets/illust.png");
+  background-image: url("/static/assets/illust.png");
   background-size: 100% 100%;
 `;
 

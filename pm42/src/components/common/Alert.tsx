@@ -19,7 +19,7 @@ const TextBox = styled.div`
 const Cancel = styled.div`
   width: 90px;
   height: 90px;
-  background-image: url("/assets/cancel.png");
+  background-image: url("/static/assets/cancel.png");
   background-size: 100% 100%;
 `;
 
