@@ -11,14 +11,12 @@ import {
   SubjectDescriptionState,
 } from "../../Atom";
 import customHooks, { convertToLectureTime } from "../../hooks";
-import { getMonday } from "../ScheduleModal.tsx/ScheduleHooks";
 
 function calDate(start: number) {
-  const mon = getMonday();
-  mon.setMinutes(start * 15);
-  return `${mon.getFullYear() % 100}.${
-    mon.getMonth() < 9 ? "0" + (mon.getMonth() + 1) : mon.getMonth()
-  }.${mon.getDate() < 10 ? "0" + mon.getDate() : mon.getDate()}`;
+  const temp = new Date(start * 1000);
+  return `${temp.getFullYear() % 100}.${
+    temp.getMonth() < 9 ? "0" + (temp.getMonth() + 1) : temp.getMonth()
+  }.${temp.getDate() < 10 ? "0" + temp.getDate() : temp.getDate()}`;
 }
 
 const MentorRightSide = () => {
