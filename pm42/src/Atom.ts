@@ -27,7 +27,7 @@ export const backgroundToggleState = atom({
 
 export const ScheduleToggleState = atom({
   key: "scheduleToggle",
-  default: true,
+  default: false,
 });
 
 export const MenteeScheduleBackToggleState = atom({
@@ -42,7 +42,7 @@ export const MenteeScheduleToggleState = atom({
 
 export const ScheduleBackToggleState = atom({
   key: "schduleBackToggle",
-  default: true,
+  default: false,
 });
 
 export const StartIndexState = atom({

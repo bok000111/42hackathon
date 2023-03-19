@@ -25,7 +25,12 @@ import {
 } from "./ScheduleHooks";
 import Select from "./Select";
 
-const calIdx = (idx: number) => 96 * (idx % 7) + Math.floor(idx / 7);
+const calIdx = (mon: Date, idx: number) => {
+  const i = 96 * (idx % 7) + Math.floor(idx / 7);
+  const temp = new Date(mon);
+  temp.setMinutes(i * 15);
+  return temp.getTime() / 1000;
+};
 
 function getSubjectIndex(list: any, idx: number, num: number) {
   for (let i = 0; i < list.length; i++) {
@@ -71,17 +76,18 @@ const ScheduleModal = () => {
               ))}
             </TimeStampContainer>
           </TimeInfoContainer>
+
           <TimeBlockContainer>
             {new Array(96 * 7).fill(0).map((_, idx) => {
-              const i = calIdx(idx);
+              const i = calIdx(mon, idx);
               const timeIndex = getSubjectIndex(subjectInfo.info, i, num++);
               return (
                 <TimeBlock
                   className={`${
                     Math.floor(idx / 7) % 2 === 0 ? "odd" : "even"
-                  } ${
-                    checkTimeOver(createDateInfo(mon, i)) ? "" : "disabled"
-                  } ${timeIndex !== -1 ? "onReserved" : ""}`}
+                  } ${checkTimeOver(i) ? "" : "disabled"} ${
+                    timeIndex !== -1 ? "onReserved" : ""
+                  }`}
                   data-idx={i}
                   data-section-index={timeIndex}
                   onClick={onSelectSection}
