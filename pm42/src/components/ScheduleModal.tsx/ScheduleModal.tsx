@@ -46,7 +46,8 @@ const ScheduleModal = () => {
   const setAlertMessage = useSetRecoilState(AlertMessageState);
   const onConfirm = () => {
     if (start === -1 || end === -1) {
-      alert("select time");
+      setAlertMessage("Select Time!");
+      openAlert();
       return;
     }
     async function getData() {
