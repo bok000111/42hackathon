@@ -93,7 +93,7 @@ import pytz
 class ApiSlot(View):
 	def isDel(self, slot) -> bool:
 		now = time.time()
-		if slot['start'] < now and slot['curr'] == 0:
+		if slot['start'] < now and slot['curr'] == slot['max']:
 			OpenSlot.objects.get(id=slot['id']).delete()
 			return False
 		return True
@@ -174,7 +174,7 @@ class ApiSlot(View):
 			return HttpResponse('Unauthorized', status=401)
 		Slot.finished += 1
 		mento.total_feedback += body['feedback']
-		if Slot.finished == Slot.max:
+		if Slot.finished == Slot.curr:
 			mento.total_time += Slot.end - Slot.start
 			mento.save()
 			Slot.delete()
