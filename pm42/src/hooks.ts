@@ -71,7 +71,6 @@ function customHooks() {
   };
 
   const closeMyInfoModal = () => {
-    console.log("closeMyInfoModal");
     setMyInfoToggle(false);
     setMyInfoBackToggle(false);
   };
@@ -101,10 +100,9 @@ function customHooks() {
 }
 
 export function convertToLectureTime(start: number, end: number) {
-  const mon = getMonday();
-  const startDate = new Date(mon),
-    endDate = new Date(mon);
-  startDate.setMinutes(start * 15), endDate.setMinutes((end + 1) * 15);
+  const startDate = new Date(start * 1000),
+    endDate = new Date(end * 1000);
+  //startDate.setMinutes(start * 10), endDate.setMinutes((end + 1) * 15);
   const sM = startDate.getMonth() + 1,
     sD = startDate.getDate();
   const sH = startDate.getHours(),

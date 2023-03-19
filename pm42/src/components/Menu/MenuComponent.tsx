@@ -1,6 +1,4 @@
 import styled from "@emotion/styled";
-import { useSetRecoilState } from "recoil";
-import { MyInfoToggleState } from "../../Atom";
 import customHooks from "../../hooks";
 
 const MenuComponent = () => {
@@ -17,8 +15,7 @@ const MenuComponent = () => {
           height={25}
           width={25}
         />
-        <IconContainer url="/assets/record.png" height={25} width={25} />
-        <IconContainer url="/assets/logout.png" height={25} width={25} />
+        <IconContainer url="/assets/records.png" height={25} width={25} />
       </RightContainer>
     </MenuContainer>
   );

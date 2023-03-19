@@ -8,18 +8,17 @@ import { HeaderContainer } from "../../Styles";
 import { getMonday } from "../ScheduleModal.tsx/ScheduleHooks";
 import createMatchIndex from "./createMatchIndex";
 
-function calDate(mon: Date, start: number) {
-  const temp = new Date(mon);
-  temp.setMinutes(start * 15);
+function calDate(start: number) {
+  const temp = new Date(start * 1000);
   return temp;
 }
 
 function convertData(slots: ISlotInfo[], login: string) {
-  const mon = getMonday();
   return slots.map((slot) => ({
     type: slot.mentor.login === login ? "mentor" : "mentee",
     subject: slot.subject,
-    time: calDate(mon, slot.start),
+    time: calDate(slot.start),
+    id: slot.id,
     target:
       slot.mentor.login === login
         ? slot.mentees.split(" ")
@@ -34,9 +33,7 @@ const MatchList = () => {
       (slot.mentor.login === login && slot.mentees !== "") ||
       slot.mentees.includes(login)
   );
-  console.log(slots);
   const data = convertData(slots, login);
-  console.log(data);
   return (
     <MatchListContainer>
       <HeaderContainer>Mentor</HeaderContainer>

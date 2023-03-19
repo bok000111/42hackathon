@@ -174,3 +174,13 @@ export const FeedbackBackToggleState = atom({
   key: "feedbackBackToggle",
   default: false,
 });
+
+export const RecordsBackToggle = atom({
+  key: 'recordsBackToggle',
+  default: true,
+})
+
+export const RecordsToggle = atom({
+  key:'recordsToggle',
+  default: true,
+})

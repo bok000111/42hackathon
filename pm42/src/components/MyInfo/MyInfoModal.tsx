@@ -7,8 +7,6 @@ import MentorInfoCard from "../common/MentorInfoCard";
 const MyInfoModal = () => {
   const myInfo = useRecoilValue(myInfoState);
   const subjects = JSON.parse(myInfo.projects);
-  console.log(myInfo);
-  console.log();
 
   const [SUBJECT, SCORE, DATE] = [43, 20, 33];
   return (
@@ -39,7 +37,7 @@ const MyInfoModal = () => {
                 final_mark: string;
                 marked_at: string;
               }) => (
-                <SubjectBlockContainer>
+                <SubjectBlockContainer key={subject.name}>
                   <Block w={SUBJECT}>{subject.name}</Block>
                   <Block w={SCORE}>{subject.final_mark}</Block>
                   <Block w={DATE}>{convertDate(subject.marked_at)}</Block>
@@ -61,7 +59,7 @@ const SubjectBlockContainer = styled.div`
   & > div {
     border-right: 1px solid #dcdcdc;
   }
-  & > div:nth-child(3) {
+  & > div:nth-of-type(3) {
     border-right: none;
   }
   & > div:first-of-type {

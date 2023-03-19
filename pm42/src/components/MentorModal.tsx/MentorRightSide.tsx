@@ -22,10 +22,6 @@ function calDate(start: number) {
   }.${mon.getDate() < 10 ? "0" + mon.getDate() : mon.getDate()}`;
 }
 
-function calTime(start: number, end: number) {
-  const mon = getMonday;
-}
-
 const MentorRightSide = ({ data }: { data: ITimeData[] }) => {
   const slots = useRecoilValue(OpenedSlotsState);
   const myInfo = useRecoilValue(myInfoState);

@@ -78,7 +78,6 @@ const MentorInfoModal = ({ info }: { info: IMentorInfo }) => {
     openMenteeSchedule();
     setSelectedMentorSubjectInfo(list[selectedIndex]);
   };
-  console.log(info);
   //intra: string; description: string; level: string; good: number; image: string
   return (
     <MentorInfoModalContainer>

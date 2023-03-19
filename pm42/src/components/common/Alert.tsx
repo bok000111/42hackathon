@@ -30,7 +30,7 @@ const AlertContainer = styled.div`
   height: 150px;
   background: var(--white-color);
   border-radius: 10px;
-  z-index: 4;
+  z-index: 5;
   left: calc(50% - 150px);
   top: 30%;
   display: flex;

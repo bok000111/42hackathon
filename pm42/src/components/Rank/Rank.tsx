@@ -59,7 +59,7 @@ const Rank = () => {
         </thead>
         <tbody>
           {data.map((info: any, idx) => (
-            <tr>
+            <tr key={idx}>
               <td>{info.login ? idx + 1 : "-"}</td>
               <td>
                 <a target="_blank" href={createLink(info.login)}>

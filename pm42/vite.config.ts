@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     https: false,
-    host: "yooh",
+    //host: "yooh",
     port: 5173,
   },
 });

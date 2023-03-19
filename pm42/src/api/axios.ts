@@ -113,7 +113,6 @@ export const axiosPatchMyGreetings = async (
       login,
       description,
     });
-    console.log(response);
   } catch (e) {
     console.error(e);
   }

@@ -163,10 +163,10 @@ const TimeStamp = styled.div`
     cursor: not-allowed;
   }
 
-  &:nth-child(2n) {
+  &:nth-of-type(2n) {
     border-bottom: 1px solid var(--gray-color);
   }
-  &:nth-child(2n + 1) {
+  &:nth-of-type(2n + 1) {
     border-bottom: 1px solid var(--lightgray-color);
   }
   &:last-of-type {

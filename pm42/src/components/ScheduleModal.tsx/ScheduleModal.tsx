@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useRef } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { axiosAddSlot } from "../../api/axios";
 import {
+  AlertMessageState,
   EndIndexState,
   MenteeNumberState,
   myInfoState,
@@ -41,7 +42,8 @@ const ScheduleModal = () => {
   const [slots, setSlots] = useRecoilState(OpenedSlotsState);
   const { closeScheduleBack } = customHooks();
   const myData = slots.filter((data) => data.mentor.login === login);
-
+  const { openAlert } = customHooks();
+  const setAlertMessage = useSetRecoilState(AlertMessageState);
   const onConfirm = () => {
     if (start === -1 || end === -1) {
       alert("select time");
@@ -98,7 +100,8 @@ const ScheduleModal = () => {
       if (t >= i && t <= j && node.classList.contains("onReserved")) flag = 1;
     });
     if (flag) {
-      alert("중간에 뭐 있음");
+      setAlertMessage("Incorrent Timezone!");
+      openAlert();
       return;
     }
     target.childNodes.forEach((node: any) => {
@@ -233,10 +236,10 @@ const TimeStamp = styled.div`
     cursor: not-allowed;
   }
 
-  &:nth-child(2n) {
+  &:nth-of-type(2n) {
     border-bottom: 1px solid var(--gray-color);
   }
-  &:nth-child(2n + 1) {
+  &:nth-of-type(2n + 1) {
     border-bottom: 1px solid var(--lightgray-color);
   }
   &:last-of-type {
@@ -248,10 +251,10 @@ const TimeInfo = styled.div`
   display: flex;
   width: 100%;
   height: 40px;
-  &:nth-child(2n + 1) {
+  &:nth-of-type(2n + 1) {
     border-bottom: 1px solid var(--lightgray-color);
   }
-  &:nth-child(2n) {
+  &:nth-of-type(2n) {
     border-bottom: 1px solid var(--gray-color);
   }
   &:last-of-type {

@@ -13,6 +13,7 @@ export interface IMentor {
   subject: string;
   time: Date;
   target: string[];
+  id: number;
 }
 
 export interface ITimeData {

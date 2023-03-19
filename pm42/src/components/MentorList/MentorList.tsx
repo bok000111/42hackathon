@@ -23,12 +23,13 @@ function convertData(list: ISlotInfo[], login: string) {
         acc[cur.mentor.login].level = cur.mentor.level;
         acc[cur.mentor.login].good = cur.mentor.total_feedback;
         acc[cur.mentor.login].coalition = cur.mentor.coa;
+        acc[cur.mentor.login].description = cur.mentor.description;
       }
       acc[cur.mentor.login].subjects.push(cur.subject);
     }
     return acc;
   }, {});
-
+  //console.log(map);
   return Object.keys(map).map((name) => ({
     intra: name,
     ...map[name],
@@ -61,9 +62,6 @@ const MentorList = () => {
   const { token, login } = useRecoilValue(myInfoState);
   const currentCircleInfo = useRecoilValue(CurrentCircleInfoState);
   const filterInfo = useRecoilValue(FilterInfoState);
-  console.log(circleInfo);
-  console.log(currentCircleInfo);
-  console.log(convertData(slotList, login));
   useEffect(() => {
     async function getData() {
       const response = await axiosGetAllSlots(

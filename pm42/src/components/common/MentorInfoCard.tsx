@@ -23,11 +23,9 @@ const MentorInfoCard = ({
   const [editToggle, setEditToggle] = useState(false);
   const [greetings, setGreetings] = useState("");
 
-  console.log(myInfo);
   const onClickEdit = () => {
     setEditToggle(!editToggle);
     if (editToggle && getData()) {
-      console.log(greetings);
       setMyInfo({ ...myInfo, description: greetings });
       setGreetings("");
     }

@@ -24,7 +24,6 @@ const LoginPage = () => {
     async function getData(code: string) {
       try {
         const { data } = await axiosLogin(code);
-        console.log(data);
         setMyInfo({
           token: data.token,
           image: data.image,

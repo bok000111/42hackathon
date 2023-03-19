@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 import React from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { axiosJoinLecture, axiosRemoveSlot } from "../../api/axios";
+import { myInfoState, OpenedSlotsState } from "../../Atom";
 import { IMentor } from "../../interface";
-
 
 const createLink = (name: string) =>
   `https://profile.intra.42.fr/users/${name}`;
@@ -24,36 +26,80 @@ const MentorInfo = ({
   info: IMentor;
   idx: number;
   total: number;
-}): JSX.Element => (
-  <div>
-    You will teach {info.subject} to{" "}
-    {info.target.length > 1 ? (
-      <SpanContainer>
-        {info.target.length} cadets
-        <CadetInfoContainer idx={idx} total={total} count={info.target.length}>
-          {info.target.map((name) => (
-            <CadetInfo key={name}>{name}</CadetInfo>
-          ))}
-        </CadetInfoContainer>
-      </SpanContainer>
-    ) : (
+}): JSX.Element => {
+  const setSlots = useSetRecoilState(OpenedSlotsState);
+  const { token } = useRecoilValue(myInfoState);
+  const onClickCancel = () => {
+    getData();
+  };
+  async function getData() {
+    const { slots } = await axiosRemoveSlot(token, info.id);
+    setSlots(slots);
+  }
+  return (
+    <div>
+      You will teach {info.subject} to{" "}
+      {info.target.length > 1 ? (
+        <SpanContainer>
+          {info.target.length} cadets
+          <CadetInfoContainer
+            idx={idx}
+            total={total}
+            count={info.target.length}
+          >
+            {info.target.map((name) => (
+              <CadetInfo key={name}>{name}</CadetInfo>
+            ))}
+          </CadetInfoContainer>
+        </SpanContainer>
+      ) : (
+        <NameContainer target="_blank" href={createLink(info.target[0])}>
+          {info.target[0]}
+        </NameContainer>
+      )}{" "}
+      in {createTimeStamp(info.time)}.
+      <CancelButton onClick={onClickCancel} />
+    </div>
+  );
+};
+
+const CancelButton = styled.div`
+  width: 15px;
+  height: 15px;
+  margin-left: 10px;
+  cursor: pointer;
+  background-image: url("/assets/cancelButton.png");
+  background-size: 100% 100%;
+  display: inline-block;
+`;
+
+//const response = await axiosJoinLecture(
+//  token,
+//  list[selectedIndex].info[selectedLectureIndex].id,
+//  login
+//);
+//setSlots(response.data.slots);
+
+const MenteeInfo = ({ info }: { info: IMentor }) => {
+  const { token, login } = useRecoilValue(myInfoState);
+  const setSlots = useSetRecoilState(OpenedSlotsState);
+  const onClickCancel = () => {
+    getData();
+  };
+  async function getData() {
+    const response = await axiosJoinLecture(token, info.id, login);
+    setSlots(response.data.slots);
+  }
+  return (
+    <div>
+      You will learn {info.subject} from{" "}
       <NameContainer target="_blank" href={createLink(info.target[0])}>
         {info.target[0]}
-      </NameContainer>
-    )}{" "}
-    in {createTimeStamp(info.time)}.
-  </div>
-);
-
-const MenteeInfo = ({ info }: { info: IMentor }) => (
-  <div>
-    You will learn {info.subject} from{" "}
-    <NameContainer target="_blank" href={createLink(info.target[0])}>
-      {info.target[0]}
-    </NameContainer>{" "}
-    in {createTimeStamp(info.time)}.
-  </div>
-);
+      </NameContainer>{" "}
+      in {createTimeStamp(info.time)}. <CancelButton onClick={onClickCancel} />
+    </div>
+  );
+};
 
 export default function createMatchIndex(
   info: IMentor,

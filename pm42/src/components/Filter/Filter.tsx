@@ -32,6 +32,7 @@ const Filter = () => {
     <FilterContainer>
       {list.map((str) => (
         <FilterElement
+          key={str}
           className={currentCircleInfo === str ? "active" : ""}
           onClick={() => onClickFilter(str)}
         >

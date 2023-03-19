@@ -312,14 +312,14 @@ tr.alt {
     background: var(--darkened-bg);
 }
 
-tr:nth-child(odd), .row-form-errors {
+tr:nth-of-type(odd), .row-form-errors {
     background: var(--body-bg);
 }
 
-tr:nth-child(even),
-tr:nth-child(even) .errorlist,
-tr:nth-child(odd) + .row-form-errors,
-tr:nth-child(odd) + .row-form-errors .errorlist {
+tr:nth-of-type(even),
+tr:nth-of-type(even) .errorlist,
+tr:nth-of-type(odd) + .row-form-errors,
+tr:nth-of-type(odd) + .row-form-errors .errorlist {
     background: var(--darkened-bg);
 }
 
