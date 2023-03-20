@@ -2,7 +2,8 @@ import axios from "axios";
 import { Cookies } from "react-cookie";
 
 const access = axios.create({
-  baseURL: "http://localhost:8000",
+  //baseURL: "http://localhost:8000",
+  baseURL: "http://15.164.210.155:8000/",
   timeout: 180000,
   withCredentials: false,
 });
