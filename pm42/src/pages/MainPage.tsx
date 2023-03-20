@@ -67,8 +67,9 @@ const MainPage = () => {
   const setStart = useSetRecoilState(StartIndexState);
   const setEnd = useSetRecoilState(EndIndexState);
 
-  const slots = useRecoilValue(OpenedSlotsState);
+  //const slots = useRecoilValue(OpenedSlotsState);
 
+  const slots: any = [];
   const {
     closeSetMentoring,
     closeScheduleBack,
@@ -117,8 +118,8 @@ const MainPage = () => {
         <BackgroundContainer onClick={closeAlert} zIndex={4} />
       )}
       {alertToggle && <Alert msg={alertMessage} />}
-      {slots.length && <BackgroundContainer zIndex={2} />}
-      {slots.length && <Feedback {...slots[0]} />}
+      {slots.length > 0 && <BackgroundContainer zIndex={2} />}
+      {slots.length > 0 && <Feedback {...slots[0]} />}
       {recordsToggle && <RecordsModal />}
       {recordsBackToggle && (
         <BackgroundContainer zIndex={3} onClick={closeRecords} />

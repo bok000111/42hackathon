@@ -83,7 +83,7 @@ export const axiosLogin = async (code: string): Promise<any> => {
     const response = await access.get("/api/login/?code=" + code, { headers });
     return response;
   } catch (e) {
-    console.error("hi", e);
+    console.error(e);
   }
 };
 
@@ -113,6 +113,22 @@ export const axiosPatchMyGreetings = async (
       login,
       description,
     });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const axiosSendFeedback = async (
+  token: string,
+  count: number,
+  id: number
+) => {
+  try {
+    const response = await access.put("/api/login/?token=" + token, {
+      feedback: count,
+      id,
+    });
+    return response;
   } catch (e) {
     console.error(e);
   }
