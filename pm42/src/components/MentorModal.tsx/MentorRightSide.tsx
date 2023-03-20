@@ -184,7 +184,7 @@ const ReservationContainer = styled.div`
   margin-right: 25px;
   border-radius: 10px;
   margin-top: 15px;
-  height: 400px;
+  height: 520px;
   width: 550px;
   overflow: hidden;
   border: 1px solid var(--main-color);
