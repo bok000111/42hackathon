@@ -64,7 +64,7 @@ const Rank = () => {
               <td>{info.login ? idx + 1 : "-"}</td>
               <td>
                 <a target="_blank" href={createLink(info.login)}>
-                  <CoalitionIcon src={info.coa} />
+                  {info.coa !== "-" ? <CoalitionIcon src={info.coa} /> : ""}
                   {info.login}
                 </a>
               </td>

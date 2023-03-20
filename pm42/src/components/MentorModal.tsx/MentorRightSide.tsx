@@ -99,7 +99,6 @@ const MentorRightSide = () => {
           ))}
         </ReserveDataContainer>
       </ReservationContainer>
-      <Button>Close</Button>
     </>
   );
 };
