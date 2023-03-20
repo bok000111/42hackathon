@@ -17,7 +17,7 @@ const MenuComponent = () => {
         />
         <IconContainer
           onClick={openRecords}
-          url="/assets/records.png"
+          url="/static/assets/records.png"
           height={25}
           width={25}
         />
