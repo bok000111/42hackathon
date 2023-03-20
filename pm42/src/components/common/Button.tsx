@@ -16,7 +16,7 @@ const Button = ({
 };
 
 const ArrowIcon = styled.div`
-  background-image: url("/assets/arrow.png");
+  background-image: url("/static/assets/arrow.png");
   width: 30px;
   height: 30px;
   background-size: 100% 100%;

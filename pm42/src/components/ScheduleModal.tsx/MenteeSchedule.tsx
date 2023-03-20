@@ -236,7 +236,7 @@ const ConfirmButton = styled.div`
 const MemberIcon = styled.div`
   width: 30px;
   height: 30px;
-  background: url("/assets/member.png");
+  background: url("/static/assets/member.png");
   background-size: 100% 100%;
 `;
 

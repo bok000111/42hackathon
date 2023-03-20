@@ -18,7 +18,7 @@ export const HeaderContainer = styled.div`
 export const Logo = styled.div<{ width: number; height: number }>`
   ${({ width }) => `width : ${width}px`};
   ${({ height }) => `height : ${height}px`};
-  background-image: url("/assets/42logo.png");
+  background-image: url("/static/assets/42logo.png");
   background-size: 100% 100%;
   position: absolute;
   right: 50px;

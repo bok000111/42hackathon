@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'pm42'
+    'django_vite',
+    'pm42',
 ]
 
 MIDDLEWARE = [
@@ -48,8 +49,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # CORS 관련 추가
 CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:5173'
                          ,'http://localhost:5173']
@@ -67,7 +69,7 @@ ROOT_URLCONF = 'pm42.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'dist'],
+        'DIRS': [BASE_DIR / 'collectedstatic'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,14 +132,11 @@ USE_TZ = True
 
 import os
 
-STATIC_ROOT = ''
-STATIC_URL = "assets/"
-STATICFILES_DIRS = [
-    #os.path.join(BASE_DIR, "myproject", "myapp", "static"),
-    BASE_DIR / "dist",
-    BASE_DIR / "dist" / 'assets',
-    BASE_DIR / 'assets',
-]
+STATIC_ROOT = BASE_DIR / "collectedstatic"
+STATIC_URL = "/static/"
+DJANGO_VITE_ASSETS_PATH = BASE_DIR / "static" / "dist"
+STATICFILES_DIRS = [DJANGO_VITE_ASSETS_PATH]
+DJANGO_VITE_DEV_MODE = False
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -82,7 +82,7 @@ const CoalitionIcon = styled.div<{ src: string }>`
   display: inline-block;
   width: 25px;
   height: 25px;
-  background-image: ${({ src }) => `url(/assets/${src}_icon.png)`};
+  background-image: ${({ src }) => `url(/static/assets/${src}_icon.png)`};
   background-size: 100% 100%;
   margin-right: 5px;
 `;

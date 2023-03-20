@@ -110,7 +110,7 @@ const Profile = styled.div<{ src: string | undefined; coalition: string }>`
   width: 45%;
   padding-bottom: 45%;
   border-radius: 100%;
-  background-image: url(${({ src }) => src || "/assets/defaultImage.png"});
+  background-image: url(${({ src }) => src || "/static/assets/defaultImage.png"});
   background-size: 100% 120%;
   background-position-x: 30%;
   background-position-y: 50%;
@@ -123,7 +123,7 @@ const Profile = styled.div<{ src: string | undefined; coalition: string }>`
     display: block;
     position: absolute;
     background-image: ${({ coalition }) =>
-      `url(/assets/${coalition}_icon.png)`};
+      `url(/static/assets/${coalition}_icon.png)`};
     background-size: 100% 100%;
     right: 0;
     bottom: 0;

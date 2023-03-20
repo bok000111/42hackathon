@@ -68,7 +68,7 @@ const CancelButton = styled.div`
   height: 15px;
   margin-left: 10px;
   cursor: pointer;
-  background-image: url("/assets/cancelButton.png");
+  background-image: url("/static/assets/cancelButton.png");
   background-size: 100% 100%;
   display: inline-block;
 `;

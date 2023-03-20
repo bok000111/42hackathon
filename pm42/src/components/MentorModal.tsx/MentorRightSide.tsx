@@ -132,7 +132,7 @@ const Button = styled.div`
 const RemoveButton = styled.div`
   width: 25px;
   height: 25px;
-  background-image: url("/assets/remove.png");
+  background-image: url("/static/assets/remove.png");
   background-size: 100% 100%;
   cursor: pointer;
 `;
@@ -207,7 +207,7 @@ const ReservationContainer = styled.div`
 const AddButton = styled.div`
   width: 25px;
   height: 25px;
-  background-image: url("/assets/addButton.png");
+  background-image: url("/static/assets/addButton.png");
   background-size: 100% 100%;
   margin-left: 15px;
   cursor: pointer;

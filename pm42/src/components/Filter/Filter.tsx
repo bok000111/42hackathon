@@ -59,7 +59,7 @@ const Input = styled.input`
   color: white;
 `;
 const SearchIcon = styled.div`
-  background-image: url("/assets/SearchIcon.png");
+  background-image: url("/static/assets/SearchIcon.png");
   background-size: 100% 100%;
   width: 20px;
   height: 20px;

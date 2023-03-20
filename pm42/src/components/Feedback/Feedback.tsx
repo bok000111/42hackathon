@@ -62,7 +62,7 @@ const Thumb = styled.div`
   display: inline-block;
   width: 30px;
   height: 30px;
-  background-image: url("/assets/thumb.png");
+  background-image: url("/static/assets/thumb.png");
   background-size: 100% 100%;
   margin-left: 50px;
   margin-right: 10px;

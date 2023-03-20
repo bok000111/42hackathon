@@ -117,7 +117,7 @@ const MentorModal = () => {
         <MentorLeftSide data={subjectData} />
       </Container>
       <Container>
-        <MentorRightSide data={timeData} />
+        <MentorRightSide />
       </Container>
       <Line />
     </MentorModalContainer>

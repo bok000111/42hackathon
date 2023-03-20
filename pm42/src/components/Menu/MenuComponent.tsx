@@ -6,12 +6,12 @@ const MenuComponent = () => {
   return (
     <MenuContainer>
       <div>
-        <IconContainer url="/assets/mtom.png" width={50} height={50} />
+        <IconContainer url="/static/assets/mtom.png" width={50} height={50} />
       </div>
       <RightContainer>
         <IconContainer
           onClick={openMyInfoModal}
-          url="/assets/info.png"
+          url="/static/assets/info.png"
           height={25}
           width={25}
         />
